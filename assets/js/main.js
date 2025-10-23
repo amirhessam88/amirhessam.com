@@ -1,4 +1,4 @@
-!(function($) {
+!(function ($) {
   "use strict";
 
   // Hero typed
@@ -15,7 +15,7 @@
   }
 
   // Smooth scroll for the navigation menu and links with .scrollto classes
-  $(document).on('click', '.nav-menu a, .scrollto', function(e) {
+  $(document).on('click', '.nav-menu a, .scrollto', function (e) {
     if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
       e.preventDefault();
       var target = $(this.hash);
@@ -41,12 +41,12 @@
     }
   });
 
-  $(document).on('click', '.mobile-nav-toggle', function(e) {
+  $(document).on('click', '.mobile-nav-toggle', function (e) {
     $('body').toggleClass('mobile-nav-active');
     $('.mobile-nav-toggle i').toggleClass('icofont-navigation-menu icofont-close');
   });
 
-  $(document).click(function(e) {
+  $(document).click(function (e) {
     var container = $(".mobile-nav-toggle");
     if (!container.is(e.target) && container.has(e.target).length === 0) {
       if ($('body').hasClass('mobile-nav-active')) {
@@ -60,10 +60,10 @@
   var nav_sections = $('section');
   var main_nav = $('.nav-menu, #mobile-nav');
 
-  $(window).on('scroll', function() {
+  $(window).on('scroll', function () {
     var cur_pos = $(this).scrollTop() + 10;
 
-    nav_sections.each(function() {
+    nav_sections.each(function () {
       var top = $(this).offset().top,
         bottom = top + $(this).outerHeight();
 
@@ -80,7 +80,7 @@
   });
 
   // Back to top button
-  $(window).scroll(function() {
+  $(window).scroll(function () {
     if ($(this).scrollTop() > 100) {
       $('.back-to-top').fadeIn('slow');
     } else {
@@ -88,12 +88,112 @@
     }
   });
 
-  $('.back-to-top').click(function() {
+  $('.back-to-top').click(function () {
     $('html, body').animate({
       scrollTop: 0
     }, 1500, 'easeInOutExpo');
     return false;
   });
+
+  // Fetch citation and papers count dynamically
+  function fetchCounts() {
+    fetch('fetch_citations.php')
+      .then(response => response.json())
+      .then(data => {
+        if (data.citations) {
+          // Update the citation count in the HTML
+          $('#citation-count').text(data.citations);
+
+          // Re-initialize counterUp for the updated citation count
+          $('#citation-count').counterUp({
+            delay: 10,
+            time: 1000
+          });
+        }
+
+        if (data.papers) {
+          // Update the papers count in the HTML
+          $('#papers-count').text(data.papers);
+
+          // Re-initialize counterUp for the updated papers count
+          $('#papers-count').counterUp({
+            delay: 10,
+            time: 1000
+          });
+        }
+
+        if (data.hindex) {
+          // Update the hindex count in the HTML
+          $('#hindex-count').text(data.hindex);
+
+          // Re-initialize counterUp for the updated hindex count
+          $('#hindex-count').counterUp({
+            delay: 10,
+            time: 1000
+          });
+        }
+      })
+      .catch(error => {
+        console.log('Error fetching counts:', error);
+        // Fallback to cached values or defaults
+        fetch('assets/data/citations.txt')
+          .then(response => response.text())
+          .then(text => {
+            const citations = parseInt(text.trim());
+            if (!isNaN(citations)) {
+              $('#citation-count').text(citations);
+              $('#citation-count').counterUp({
+                delay: 10,
+                time: 1000
+              });
+            }
+          })
+          .catch(err => {
+            console.log('Error loading cached citations:', err);
+            // Final fallback to a default value
+            $('#citation-count').text('1251');
+          });
+
+        fetch('assets/data/papers.txt')
+          .then(response => response.text())
+          .then(text => {
+            const papers = parseInt(text.trim());
+            if (!isNaN(papers)) {
+              $('#papers-count').text(papers);
+              $('#papers-count').counterUp({
+                delay: 10,
+                time: 1000
+              });
+            }
+          })
+          .catch(err => {
+            console.log('Error loading cached papers:', err);
+            // Final fallback to a default value
+            $('#papers-count').text('83');
+          });
+
+        fetch('assets/data/hindex.txt')
+          .then(response => response.text())
+          .then(text => {
+            const hindex = parseInt(text.trim());
+            if (!isNaN(hindex)) {
+              $('#hindex-count').text(hindex);
+              $('#hindex-count').counterUp({
+                delay: 10,
+                time: 1000
+              });
+            }
+          })
+          .catch(err => {
+            console.log('Error loading cached hindex:', err);
+            // Final fallback to a default value
+            $('#hindex-count').text('16');
+          });
+      });
+  }
+
+  // Load counts when page loads
+  fetchCounts();
 
   // jQuery counterUp
   $('[data-toggle="counter-up"]').counterUp({
@@ -102,8 +202,8 @@
   });
 
   // Skills section
-  $('.skills-content').waypoint(function() {
-    $('.progress .progress-bar').each(function() {
+  $('.skills-content').waypoint(function () {
+    $('.progress .progress-bar').each(function () {
       $(this).css("width", $(this).attr("aria-valuenow") + '%');
     });
   }, {
@@ -111,13 +211,13 @@
   });
 
   // Porfolio isotope and filter
-  $(window).on('load', function() {
+  $(window).on('load', function () {
     var portfolioIsotope = $('.portfolio-container').isotope({
       itemSelector: '.portfolio-item',
       layoutMode: 'fitRows'
     });
 
-    $('#portfolio-flters li').on('click', function() {
+    $('#portfolio-flters li').on('click', function () {
       $("#portfolio-flters li").removeClass('filter-active');
       $(this).addClass('filter-active');
 
@@ -127,7 +227,7 @@
     });
 
     // Initiate venobox (lightbox feature used in portofilo)
-    $(document).ready(function() {
+    $(document).ready(function () {
       $('.venobox').venobox();
     });
   });
