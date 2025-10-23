@@ -119,7 +119,9 @@
       const currentPath = paths[index];
       console.log(`Trying PHP path: ${currentPath}`);
 
-      fetch(currentPath)
+      // Add cache-busting parameter
+      const cacheBuster = '?t=' + Date.now();
+      fetch(currentPath + cacheBuster)
         .then(response => {
           console.log(`PHP fetch response status for ${currentPath}:`, response.status);
           if (!response.ok) {
@@ -157,7 +159,9 @@
         const currentPath = paths[index];
         console.log(`Trying JSON path: ${currentPath}`);
 
-        fetch(currentPath)
+        // Add cache-busting parameter for JSON as well
+        const cacheBuster = '?t=' + Date.now();
+        fetch(currentPath + cacheBuster)
           .then(response => {
             console.log(`JSON fetch response status for ${currentPath}:`, response.status);
             if (!response.ok) {
@@ -179,7 +183,10 @@
 
   // Function to update all counts
   function updateCounts(data) {
+    console.log('updateCounts called with data:', data);
+
     if (data.citations) {
+      console.log('Updating citations to:', data.citations);
       $('#citation-count').text(data.citations);
       $('#citation-count').counterUp({
         delay: 10,
@@ -188,6 +195,7 @@
     }
 
     if (data.papers) {
+      console.log('Updating papers to:', data.papers);
       $('#papers-count').text(data.papers);
       $('#papers-count').counterUp({
         delay: 10,
@@ -196,6 +204,7 @@
     }
 
     if (data.hindex) {
+      console.log('Updating hindex to:', data.hindex);
       $('#hindex-count').text(data.hindex);
       $('#hindex-count').counterUp({
         delay: 10,
@@ -250,7 +259,16 @@
   }
 
   // Load counts when page loads
-  fetchCounts();
+  console.log('Main.js loaded, calling fetchCounts...');
+
+  // Ensure jQuery is loaded before calling fetchCounts
+  $(document).ready(function () {
+    console.log('jQuery ready, calling fetchCounts...');
+    // Add a small delay to ensure all elements are ready
+    setTimeout(function () {
+      fetchCounts();
+    }, 500);
+  });
 
   // jQuery counterUp
   $('[data-toggle="counter-up"]').counterUp({
