@@ -42,9 +42,9 @@ if ($http_code !== 200 || !$html) {
         $stats_data = json_decode(file_get_contents($stats_file), true);
         if ($stats_data) {
             echo json_encode([
-                'citations' => $stats_data['citations'] ?? 1457,
-                'papers' => $stats_data['papers'] ?? 93,
-                'hindex' => $stats_data['hindex'] ?? 18,
+                'citations' => isset($stats_data['citations']) ? $stats_data['citations'] : 1457,
+                'papers' => isset($stats_data['papers']) ? $stats_data['papers'] : 93,
+                'hindex' => isset($stats_data['hindex']) ? $stats_data['hindex'] : 18,
                 'cached' => true,
                 'error' => 'Google Scholar fetch failed, using cached data'
             ]);
