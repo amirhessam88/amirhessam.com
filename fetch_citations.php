@@ -30,28 +30,31 @@ $html = $result['html'];
 $http_code = $result['http_code'];
 
 if ($http_code !== 200 || !$html) {
-    // Fallback to cached values if fetch fails
-    $citations_file = 'assets/data/citations.txt';
-    $papers_file = 'assets/data/papers.txt';
-    $hindex_file = 'assets/data/hindex.txt';
+    // If we can't fetch from Google Scholar, try to load from stats.json as fallback
+    $stats_file = 'assets/data/stats.json';
     
-    $cached_citations = 0;
-    $cached_papers = 0;
-    $cached_hindex = 0;
-    
-    if (file_exists($citations_file)) {
-        $cached_citations = intval(trim(file_get_contents($citations_file)));
+    if (file_exists($stats_file)) {
+        $stats_data = json_decode(file_get_contents($stats_file), true);
+        if ($stats_data) {
+            echo json_encode([
+                'citations' => $stats_data['citations'] ?? 1457,
+                'papers' => $stats_data['papers'] ?? 93,
+                'hindex' => $stats_data['hindex'] ?? 18,
+                'cached' => true,
+                'error' => 'Google Scholar fetch failed, using cached data'
+            ]);
+            exit;
+        }
     }
     
-    if (file_exists($papers_file)) {
-        $cached_papers = intval(trim(file_get_contents($papers_file)));
-    }
-    
-    if (file_exists($hindex_file)) {
-        $cached_hindex = intval(trim(file_get_contents($hindex_file)));
-    }
-    
-    echo json_encode(['citations' => $cached_citations, 'papers' => $cached_papers, 'hindex' => $cached_hindex, 'cached' => true]);
+    // Final fallback to default values
+    echo json_encode([
+        'citations' => 1457,
+        'papers' => 93,
+        'hindex' => 18,
+        'cached' => true,
+        'error' => 'All data sources failed, using default values'
+    ]);
     exit;
 }
 

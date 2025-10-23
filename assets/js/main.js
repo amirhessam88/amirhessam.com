@@ -95,101 +95,158 @@
     return false;
   });
 
-  // Fetch citation and papers count dynamically
+  // Fetch citation and papers count dynamically - ALWAYS fetch fresh data
   function fetchCounts() {
-    fetch('fetch_citations.php')
-      .then(response => response.json())
-      .then(data => {
-        if (data.citations) {
-          // Update the citation count in the HTML
-          $('#citation-count').text(data.citations);
+    console.log('Starting to fetch fresh statistics from Google Scholar...');
 
-          // Re-initialize counterUp for the updated citation count
-          $('#citation-count').counterUp({
-            delay: 10,
-            time: 1000
-          });
+    // Try multiple paths for the PHP script (which fetches fresh data)
+    const phpPaths = [
+      'fetch_citations.php',
+      './fetch_citations.php',
+      '/fetch_citations.php'
+    ];
+
+    // Try to load fresh data from PHP script with multiple paths
+    tryPhpPaths(phpPaths, 0);
+
+    function tryPhpPaths(paths, index) {
+      if (index >= paths.length) {
+        console.log('All PHP paths failed, trying static JSON as fallback...');
+        tryStaticJson();
+        return;
+      }
+
+      const currentPath = paths[index];
+      console.log(`Trying PHP path: ${currentPath}`);
+
+      fetch(currentPath)
+        .then(response => {
+          console.log(`PHP fetch response status for ${currentPath}:`, response.status);
+          if (!response.ok) {
+            throw new Error(`PHP script failed - Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log(`Successfully loaded fresh data from PHP script (${currentPath}):`, data);
+          updateCounts(data);
+        })
+        .catch(error => {
+          console.log(`PHP path ${currentPath} failed:`, error.message);
+          tryPhpPaths(paths, index + 1);
+        });
+    }
+
+    function tryStaticJson() {
+      console.log('Trying static JSON as fallback...');
+      const jsonPaths = [
+        'assets/data/stats.json',
+        './assets/data/stats.json',
+        '/assets/data/stats.json'
+      ];
+
+      tryJsonPaths(jsonPaths, 0);
+
+      function tryJsonPaths(paths, index) {
+        if (index >= paths.length) {
+          console.log('All paths failed, using default values');
+          loadDefaults();
+          return;
         }
 
-        if (data.papers) {
-          // Update the papers count in the HTML
-          $('#papers-count').text(data.papers);
+        const currentPath = paths[index];
+        console.log(`Trying JSON path: ${currentPath}`);
 
-          // Re-initialize counterUp for the updated papers count
-          $('#papers-count').counterUp({
-            delay: 10,
-            time: 1000
-          });
-        }
-
-        if (data.hindex) {
-          // Update the hindex count in the HTML
-          $('#hindex-count').text(data.hindex);
-
-          // Re-initialize counterUp for the updated hindex count
-          $('#hindex-count').counterUp({
-            delay: 10,
-            time: 1000
-          });
-        }
-      })
-      .catch(error => {
-        console.log('Error fetching counts:', error);
-        // Fallback to cached values or defaults
-        fetch('assets/data/citations.txt')
-          .then(response => response.text())
-          .then(text => {
-            const citations = parseInt(text.trim());
-            if (!isNaN(citations)) {
-              $('#citation-count').text(citations);
-              $('#citation-count').counterUp({
-                delay: 10,
-                time: 1000
-              });
+        fetch(currentPath)
+          .then(response => {
+            console.log(`JSON fetch response status for ${currentPath}:`, response.status);
+            if (!response.ok) {
+              throw new Error(`Static file not found - Status: ${response.status}`);
             }
+            return response.json();
           })
-          .catch(err => {
-            console.log('Error loading cached citations:', err);
-            // Final fallback to a default value
-            $('#citation-count').text('1251');
+          .then(data => {
+            console.log(`Successfully loaded from static JSON (${currentPath}):`, data);
+            updateCounts(data);
+          })
+          .catch(error => {
+            console.log(`JSON path ${currentPath} failed:`, error.message);
+            tryJsonPaths(paths, index + 1);
           });
+      }
+    }
+  }
 
-        fetch('assets/data/papers.txt')
-          .then(response => response.text())
-          .then(text => {
-            const papers = parseInt(text.trim());
-            if (!isNaN(papers)) {
-              $('#papers-count').text(papers);
-              $('#papers-count').counterUp({
-                delay: 10,
-                time: 1000
-              });
-            }
-          })
-          .catch(err => {
-            console.log('Error loading cached papers:', err);
-            // Final fallback to a default value
-            $('#papers-count').text('83');
-          });
-
-        fetch('assets/data/hindex.txt')
-          .then(response => response.text())
-          .then(text => {
-            const hindex = parseInt(text.trim());
-            if (!isNaN(hindex)) {
-              $('#hindex-count').text(hindex);
-              $('#hindex-count').counterUp({
-                delay: 10,
-                time: 1000
-              });
-            }
-          })
-          .catch(err => {
-            console.log('Error loading cached hindex:', err);
-            // Final fallback to a default value
-            $('#hindex-count').text('16');
-          });
+  // Function to update all counts
+  function updateCounts(data) {
+    if (data.citations) {
+      $('#citation-count').text(data.citations);
+      $('#citation-count').counterUp({
+        delay: 10,
+        time: 1000
       });
+    }
+
+    if (data.papers) {
+      $('#papers-count').text(data.papers);
+      $('#papers-count').counterUp({
+        delay: 10,
+        time: 1000
+      });
+    }
+
+    if (data.hindex) {
+      $('#hindex-count').text(data.hindex);
+      $('#hindex-count').counterUp({
+        delay: 10,
+        time: 1000
+      });
+    }
+  }
+
+  // Function to trigger counter animation on existing values
+  function triggerCounterAnimation() {
+    console.log('Triggering counter animation on embedded values');
+
+    // The values are already in the HTML, just trigger the counter animation
+    $('#citation-count').counterUp({
+      delay: 10,
+      time: 1000
+    });
+
+    $('#papers-count').counterUp({
+      delay: 10,
+      time: 1000
+    });
+
+    $('#hindex-count').counterUp({
+      delay: 10,
+      time: 1000
+    });
+  }
+
+  // Function to load default values (fallback)
+  function loadDefaults() {
+    console.log('Loading default values as final fallback');
+
+    // Set default values
+    $('#citation-count').text('1457');
+    $('#citation-count').counterUp({
+      delay: 10,
+      time: 1000
+    });
+
+    $('#papers-count').text('93');
+    $('#papers-count').counterUp({
+      delay: 10,
+      time: 1000
+    });
+
+    $('#hindex-count').text('18');
+    $('#hindex-count').counterUp({
+      delay: 10,
+      time: 1000
+    });
   }
 
   // Load counts when page loads
