@@ -119,9 +119,16 @@
       const currentPath = paths[index];
       console.log(`Trying PHP path: ${currentPath}`);
 
-      // Add cache-busting parameter
-      const cacheBuster = '?t=' + Date.now();
-      fetch(currentPath + cacheBuster)
+      // Add multiple cache-busting parameters for Chrome
+      const cacheBuster = '?t=' + Date.now() + '&r=' + Math.random() + '&v=' + Math.floor(Math.random() * 1000);
+      fetch(currentPath + cacheBuster, {
+        method: 'GET',
+        cache: 'no-cache',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      })
         .then(response => {
           console.log(`PHP fetch response status for ${currentPath}:`, response.status);
           if (!response.ok) {
@@ -159,9 +166,16 @@
         const currentPath = paths[index];
         console.log(`Trying JSON path: ${currentPath}`);
 
-        // Add cache-busting parameter for JSON as well
-        const cacheBuster = '?t=' + Date.now();
-        fetch(currentPath + cacheBuster)
+        // Add multiple cache-busting parameters for JSON as well
+        const cacheBuster = '?t=' + Date.now() + '&r=' + Math.random() + '&v=' + Math.floor(Math.random() * 1000);
+        fetch(currentPath + cacheBuster, {
+          method: 'GET',
+          cache: 'no-cache',
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        })
           .then(response => {
             console.log(`JSON fetch response status for ${currentPath}:`, response.status);
             if (!response.ok) {
