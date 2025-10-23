@@ -1,6 +1,55 @@
 !(function ($) {
   "use strict";
 
+  // Cache busting functionality
+  function initCacheBuster() {
+    // Get version from server
+    fetch('assets/php/version.php')
+      .then(response => response.json())
+      .then(data => {
+        window.CACHE_VERSION = data.version;
+
+        // Update all images with cache busting
+        $('img').each(function () {
+          const $img = $(this);
+          const src = $img.attr('src');
+          if (src && !src.includes('v=')) {
+            $img.attr('src', src + (src.includes('?') ? '&' : '?') + 'v=' + data.version);
+          }
+        });
+
+        // Update background images
+        $('[style*="background-image"]').each(function () {
+          const $el = $(this);
+          const style = $el.attr('style');
+          if (style && style.includes('url(') && !style.includes('v=')) {
+            const newStyle = style.replace(/url\(['"]?([^'"]+)['"]?\)/g, function (match, url) {
+              const separator = url.includes('?') ? '&' : '?';
+              return `url(${url}${separator}v=${data.version})`;
+            });
+            $el.attr('style', newStyle);
+          }
+        });
+      })
+      .catch(error => {
+        console.log('Cache busting: Using fallback version');
+        // Fallback to timestamp-based version
+        const version = Date.now();
+        $('img').each(function () {
+          const $img = $(this);
+          const src = $img.attr('src');
+          if (src && !src.includes('v=')) {
+            $img.attr('src', src + (src.includes('?') ? '&' : '?') + 'v=' + version);
+          }
+        });
+      });
+  }
+
+  // Initialize cache busting when DOM is ready
+  $(document).ready(function () {
+    initCacheBuster();
+  });
+
   // Hero typed
   if ($('.typed').length) {
     var typed_strings = $(".typed").data('typed-items');
