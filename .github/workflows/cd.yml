@@ -1,0 +1,48 @@
+####################################################################################################
+# Continuous Deployment [Website] on Push to Master
+####################################################################################################
+# References:
+# - https://github.com/SamKirkland/FTP-Deploy-Action
+####################################################################################################
+name: website
+
+on:
+    push:
+        branches: ["master"]
+
+jobs:
+    ci:
+        #----------------------------------------------
+        # -----  setup operating system (os)  -----
+        #----------------------------------------------
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                os: ["ubuntu-latest"]
+                python-version: ["3.10"]
+        steps:
+            #----------------------------------------------
+            # ----- check-out repo and set-up python -----
+            #----------------------------------------------
+            - name: Checkout Repository
+              uses: actions/checkout@v3
+            - name: Setup Python v${{ matrix.python-version }}
+              uses: actions/setup-python@v4
+              with:
+                  python-version: ${{ matrix.python-version }}
+            #----------------------------------------------
+            #  ---  Deploy files to www.amirhessam.com  ---
+            #----------------------------------------------
+            - name: Deploy Website
+              uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+              with:
+                  server: ${{ secrets.FTP_SERVER }}
+                  username: ${{ secrets.FTP_USERNAME }}
+                  password: ${{ secrets.FTP_PASSWORD }}
+                  protocol: ftps
+                  port: 21
+                  timeout: 60000
+                  local-dir: ./
+                  exclude: |
+                      admin/

@@ -101,9 +101,9 @@
 
     // Try multiple paths for the PHP script (which fetches fresh data)
     const phpPaths = [
-      'fetch_citations.php',
-      './fetch_citations.php',
-      '/fetch_citations.php'
+      'assets/php/fetch_citations.php',
+      './assets/php/fetch_citations.php',
+      '/assets/php/fetch_citations.php'
     ];
 
     // Try to load fresh data from PHP script with multiple paths
