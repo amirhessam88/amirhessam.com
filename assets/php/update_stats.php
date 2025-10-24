@@ -2,6 +2,9 @@
 // Script to update statistics and generate static JSON file
 // This can be run via cron job or manually
 
+// Include database configuration
+require_once 'db_config.php';
+
 // Include the fetch_citations.php logic
 $scholar_url = 'https://scholar.google.com/citations?user=CnHZjFAAAAAJ&hl=en';
 
@@ -91,6 +94,17 @@ $data_dir = $website_root . '/assets/data';
 // Create the data directory if it doesn't exist
 if (!is_dir($data_dir)) {
     mkdir($data_dir, 0755, true);
+}
+
+// Insert stats into database
+$db_connection = getDbConnection($db_config);
+if ($db_connection) {
+    $db_success = insertStatsToDb($db_connection, $db_config, $citations, $papers, $hindex);
+    if (!$db_success) {
+        echo "Warning: Failed to insert stats into database, but continuing with JSON file creation.\n";
+    }
+} else {
+    echo "Warning: Could not connect to database, but continuing with JSON file creation.\n";
 }
 
 // Note: Individual .txt files are no longer needed since we use stats.json
