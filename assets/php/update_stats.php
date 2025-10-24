@@ -84,9 +84,13 @@ if ($http_code === 200 && $html) {
     }
 }
 
+// Get the absolute path to the website root
+$website_root = dirname(dirname(__DIR__));
+$data_dir = $website_root . '/assets/data';
+
 // Create the data directory if it doesn't exist
-if (!is_dir('assets/data')) {
-    mkdir('assets/data', 0755, true);
+if (!is_dir($data_dir)) {
+    mkdir($data_dir, 0755, true);
 }
 
 // Note: Individual .txt files are no longer needed since we use stats.json
@@ -100,7 +104,8 @@ $stats_data = [
     'cached' => false
 ];
 
-file_put_contents('assets/data/stats.json', json_encode($stats_data, JSON_PRETTY_PRINT));
+$stats_file = $data_dir . '/stats.json';
+file_put_contents($stats_file, json_encode($stats_data, JSON_PRETTY_PRINT));
 
 echo "Statistics updated successfully:\n";
 echo "Citations: $citations\n";

@@ -29,5 +29,9 @@ else
     echo "Error: stats.json was not created!"
     echo "Checking if assets/data directory exists..."
     ls -la assets/
+    echo "Checking for any data directories..."
+    find . -name "data" -type d
+    echo "Checking for stats.json files..."
+    find . -name "stats.json" -type f
     exit 1
 fi
