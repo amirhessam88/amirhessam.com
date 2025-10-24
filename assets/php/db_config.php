@@ -2,12 +2,17 @@
 // Database configuration for PostgreSQL
 // Uses environment variables from .htaccess for security
 
+// Try to get credentials from environment variables
+// Works for both web context (.htaccess) and command line (.bashrc)
+$db_username = $_ENV['DATABASE_USERNAME'] ?? getenv('DATABASE_USERNAME') ?? '';
+$db_password = $_ENV['DATABASE_PASSWORD'] ?? getenv('DATABASE_PASSWORD') ?? '';
+
 $db_config = [
     'host' => 'localhost', // Usually localhost for cPanel
     'port' => '5432', // Default PostgreSQL port
     'dbname' => 'amirhessam_main', // Your database name
-    'user' => $_ENV['DATABASE_USERNAME'] ?? 'amirhessam_main', // From .htaccess env variable
-    'password' => $_ENV['DATABASE_PASSWORD'] ?? '', // From .htaccess env variable
+    'user' => $db_username,
+    'password' => $db_password,
     'schema' => 'amirhessam_com', // Your schema name
     'table' => 'google_scholar_stats' // Your table name
 ];
