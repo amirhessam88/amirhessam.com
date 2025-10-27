@@ -97,15 +97,29 @@ if (!is_dir($data_dir)) {
 }
 
 // Insert stats into database
+echo "\n=== Database Connection Attempt ===\n";
+echo "Database config:\n";
+echo "  Host: " . $db_config['host'] . "\n";
+echo "  Port: " . $db_config['port'] . "\n";
+echo "  Database: " . $db_config['dbname'] . "\n";
+echo "  Schema: " . $db_config['schema'] . "\n";
+echo "  Table: " . $db_config['table'] . "\n";
+echo "  Username: " . ($db_config['user'] ? '***set***' : 'NOT SET') . "\n";
+echo "  Password: " . ($db_config['password'] ? '***set***' : 'NOT SET') . "\n";
+
 $db_connection = getDbConnection($db_config);
 if ($db_connection) {
+    echo "Database connection successful!\n";
     $db_success = insertStatsToDb($db_connection, $db_config, $citations, $papers, $hindex);
     if (!$db_success) {
         echo "Warning: Failed to insert stats into database, but continuing with JSON file creation.\n";
     }
 } else {
-    echo "Warning: Could not connect to database, but continuing with JSON file creation.\n";
+    echo "ERROR: Could not connect to database!\n";
+    echo "Check database credentials and permissions.\n";
+    echo "Continuing with JSON file creation...\n";
 }
+echo "=== End Database Connection ===\n\n";
 
 // Note: Individual .txt files are no longer needed since we use stats.json
 
