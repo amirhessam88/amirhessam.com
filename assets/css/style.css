@@ -204,7 +204,7 @@ h1, h2, h3, h4, h5, h6 {
 #hero {
   width: 100%;
   height: 100vh;
-  background: url("../img/hero-bg.jpg") top center;
+  background: url("../img/hero-bg.jpg") top left;
   background-size: cover;
 }
 
@@ -384,38 +384,72 @@ section {
 }
 
 /*--------------------------------------------------------------
-# Akills
+# Focus Areas
 --------------------------------------------------------------*/
-.skills .progress {
-  height: 50px;
-  display: block;
-  background: none;
+.focus-areas .focus-box {
+  background: #fff;
+  padding: 30px 20px;
+  margin-bottom: 30px;
+  text-align: center;
+  height: 100%;
+  box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.06);
 }
 
-.skills .progress .skill {
-  padding: 0;
-  margin: 0 0 6px 0;
-  text-transform: uppercase;
-  display: block;
-  font-weight: 600;
-  font-family: "Poppins", sans-serif;
+.focus-areas .focus-box .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  background: #149ddd;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+.focus-areas .focus-box .icon i {
+  color: #fff;
+  font-size: 24px;
+}
+
+.focus-areas .focus-box h4 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
   color: #050d18;
 }
 
-.skills .progress .skill .val {
-  float: right;
-  font-style: normal;
+.focus-areas .focus-box p {
+  font-size: 14px;
+  line-height: 24px;
+  color: #122f57;
+  margin-bottom: 0;
 }
 
-.skills .progress-bar-wrap {
-  background: #dce8f8;
+.focus-areas .focus-box a {
+  color: #149ddd;
 }
 
-.skills .progress-bar {
-  width: 1px;
-  height: 10px;
-  transition: .9s;
-  background-color: #149ddd;
+.focus-areas .focus-box a:hover {
+  color: #0d6e9e;
+}
+
+.focus-areas .focus-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 10px;
+}
+
+.focus-areas .focus-tags span {
+  background: #fff;
+  color: #173b6c;
+  font-family: "Poppins", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 20px;
+  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.06);
 }
 
 /*--------------------------------------------------------------
