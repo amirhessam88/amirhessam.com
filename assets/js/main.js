@@ -321,6 +321,92 @@
     });
   }
 
+  // Fetch focus areas dynamically - refresh from server when available
+  function fetchFocusAreas() {
+    const phpPaths = [
+      'assets/php/fetch_focus_areas.php',
+      './assets/php/fetch_focus_areas.php',
+      '/assets/php/fetch_focus_areas.php'
+    ];
+
+    const jsonPaths = [
+      'assets/data/focus_areas.json',
+      './assets/data/focus_areas.json',
+      '/assets/data/focus_areas.json'
+    ];
+
+    tryFocusPaths(phpPaths, 0, function () {
+      tryFocusPaths(jsonPaths, 0, function () {
+        console.log('Focus areas: using static HTML fallback');
+      });
+    });
+  }
+
+  function tryFocusPaths(paths, index, onFailure) {
+    if (index >= paths.length) {
+      if (onFailure) {
+        onFailure();
+      }
+      return;
+    }
+
+    fetchFreshFocusData(paths[index])
+      .then(data => renderFocusAreas(data))
+      .catch(function () {
+        tryFocusPaths(paths, index + 1, onFailure);
+      });
+  }
+
+  function fetchFreshFocusData(path) {
+    const cacheBuster = '?t=' + Date.now() + '&r=' + Math.random() + '&v=' + Math.floor(Math.random() * 1000);
+    return fetch(path + cacheBuster, {
+      method: 'GET',
+      cache: 'no-store',
+      headers: {
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache'
+      }
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Focus areas fetch failed - Status: ' + response.status);
+        }
+        return response.json();
+      });
+  }
+
+  function renderFocusAreas(data) {
+    const container = document.getElementById('focus-areas-content');
+    if (!container || !data.areas) {
+      return;
+    }
+
+    const cardsHtml = data.areas.map(function (area, index) {
+      const delayAttr = index > 0 ? ' data-aos-delay="' + (index * 100) + '"' : '';
+      return (
+        '<div class="col-lg-3 col-md-6" data-aos="fade-up"' + delayAttr + '>' +
+          '<div class="focus-box">' +
+            '<div class="icon"><i class="' + area.icon + '"></i></div>' +
+            '<h4>' + area.title + '</h4>' +
+            '<p>' + area.description + '</p>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    const tagsHtml = (data.tags || []).map(function (tag) {
+      return '<span>' + tag + '</span>';
+    }).join('');
+
+    container.innerHTML =
+      '<div class="row">' + cardsHtml + '</div>' +
+      '<div class="focus-tags" data-aos="fade-up" data-aos-delay="400">' + tagsHtml + '</div>';
+
+    if (typeof AOS !== 'undefined') {
+      AOS.refreshHard();
+    }
+  }
+
   // Load counts when page loads
   console.log('Main.js loaded, calling fetchCounts...');
 
@@ -330,6 +416,7 @@
     // Add a small delay to ensure all elements are ready
     setTimeout(function () {
       fetchCounts();
+      fetchFocusAreas();
     }, 500);
   });
 
