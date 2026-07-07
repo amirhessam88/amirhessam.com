@@ -613,6 +613,24 @@ section {
   bottom: 0;
 }
 
+#ventures .portfolio-item {
+  display: flex;
+  justify-content: center;
+}
+
+#ventures .portfolio-wrap {
+  max-width: 140px;
+}
+
+#ventures .portfolio-wrap img {
+  max-height: 90px;
+  width: auto;
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
 /*--------------------------------------------------------------
 # Services
 --------------------------------------------------------------*/

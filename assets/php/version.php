@@ -16,7 +16,8 @@ $versionFiles = [
     __DIR__ . '/../img/logo_color_clear.png',
     __DIR__ . '/../img/logo_black_clear.png',
     __DIR__ . '/../css/style.css',
-    __DIR__ . '/../js/main.js'
+    __DIR__ . '/../js/main.js',
+    __DIR__ . '/../data/focus_areas.json'
 ];
 
 $version = md5(implode('|', array_map(function($file) {

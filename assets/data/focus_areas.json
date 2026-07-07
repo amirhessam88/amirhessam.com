@@ -1,0 +1,38 @@
+{
+  "areas": [
+    {
+      "icon": "icofont-brainstorming",
+      "title": "ML Systems & AI",
+      "description": "Production ML pipelines, model lifecycle, and applied AI at scale."
+    },
+    {
+      "icon": "icofont-chart-histogram",
+      "title": "Observability & Platform",
+      "description": "Reliability frameworks, monitoring, and platform engineering for AI products."
+    },
+    {
+      "icon": "icofont-database",
+      "title": "Distributed Data",
+      "description": "Large-scale data processing, Spark, and cloud-native data platforms."
+    },
+    {
+      "icon": "icofont-file-python",
+      "title": "Open Source & Research",
+      "description": "Building <a href=\"https://github.com/slickml/slick-ml\">SlickML</a> and publishing in ML &amp; scientific computing."
+    }
+  ],
+  "tags": [
+    "Python",
+    "Go",
+    "SQL",
+    "Bash",
+    "LLMs",
+    "PySpark",
+    "Databricks",
+    "Spark",
+    "AWS",
+    "Azure",
+    "Git",
+    "Linux"
+  ]
+}
