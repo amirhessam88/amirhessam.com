@@ -154,8 +154,32 @@
         }
       })
       .catch(function () {
-        // Embedded HTML values are already visible; nothing else to do
+        loadDefaults();
       });
+  }
+
+  function parseStatsDate(dateStr) {
+    if (!dateStr) {
+      return null;
+    }
+
+    var parts = String(dateStr).trim().match(
+      /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})$/
+    );
+
+    if (parts) {
+      return new Date(
+        parseInt(parts[1], 10),
+        parseInt(parts[2], 10) - 1,
+        parseInt(parts[3], 10),
+        parseInt(parts[4], 10),
+        parseInt(parts[5], 10),
+        parseInt(parts[6], 10)
+      );
+    }
+
+    var parsed = new Date(dateStr.replace(' ', 'T'));
+    return isNaN(parsed.getTime()) ? null : parsed;
   }
 
   function loadCachedStats() {
@@ -176,11 +200,7 @@
     const cacheBuster = '?t=' + Date.now();
     return fetch(paths[index] + cacheBuster, {
       method: 'GET',
-      cache: 'no-cache',
-      headers: {
-        'Cache-Control': 'no-cache',
-        'Pragma': 'no-cache'
-      }
+      credentials: 'same-origin'
     })
       .then(function (response) {
         if (!response.ok) {
@@ -198,8 +218,8 @@
       return true;
     }
 
-    const updated = new Date(data.last_updated.replace(' ', 'T'));
-    if (isNaN(updated.getTime())) {
+    const updated = parseStatsDate(data.last_updated);
+    if (!updated) {
       return true;
     }
 
@@ -224,11 +244,7 @@
       const cacheBuster = '?refresh=1&t=' + Date.now();
       fetch(paths[index] + cacheBuster, {
         method: 'GET',
-        cache: 'no-cache',
-        headers: {
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
-        }
+        credentials: 'same-origin'
       })
         .then(function (response) {
           if (!response.ok) {
@@ -237,7 +253,7 @@
           return response.json();
         })
         .then(function (data) {
-          if (data.citations || data.papers || data.hindex) {
+          if (data.citations != null || data.papers != null || data.hindex != null) {
             updateCounts(data, true);
           }
         })
@@ -249,17 +265,36 @@
 
   // Function to update all counts
   function updateCounts(data, silent) {
-    if (data.citations) {
+    if (data.citations != null) {
       updateCounter('#citation-count', data.citations, silent);
     }
 
-    if (data.papers) {
+    if (data.papers != null) {
       updateCounter('#papers-count', data.papers, silent);
     }
 
-    if (data.hindex) {
+    if (data.hindex != null) {
       updateCounter('#hindex-count', data.hindex, silent);
     }
+  }
+
+  function animateCounter($el, target) {
+    var steps = 50;
+    var stepTime = 20;
+    var step = 0;
+
+    $el.text(0);
+
+    var timer = setInterval(function () {
+      step++;
+      var current = Math.min(Math.round((target / steps) * step), target);
+      $el.text(current);
+
+      if (step >= steps) {
+        clearInterval(timer);
+        $el.text(target);
+      }
+    }, stepTime);
   }
 
   function updateCounter(selector, value, silent) {
@@ -270,58 +305,20 @@
       return;
     }
 
-    $el.text(value);
-
-    if (!silent) {
-      $el.counterUp({
-        delay: 10,
-        time: 1000
-      });
+    if (silent) {
+      $el.text(value);
+      return;
     }
-  }
 
-  // Function to trigger counter animation on existing values
-  function triggerCounterAnimation() {
-    console.log('Triggering counter animation on embedded values');
-
-    // The values are already in the HTML, just trigger the counter animation
-    $('#citation-count').counterUp({
-      delay: 10,
-      time: 1000
-    });
-
-    $('#papers-count').counterUp({
-      delay: 10,
-      time: 1000
-    });
-
-    $('#hindex-count').counterUp({
-      delay: 10,
-      time: 1000
-    });
+    animateCounter($el, value);
   }
 
   // Function to load default values (fallback)
   function loadDefaults() {
-    console.log('Loading default values as final fallback');
-
-    // Set default values
-    $('#citation-count').text('1457');
-    $('#citation-count').counterUp({
-      delay: 10,
-      time: 1000
-    });
-
-    $('#papers-count').text('93');
-    $('#papers-count').counterUp({
-      delay: 10,
-      time: 1000
-    });
-
-    $('#hindex-count').text('18');
-    $('#hindex-count').counterUp({
-      delay: 10,
-      time: 1000
+    updateCounts({
+      citations: 1457,
+      papers: 93,
+      hindex: 18
     });
   }
 
@@ -417,7 +414,7 @@
     fetchFocusAreas();
   });
 
-  // jQuery counterUp
+  // jQuery counterUp (static counts only; scholar stats use animateCounter)
   $('[data-toggle="counter-up"]').counterUp({
     delay: 10,
     time: 1000
