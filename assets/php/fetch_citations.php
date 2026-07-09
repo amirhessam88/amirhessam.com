@@ -9,6 +9,57 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 header('Access-Control-Allow-Headers: Content-Type');
 
+$data_dir = dirname(__DIR__) . '/data';
+$stats_file = $data_dir . '/stats.json';
+$cache_max_age_hours = 24;
+$force_refresh = isset($_GET['refresh']) && $_GET['refresh'] === '1';
+
+function loadCachedStats($stats_file) {
+    if (!file_exists($stats_file)) {
+        return null;
+    }
+
+    $stats_data = json_decode(file_get_contents($stats_file), true);
+    return is_array($stats_data) ? $stats_data : null;
+}
+
+function isStatsCacheFresh($stats_data, $cache_max_age_hours) {
+    if (empty($stats_data['last_updated'])) {
+        return false;
+    }
+
+    $last_updated = strtotime($stats_data['last_updated']);
+    if ($last_updated === false) {
+        return false;
+    }
+
+    return (time() - $last_updated) < ($cache_max_age_hours * 3600);
+}
+
+function saveStats($stats_file, $citations, $papers, $hindex, $cached = false) {
+    $stats_data = [
+        'citations' => $citations,
+        'papers' => $papers,
+        'hindex' => $hindex,
+        'last_updated' => date('Y-m-d H:i:s'),
+        'cached' => $cached
+    ];
+
+    $data_dir = dirname($stats_file);
+    if (!is_dir($data_dir)) {
+        mkdir($data_dir, 0755, true);
+    }
+
+    file_put_contents($stats_file, json_encode($stats_data, JSON_PRETTY_PRINT));
+    return $stats_data;
+}
+
+$cached_stats = loadCachedStats($stats_file);
+if (!$force_refresh && $cached_stats && isStatsCacheFresh($cached_stats, $cache_max_age_hours)) {
+    echo json_encode(array_merge($cached_stats, ['cached' => true]));
+    exit;
+}
+
 // Function to fetch a page with cURL
 function fetchPage($url) {
     $ch = curl_init();
@@ -35,23 +86,14 @@ $html = $result['html'];
 $http_code = $result['http_code'];
 
 if ($http_code !== 200 || !$html) {
-    // If we can't fetch from Google Scholar, try to load from stats.json as fallback
-    $stats_file = 'assets/data/stats.json';
-    
-    if (file_exists($stats_file)) {
-        $stats_data = json_decode(file_get_contents($stats_file), true);
-        if ($stats_data) {
-            echo json_encode([
-                'citations' => isset($stats_data['citations']) ? $stats_data['citations'] : 1457,
-                'papers' => isset($stats_data['papers']) ? $stats_data['papers'] : 93,
-                'hindex' => isset($stats_data['hindex']) ? $stats_data['hindex'] : 18,
-                'cached' => true,
-                'error' => 'Google Scholar fetch failed, using cached data'
-            ]);
-            exit;
-        }
+    if ($cached_stats) {
+        echo json_encode(array_merge($cached_stats, [
+            'cached' => true,
+            'error' => 'Google Scholar fetch failed, using cached data'
+        ]));
+        exit;
     }
-    
+
     // Final fallback to default values
     echo json_encode([
         'citations' => 1457,
@@ -164,18 +206,9 @@ if ($papers === 0) {
     $papers = preg_match_all('/<a[^>]*class="gsc_a_at"[^>]*>/', $all_html, $paper_matches);
 }
 
-// Update the citations file with the new count
-$citations_file = 'assets/data/citations.txt';
-file_put_contents($citations_file, $citations);
-
-// Update the papers file with the new count
-$papers_file = 'assets/data/papers.txt';
-file_put_contents($papers_file, $papers);
-
-// Update the hindex file with the new count
-$hindex_file = 'assets/data/hindex.txt';
-file_put_contents($hindex_file, $hindex);
+// Update stats.json with the latest counts
+$stats_data = saveStats($stats_file, $citations, $papers, $hindex, false);
 
 // Return all counts
-echo json_encode(['citations' => $citations, 'papers' => $papers, 'hindex' => $hindex, 'cached' => false]);
+echo json_encode($stats_data);
 ?>
