@@ -2,8 +2,8 @@
   "areas": [
     {
       "icon": "icofont-brainstorming",
-      "title": "ML Systems & AI",
-      "description": "Production ML pipelines, model lifecycle, and applied AI at scale."
+      "title": "AI/ML Systems Ops",
+      "description": "Production ML pipelines, model lifecycle, MLOps, CI/CD, and applied AI at scale."
     },
     {
       "icon": "icofont-chart-histogram",
@@ -27,6 +27,8 @@
     "SQL",
     "Bash",
     "LLMs",
+    "MLOps",
+    "CI/CD",
     "PySpark",
     "Databricks",
     "Spark",
