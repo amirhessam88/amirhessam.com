@@ -613,16 +613,19 @@ section {
   bottom: 0;
 }
 
-#ventures .portfolio-item {
+#ventures .portfolio-item,
+#libraries .portfolio-item {
   display: flex;
   justify-content: center;
 }
 
-#ventures .portfolio-wrap {
+#ventures .portfolio-wrap,
+#libraries .portfolio-wrap {
   max-width: 140px;
 }
 
-#ventures .portfolio-wrap img {
+#ventures .portfolio-wrap img,
+#libraries .portfolio-wrap img {
   max-height: 90px;
   width: auto;
   max-width: 100%;
