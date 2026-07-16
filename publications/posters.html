@@ -9,8 +9,24 @@
 <html lang="en">
 
 <head>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored === "light" || stored === "dark"
+          ? stored
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="color-scheme" content="light dark">
 
   <title>Posters</title>
   <meta content="" name="descriptison">
@@ -76,6 +92,17 @@
 
         </ul>
       </nav><!-- .nav-menu -->
+
+      <button type="button" class="theme-toggle" data-theme-toggle
+        aria-pressed="false" aria-label="Switch to dark theme"
+        title="Dark theme">
+        <i class="bx bx-moon theme-toggle-icon theme-toggle-icon-moon"
+          aria-hidden="true"></i>
+        <i class="bx bx-sun theme-toggle-icon theme-toggle-icon-sun"
+          aria-hidden="true"></i>
+        <span class="theme-toggle-label">Dark mode</span>
+      </button>
+
       <button type="button" class="mobile-nav-toggle d-xl-none"><i
           class="icofont-navigation-menu"></i></button>
 
@@ -253,6 +280,9 @@
   <script src="../assets/vendor/owl.carousel/owl.carousel.min.js"></script>
   <script src="../assets/vendor/typed.js/typed.min.js"></script>
   <script src="../assets/vendor/aos/aos.js"></script>
+
+  <!-- Theme toggle -->
+  <script src="../assets/js/theme-toggle.js?v=20260716174000"></script>
 
   <!-- Template Main JS File -->
   <script src="../assets/js/main.js"></script>

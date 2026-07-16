@@ -9,6 +9,21 @@
 <html lang="en">
 
 <head>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored === "light" || stored === "dark"
+          ? stored
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async
     src="https://www.googletagmanager.com/gtag/js?id=UA-113469174-1"></script>
@@ -29,6 +44,7 @@
   <meta http-equiv="Expires" content="0">
   <meta http-equiv="Last-Modified" content="0">
   <meta name="cache-buster" content="20250123030000">
+  <meta name="color-scheme" content="light dark">
 
   <title>&copy Amirhessam Tahmassebi</title>
   <meta content="" name="descriptison">
@@ -78,9 +94,9 @@
             class="google-plus"><i class="bx bxl-google"></i></a>
           <a href="https://github.com/amirhessam88" class="github"><i
               class="bx bxl-github"></i></a>
-          <a href="https://amirhessam88.github.io/" class="datascience"><i
+          <a href="https://slickml.com/" class="consulting"><i
               class="icofont-learn"></i></a>
-          <a href="https://github.com/slickml/slick-ml" class="library"><i
+          <a href="https://github.com/slickml" class="library"><i
               class="icofont-brainstorming"></i></a>
 
 
@@ -111,6 +127,17 @@
 
         </ul>
       </nav><!-- .nav-menu -->
+
+      <button type="button" class="theme-toggle" data-theme-toggle
+        aria-pressed="false" aria-label="Switch to dark theme"
+        title="Dark theme">
+        <i class="bx bx-moon theme-toggle-icon theme-toggle-icon-moon"
+          aria-hidden="true"></i>
+        <i class="bx bx-sun theme-toggle-icon theme-toggle-icon-sun"
+          aria-hidden="true"></i>
+        <span class="theme-toggle-label">Dark mode</span>
+      </button>
+
       <button type="button" class="mobile-nav-toggle d-xl-none"><i
           class="icofont-navigation-menu"></i></button>
 
@@ -157,9 +184,9 @@
               in Neuroinformatics</a>, starting August 2021.
 
             Last, I am the Founder of <a
-              href="https://github.com/slickml/slick-ml">SlickML</a>,
-            an open-source machine learning library written in
-            Python.
+              href="https://github.com/slickml">SlickML</a>,
+            an open-source software foundation building practical machine
+            learning tools in Python.
 
 
           </p>
@@ -426,142 +453,171 @@
               <a href="./assets/pdf/CV.pdf">Full CV</a></em>.
           </p>
         </div>
+
+        <div class="resume-filters" role="tablist" aria-label="Filter résumé">
+          <button type="button" class="resume-filter is-active"
+            data-filter="all" role="tab" aria-selected="true">All</button>
+          <button type="button" class="resume-filter" data-filter="industry"
+            role="tab" aria-selected="false">Industry</button>
+          <button type="button" class="resume-filter" data-filter="academia"
+            role="tab" aria-selected="false">Academia</button>
+        </div>
+
         <!-- ======= Summary Section ======= -->
         <div class="row">
-          <div class="col-lg-4" data-aos="fade-up">
+          <div class="col-lg-4 resume-col" data-aos="fade-up"
+            data-resume-col="academia">
 
             <!-- ======= Education Section ======= -->
             <h3 class="resume-title">Education</h3>
 
-            <!-- ======= PhD ======= -->
-            <div class="resume-item">
-              <h4>PhD -- Computational Science</h4>
-              <h5>Florida State University, Florida, USA</h5>
-              <h5>August 2015 - August 2018</h5>
-              <p><em>GPA: 3.969/4.0</em></p>
-              <p><em>Advisor: Prof. Anke Meyer-Baese</em></p>
-              <p>Dissertation: Pattern Recognition in Medical Imaging:
-                Supervised Learning of MRI and fMRI Data</p>
-            </div>
+            <div class="resume-track">
+              <div class="resume-progress" aria-hidden="true"></div>
 
-            <!-- ======= MSc ======= -->
-            <div class="resume-item">
-              <h4>MSc -- Computational Science</h4>
-              <h5>Florida State University, Florida, USA</h5>
-              <h5>August 2015 - December 2017</h5>
-              <p><em>GPA: 3.969/4.0</em></p>
-              <p><em>Advisor: Prof. Anke Meyer-Baese</em></p>
-            </div>
+              <div class="resume-item" data-track="academia" id="resume-phd"
+                data-step="phd">
+                <h4>PhD -- Computational Science</h4>
+                <h5>Florida State University, Florida, USA</h5>
+                <h5>August 2015 - August 2018</h5>
+                <p><em>GPA: 3.969/4.0</em></p>
+                <p><em>Advisor: Prof. Anke Meyer-Baese</em></p>
+                <p>Dissertation: Pattern Recognition in Medical Imaging:
+                  Supervised Learning of MRI and fMRI Data</p>
+              </div>
 
-            <!-- ======= MSc ======= -->
-            <div class="resume-item">
-              <h4>MSc -- Physics</h4>
-              <h5>University of Akron, Ohio, USA</h5>
-              <h5>August 2013 - August 2015</h5>
-              <p><em>GPA: 3.982/4.0</em></p>
-              <p><em>Advisor: Prof. Alper Buldum</em></p>
-              <p>Dissertation: Fluid Flow Through Carbon Nanotubes And Graphene
-                Based Nanostructures</p>
-            </div>
+              <div class="resume-item" data-track="academia" id="resume-msc-cs"
+                data-step="msc-cs">
+                <h4>MSc -- Computational Science</h4>
+                <h5>Florida State University, Florida, USA</h5>
+                <h5>August 2015 - December 2017</h5>
+                <p><em>GPA: 3.969/4.0</em></p>
+                <p><em>Advisor: Prof. Anke Meyer-Baese</em></p>
+              </div>
 
-            <!-- ======= BSC ======= -->
-            <div class="resume-item">
-              <h4>BSc -- Physics</h4>
-              <h5>University of Tehran, Tehran, Iran</h5>
-              <h5>September 2006 - July 2010</h5>
-              <p><em>GPA: 3.1/4.0</em></p>
-              <p><em>Advisor: Prof. Hamidreza Moshfegh</em></p>
+              <div class="resume-item" data-track="academia"
+                id="resume-msc-phys" data-step="msc-phys">
+                <h4>MSc -- Physics</h4>
+                <h5>University of Akron, Ohio, USA</h5>
+                <h5>August 2013 - August 2015</h5>
+                <p><em>GPA: 3.982/4.0</em></p>
+                <p><em>Advisor: Prof. Alper Buldum</em></p>
+                <p>Dissertation: Fluid Flow Through Carbon Nanotubes And
+                  Graphene
+                  Based Nanostructures</p>
+              </div>
+
+              <div class="resume-item" data-track="academia" id="resume-bsc"
+                data-step="bsc">
+                <h4>BSc -- Physics</h4>
+                <h5>University of Tehran, Tehran, Iran</h5>
+                <h5>September 2006 - July 2010</h5>
+                <p><em>GPA: 3.1/4.0</em></p>
+                <p><em>Advisor: Prof. Hamidreza Moshfegh</em></p>
+              </div>
             </div>
           </div>
 
           <!-- ======= Professional Experience Section ======= -->
-          <div class="col-lg-8" data-aos="fade-up" data-aos-delay="100">
+          <div class="col-lg-8 resume-col" data-aos="fade-up"
+            data-aos-delay="100" data-resume-col="experience">
             <h3 class="resume-title">Professional Experience</h3>
 
-            <!-- ======= Rivian VW ======= -->
-            <div class="resume-item">
-              <h4>Staff Software Engineer -- Rivian &amp; Volkswagen
-                Technologies</h4>
-              <h5>Palo Alto, CA, USA (Remote)</h5>
-              <h5>November 2024 - Present</h5>
-              <ul>
-                <li>Technical lead of ConvoHealth, the observability framework
-                  for Rivian Voice Assistant.
-                </li>
-              </ul>
-            </div>
-            <!-- ======= Rivian ======= -->
-            <div class="resume-item">
-              <h4>Senior Data Scientist, Algorithms -- Rivian Automotive</h4>
-              <h5>Palo Alto, CA, USA (Remote)</h5>
-              <h5>September 2021 - November 2024</h5>
-              <ul>
-                <li>Delivered the automated decision-making platform and overall
-                  data system architecture for factory data, along with various
-                  scalable solutions within Digital Manufacturing Engineering.
-                </li>
-              </ul>
-            </div>
+            <div class="resume-track">
+              <div class="resume-progress" aria-hidden="true"></div>
 
-            <!-- ======= FSU ======= -->
-            <div class="resume-item">
-              <h4>Affiliated Courtesy Faculty -- Department of Scientific
-                Computing</h4>
-              <h5>Tallahassee, FL, USA (Remote)</h5>
-              <h5>October 2018 - Present</h5>
-              <ul>
-                <li>Technical Lead of Machine Learning in Dr. Anke Meyer-Baese's
-                  Research Group
-                  in the Department of Scientific Computing at Florida State
-                  University.</li>
-              </ul>
-            </div>
-            <!-- ======= ExxonMobil ======= -->
-            <div class="resume-item">
-              <h4>Senior Data Scientist -- ExxonMobil Corporation</h4>
-              <h5>Houston, TX, USA </h5>
-              <h5>January 2020 - September 2021</h5>
-              <ul>
-                <li>Technical lead for the development of interpretable
-                  transaction-specific models for the polyethylene and
-                  polypropylene sectors of North America, incorporating customer
-                  segmentation and pricing recommendations to maximize variable
-                  margin for ExxonMobil Chemical Company (EMCC), which resulted
-                  in a $90M revenue increase in 2020 and a $41M revenue increase
-                  in Q1–Q2 of 2021.
-                </li>
-              </ul>
-            </div>
-            <!-- ======= Cerner ======= -->
-            <div class="resume-item">
-              <h4>Data Scientist -- Oracle (formerly Cerner Corporation)</h4>
-              <h5>Kansas City, MO, USA </h5>
-              <h5>October 2018 - December 2019</h5>
-              <ul>
-                <li>Technical lead of the 90-day pediatric asthma readmission
-                  model for Children’s Hospital of Orange County (CHOC) and the
-                  30-day pediatric all-cause readmission model for 17 hospitals
-                  across the United States.</li>
-                <!-- <li>Technical Lead of Predictive Models for Bundled Payments
-                  Care Improvement Advanced (BPCI-A) for 37
-                  Defined Centers for Medicare and Medicaid Services (CMS)
-                  Episodes.</li> -->
-              </ul>
-            </div>
+              <div class="resume-item is-current" data-track="industry"
+                id="resume-rivian-vw" data-step="rivian-vw">
+                <h4>Staff Software Engineer -- Rivian &amp; Volkswagen
+                  Technologies</h4>
+                <h5>Palo Alto, CA, USA (Remote)</h5>
+                <h5>November 2024 - Present</h5>
+                <ul>
+                  <li>Technical lead of ConvoHealth, the observability framework
+                    for Rivian Voice Assistant.
+                  </li>
+                </ul>
+              </div>
 
-            <!-- ======= Mynomx Inc ======= -->
-            <div class="resume-item">
-              <h4>Data Scientist -- Mynomx Inc. (formerly Precision Wellness
-                Inc.)</h4>
-              <h5>Palo Alto, CA, USA </h5>
-              <h5>June 2017 - August 2018</h5>
-              <ul>
-                <li>Developed hybrid machine learning algorithms for population
-                  health management.
-                </li>
-              </ul>
-            </div>
+              <div class="resume-item" data-track="industry" id="resume-rivian"
+                data-step="rivian">
+                <h4>Senior Data Scientist, Algorithms -- Rivian Automotive</h4>
+                <h5>Palo Alto, CA, USA (Remote)</h5>
+                <h5>September 2021 - November 2024</h5>
+                <ul>
+                  <li>Delivered the automated decision-making platform and
+                    overall
+                    data system architecture for factory data, along with
+                    various
+                    scalable solutions within Digital Manufacturing Engineering.
+                  </li>
+                </ul>
+              </div>
 
+              <div class="resume-item is-current" data-track="academia"
+                id="resume-fsu" data-step="fsu">
+                <h4>Affiliated Courtesy Faculty -- Department of Scientific
+                  Computing</h4>
+                <h5>Tallahassee, FL, USA (Remote)</h5>
+                <h5>October 2018 - Present</h5>
+                <ul>
+                  <li>Technical Lead of Machine Learning in Dr. Anke
+                    Meyer-Baese's
+                    Research Group
+                    in the Department of Scientific Computing at Florida State
+                    University.</li>
+                </ul>
+              </div>
+
+              <div class="resume-item" data-track="industry" id="resume-exxon"
+                data-step="exxon">
+                <h4>Senior Data Scientist -- ExxonMobil Corporation</h4>
+                <h5>Houston, TX, USA </h5>
+                <h5>January 2020 - September 2021</h5>
+                <ul>
+                  <li>Technical lead for the development of interpretable
+                    transaction-specific models for the polyethylene and
+                    polypropylene sectors of North America, incorporating
+                    customer
+                    segmentation and pricing recommendations to maximize
+                    variable
+                    margin for ExxonMobil Chemical Company (EMCC), which
+                    resulted
+                    in a $90M revenue increase in 2020 and a $41M revenue
+                    increase
+                    in Q1–Q2 of 2021.
+                  </li>
+                </ul>
+              </div>
+
+              <div class="resume-item" data-track="industry" id="resume-oracle"
+                data-step="oracle">
+                <h4>Data Scientist -- Oracle (formerly Cerner Corporation)</h4>
+                <h5>Kansas City, MO, USA </h5>
+                <h5>October 2018 - December 2019</h5>
+                <ul>
+                  <li>Technical lead of the 90-day pediatric asthma readmission
+                    model for Children’s Hospital of Orange County (CHOC) and
+                    the
+                    30-day pediatric all-cause readmission model for 17
+                    hospitals
+                    across the United States.</li>
+                </ul>
+              </div>
+
+              <div class="resume-item" data-track="industry" id="resume-mynomx"
+                data-step="mynomx">
+                <h4>Data Scientist -- Mynomx Inc. (formerly Precision Wellness
+                  Inc.)</h4>
+                <h5>Palo Alto, CA, USA </h5>
+                <h5>June 2017 - August 2018</h5>
+                <ul>
+                  <li>Developed hybrid machine learning algorithms for
+                    population
+                    health management.
+                  </li>
+                </ul>
+              </div>
+            </div>
 
           </div>
         </div>
@@ -640,9 +696,7 @@
 
         <div class="section-title">
           <h2>Academic Portfolio</h2>
-          <!--
-          <p>PORTFOLIO GOES HERE.</p>
--->
+          <p>Selected research projects and academic work.</p>
         </div>
 
         <!-- ======= Filtering ======= -->
@@ -657,160 +711,163 @@
           </div>
         </div>
 
-        <!-- ======= Portolio definitons ======= -->
-        <div class="row portfolio-container" data-aos="fade-up"
-          data-aos-delay="100">
+        <div class="portfolio-network" id="portfolio-network">
+          <canvas id="portfolio-links-canvas" aria-hidden="true"></canvas>
 
-          <!-- ======= Portfolio-1 ======= -->
-          <div class="col-lg-4 col-md-6 portfolio-item filter-ml filter-dl">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-1.png" class="img-fluid"
-                alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-1.png"
-                  data-gall="portfolioGallery" class="venobox"
-                  title="My Data Science Portfolio Built via Jekyll"><i
-                    class="bx bx-plus"></i></a>
-                <a href="https://amirhessam88.github.io/"
-                  title="More Details"><i class="bx bx-link"></i></a>
+          <!-- ======= Portolio definitons ======= -->
+          <div class="row portfolio-container" data-aos="fade-up"
+            data-aos-delay="100">
+
+            <!-- ======= Portfolio-1 ======= -->
+            <div class="col-lg-4 col-md-6 portfolio-item filter-ml filter-dl">
+              <div class="portfolio-wrap">
+                <img src="assets/img/portfolio/portfolio-1.png"
+                  class="img-fluid" alt="">
+                <div class="portfolio-links">
+                  <a href="assets/img/portfolio/portfolio-1.png"
+                    data-gall="portfolioGallery" class="venobox"
+                    title="My Data Science Portfolio Built via Jekyll"><i
+                      class="bx bx-plus"></i></a>
+                  <a href="https://amirhessam88.github.io/"
+                    title="More Details"><i class="bx bx-link"></i></a>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- ======= Portfolio-2 ======= -->
-          <div class="col-lg-4 col-md-6 portfolio-item filter-ml">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-2.png" class="img-fluid"
-                alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-2.png"
-                  data-gall="portfolioGallery" class="venobox"
-                  title="Impact of Machine Learning With Multiparametric Magnetic Resonance Imaging of Breast Cancer"><i
-                    class="bx bx-plus"></i></a>
-                <a href="assets/pdf/projects/investigative2018.pdf"
-                  title="More Details"><i class="bx bx-link"></i></a>
+            <!-- ======= Portfolio-2 ======= -->
+            <div class="col-lg-4 col-md-6 portfolio-item filter-ml">
+              <div class="portfolio-wrap">
+                <img src="assets/img/portfolio/portfolio-2.png"
+                  class="img-fluid" alt="">
+                <div class="portfolio-links">
+                  <a href="assets/img/portfolio/portfolio-2.png"
+                    data-gall="portfolioGallery" class="venobox"
+                    title="Impact of Machine Learning With Multiparametric Magnetic Resonance Imaging of Breast Cancer"><i
+                      class="bx bx-plus"></i></a>
+                  <a href="assets/pdf/projects/investigative2018.pdf"
+                    title="More Details"><i class="bx bx-link"></i></a>
+                </div>
               </div>
             </div>
-          </div>
 
 
 
-          <!-- ======= Portfolio-3 ======= -->
-          <div class="col-lg-4 col-md-6 portfolio-item filter-gp">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-3.png" class="img-fluid"
-                alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-3.png"
-                  data-gall="portfolioGallery" class="venobox"
-                  title="Building Energy Consumption Forecast via MOGP"><i
-                    class="bx bx-plus"></i></a>
-                <a href="assets/pdf/projects/measurement2018.pdf"
-                  title="More Details"><i class="bx bx-link"></i></a>
+            <!-- ======= Portfolio-3 ======= -->
+            <div class="col-lg-4 col-md-6 portfolio-item filter-gp">
+              <div class="portfolio-wrap">
+                <img src="assets/img/portfolio/portfolio-3.png"
+                  class="img-fluid" alt="">
+                <div class="portfolio-links">
+                  <a href="assets/img/portfolio/portfolio-3.png"
+                    data-gall="portfolioGallery" class="venobox"
+                    title="Building Energy Consumption Forecast via MOGP"><i
+                      class="bx bx-plus"></i></a>
+                  <a href="assets/pdf/projects/measurement2018.pdf"
+                    title="More Details"><i class="bx bx-link"></i></a>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- ======= Portfolio-4 ======= -->
-          <div class="col-lg-4 col-md-6 portfolio-item filter-dl">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-4.png" class="img-fluid"
-                alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-4.png"
-                  data-gall="portfolioGallery" class="venobox"
-                  title="iDeepLe: Deep Learning in a Flash"><i
-                    class="bx bx-plus"></i></a>
-                <a href="assets/pdf/projects/spie-orlando-ideeple2018.pdf"
-                  title="More Details"><i class="bx bx-link"></i></a>
+            <!-- ======= Portfolio-4 ======= -->
+            <div class="col-lg-4 col-md-6 portfolio-item filter-dl">
+              <div class="portfolio-wrap">
+                <img src="assets/img/portfolio/portfolio-4.png"
+                  class="img-fluid" alt="">
+                <div class="portfolio-links">
+                  <a href="assets/img/portfolio/portfolio-4.png"
+                    data-gall="portfolioGallery" class="venobox"
+                    title="iDeepLe: Deep Learning in a Flash"><i
+                      class="bx bx-plus"></i></a>
+                  <a href="assets/pdf/projects/spie-orlando-ideeple2018.pdf"
+                    title="More Details"><i class="bx bx-link"></i></a>
+                </div>
               </div>
             </div>
-          </div>
 
 
-          <!-- ======= Portfolio-5 ======= -->
-          <div class="col-lg-4 col-md-6 portfolio-item filter-ml">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-5.png" class="img-fluid"
-                alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-5.png"
-                  data-gall="portfolioGallery" class="venobox"
-                  title="Feature Importance in Multi-Parametric MRI in Breast Cancer"><i
-                    class="bx bx-plus"></i></a>
-                <a href="assets/pdf/projects/spie-houston-nac2018.pdf"
-                  title="More Details"><i class="bx bx-link"></i></a>
+            <!-- ======= Portfolio-5 ======= -->
+            <div class="col-lg-4 col-md-6 portfolio-item filter-ml">
+              <div class="portfolio-wrap">
+                <img src="assets/img/portfolio/portfolio-5.png"
+                  class="img-fluid" alt="">
+                <div class="portfolio-links">
+                  <a href="assets/img/portfolio/portfolio-5.png"
+                    data-gall="portfolioGallery" class="venobox"
+                    title="Feature Importance in Multi-Parametric MRI in Breast Cancer"><i
+                      class="bx bx-plus"></i></a>
+                  <a href="assets/pdf/projects/spie-houston-nac2018.pdf"
+                    title="More Details"><i class="bx bx-link"></i></a>
+                </div>
               </div>
             </div>
-          </div>
 
 
-          <!-- ======= Portfolio-6 ======= -->
-          <div class="col-lg-4 col-md-6 portfolio-item filter-gp">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-6.png" class="img-fluid"
-                alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-6.png"
-                  data-gall="portfolioGallery" class="venobox"
-                  title="Genetic Programming Based On Error Decomposition"><i
-                    class="bx bx-plus"></i></a>
-                <a href="assets/pdf/projects/chapter-msgp.pdf"
-                  title="More Details"><i class="bx bx-link"></i></a>
+            <!-- ======= Portfolio-6 ======= -->
+            <div class="col-lg-4 col-md-6 portfolio-item filter-gp">
+              <div class="portfolio-wrap">
+                <img src="assets/img/portfolio/portfolio-6.png"
+                  class="img-fluid" alt="">
+                <div class="portfolio-links">
+                  <a href="assets/img/portfolio/portfolio-6.png"
+                    data-gall="portfolioGallery" class="venobox"
+                    title="Genetic Programming Based On Error Decomposition"><i
+                      class="bx bx-plus"></i></a>
+                  <a href="assets/pdf/projects/chapter-msgp.pdf"
+                    title="More Details"><i class="bx bx-link"></i></a>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- ======= Portfolio-7 ======= -->
-          <div class="col-lg-4 col-md-6 portfolio-item">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-7.png" class="img-fluid"
-                alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-7.png"
-                  data-gall="portfolioGallery" class="venobox"
-                  title="Fluid Flow Through Carbon Nanotubes"><i
-                    class="bx bx-plus"></i></a>
-                <a href="https://etd.ohiolink.edu/!etd.send_file?accession=akron1436545689&disposition=inline"
-                  title="More Details"><i class="bx bx-link"></i></a>
+            <!-- ======= Portfolio-7 ======= -->
+            <div class="col-lg-4 col-md-6 portfolio-item">
+              <div class="portfolio-wrap">
+                <img src="assets/img/portfolio/portfolio-7.png"
+                  class="img-fluid" alt="">
+                <div class="portfolio-links">
+                  <a href="assets/img/portfolio/portfolio-7.png"
+                    data-gall="portfolioGallery" class="venobox"
+                    title="Fluid Flow Through Carbon Nanotubes"><i
+                      class="bx bx-plus"></i></a>
+                  <a href="https://etd.ohiolink.edu/!etd.send_file?accession=akron1436545689&disposition=inline"
+                    title="More Details"><i class="bx bx-link"></i></a>
+                </div>
               </div>
             </div>
-          </div>
 
 
-          <!-- ======= Portfolio-8 ======= -->
-          <div class="col-lg-4 col-md-6 portfolio-item filter-ml filter-dl">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-8.png" class="img-fluid"
-                alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-8.png"
-                  data-gall="portfolioGallery" class="venobox"
-                  title="Pattern Recognition in Medical Imaging"><i
-                    class="bx bx-plus"></i></a>
-                <a href="assets/pdf/projects/phd.pdf" title="More Details"><i
-                    class="bx bx-link"></i></a>
+            <!-- ======= Portfolio-8 ======= -->
+            <div class="col-lg-4 col-md-6 portfolio-item filter-ml filter-dl">
+              <div class="portfolio-wrap">
+                <img src="assets/img/portfolio/portfolio-8.png"
+                  class="img-fluid" alt="">
+                <div class="portfolio-links">
+                  <a href="assets/img/portfolio/portfolio-8.png"
+                    data-gall="portfolioGallery" class="venobox"
+                    title="Pattern Recognition in Medical Imaging"><i
+                      class="bx bx-plus"></i></a>
+                  <a href="assets/pdf/projects/phd.pdf" title="More Details"><i
+                      class="bx bx-link"></i></a>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- ======= Portfolio-9 ======= -->
-          <div class="col-lg-4 col-md-6 portfolio-item filter-dl">
-            <div class="portfolio-wrap">
-              <img src="assets/img/portfolio/portfolio-9.png" class="img-fluid"
-                alt="">
-              <div class="portfolio-links">
-                <a href="assets/img/portfolio/portfolio-9.png"
-                  data-gall="portfolioGallery" class="venobox"
-                  title="fMRI Big Data Analysis via Convolutional Neural Networks"><i
-                    class="bx bx-plus"></i></a>
-                <a href="assets/pdf/projects/pearc2018.pdf"
-                  title="More Details"><i class="bx bx-link"></i></a>
+            <!-- ======= Portfolio-9 ======= -->
+            <div class="col-lg-4 col-md-6 portfolio-item filter-dl">
+              <div class="portfolio-wrap">
+                <img src="assets/img/portfolio/portfolio-9.png"
+                  class="img-fluid" alt="">
+                <div class="portfolio-links">
+                  <a href="assets/img/portfolio/portfolio-9.png"
+                    data-gall="portfolioGallery" class="venobox"
+                    title="fMRI Big Data Analysis via Convolutional Neural Networks"><i
+                      class="bx bx-plus"></i></a>
+                  <a href="assets/pdf/projects/pearc2018.pdf"
+                    title="More Details"><i class="bx bx-link"></i></a>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!--
+            <!--
           <div class="col-lg-4 col-md-6 portfolio-item filter-web">
             <div class="portfolio-wrap">
               <img src="assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">
@@ -822,7 +879,8 @@
           </div>
 -->
 
-        </div>
+          </div>
+        </div><!-- /.portfolio-network -->
 
       </div>
     </section>
@@ -1214,87 +1272,32 @@
     <section id="contact" class="contact">
       <div class="container">
 
-        <div class="section-title">
+        <div class="section-title contact-title" data-aos="fade-up">
           <h2>Contact</h2>
-          <!--
-          <p>CONTACT GOES HERE</p>
--->
+          <p>Prefer email or a quick call — happy to connect.</p>
         </div>
 
-        <div class="row" data-aos="fade-in">
+        <div class="contact-actions" data-aos="fade-up" data-aos-delay="100">
+          <a class="contact-action" id="contact-email"
+            href="mailto:admin@amirhessam.com"
+            data-email="admin@amirhessam.com">
+            <span class="contact-action-icon"><i
+                class="icofont-envelope"></i></span>
+            <span class="contact-action-label">Email</span>
+            <span class="contact-action-value">admin@amirhessam.com</span>
+            <span class="contact-action-cta">Open email →</span>
+          </a>
 
-          <div class="col-lg-12 d-flex align-items-stretch">
-            <div class="info">
-              <div class="address">
-                <i class="icofont-google-map"></i>
-                <h4>Location:</h4>
-                <p>607 Hansen Way, Palo Alto, CA 94304</p>
-              </div>
-
-              <div class="email">
-                <i class="icofont-envelope"></i>
-                <h4>Email:</h4>
-                <p>admin@amirhessam.com</p>
-              </div>
-
-              <div class="phone">
-                <i class="icofont-phone"></i>
-                <h4>Call:</h4>
-                <p>+1 (330) 606-7855</p>
-              </div>
-
-
-              <!-- ========= Adding Google API Key for Rivian address -->
-              <iframe
-                src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJ23Xwfda7j4ARKbLB_B5ltJA&key=AIzaSyCCCLBFMmOsKf3nX_V-HRFX8fav3bo_H1Y"
-                frameborder="0" style="border:0; width: 100%; height: 290px;"
-                allowfullscreen></iframe>
-
-            </div>
-
-          </div>
-
-
-
-          <!--
-          ======= Email Section ! need to figure out the PHP server =======
--->
-          <!--
-          <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-              <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label for="name">Your Name</label>
-                  <input type="text" name="name" class="form-control" id="name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                  <div class="validate"></div>
-                </div>
-                <div class="form-group col-md-6">
-                  <label for="name">Your Email</label>
-                  <input type="email" class="form-control" name="email" id="email" data-rule="email" data-msg="Please enter a valid email" />
-                  <div class="validate"></div>
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="name">Subject</label>
-                <input type="text" class="form-control" name="subject" id="subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                <div class="validate"></div>
-              </div>
-              <div class="form-group">
-                <label for="name">Message</label>
-                <textarea class="form-control" name="message" rows="10" data-rule="required" data-msg="Please write something for us"></textarea>
-                <div class="validate"></div>
-              </div>
-              <div class="mb-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
-            </form>
-          </div>
--->
-
+          <a class="contact-action" href="tel:+13306067855">
+            <span class="contact-action-icon"><i
+                class="icofont-phone"></i></span>
+            <span class="contact-action-label">Call</span>
+            <span class="contact-action-value">+1 (330) 606-7855</span>
+            <span class="contact-action-cta">Start a call →</span>
+          </a>
         </div>
+        <p class="contact-toast" id="contact-toast" hidden aria-live="polite">
+        </p>
 
       </div>
     </section><!-- End Contact Section -->
@@ -1331,13 +1334,25 @@
   <!-- Cache Busting Script -->
   <script src="assets/js/cache-buster.js?v=20250706200000"></script>
 
+  <!-- Theme toggle -->
+  <script src="assets/js/theme-toggle.js?v=20260716174000"></script>
+
   <!-- Template Main JS File -->
-  <script src="assets/js/main.js?v=20250709200000"></script>
+  <script src="assets/js/main.js?v=20260716173000"></script>
 
   <!-- Focus Areas particle fabric -->
   <script
     src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="assets/js/focus-fabric.js?v=20260716145000"></script>
+  <script src="assets/js/focus-fabric.js?v=20260716161000"></script>
+
+  <!-- Resume timeline / filters / stepper -->
+  <script src="assets/js/resume-timeline.js?v=20260716162500"></script>
+
+  <!-- Academic Portfolio card links / glow -->
+  <script src="assets/js/portfolio-glow.js?v=20260716172500"></script>
+
+  <!-- Testimonials card glow -->
+  <script src="assets/js/testimonials-glow.js?v=20260716173000"></script>
 
 </body>
 
