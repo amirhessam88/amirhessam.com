@@ -71,10 +71,10 @@
 
       var material = new THREE.PointsMaterial({
         color: color,
-        size: 0.22,
+        size: 0.28,
         transparent: true,
-        opacity: 0.9,
-        blending: THREE.AdditiveBlending,
+        opacity: 0.85,
+        blending: THREE.NormalBlending,
         depthWrite: false,
       });
 

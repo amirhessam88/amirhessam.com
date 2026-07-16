@@ -445,8 +445,12 @@
   // Testimonials carousel (uses the Owl Carousel library)
   $(".testimonials-carousel").owlCarousel({
     autoplay: true,
+    autoplayTimeout: 5500,
+    autoplayHoverPause: true,
+    smartSpeed: 650,
     dots: true,
     loop: true,
+    margin: 18,
     responsive: {
       0: {
         items: 1
@@ -454,7 +458,7 @@
       768: {
         items: 2
       },
-      900: {
+      992: {
         items: 3
       }
     }
@@ -473,5 +477,53 @@
     duration: 1000,
     easing: "ease-in-out-back"
   });
+
+  // Contact email: let native mailto open (do not preventDefault — browsers block delayed mailto)
+  (function initContactEmail() {
+    var link = document.getElementById('contact-email');
+    var toast = document.getElementById('contact-toast');
+    if (!link) return;
+
+    function showToast(message) {
+      if (!toast) return;
+      toast.hidden = false;
+      toast.textContent = message;
+      toast.classList.add('is-visible');
+      window.clearTimeout(showToast._timer);
+      showToast._timer = window.setTimeout(function () {
+        toast.classList.remove('is-visible');
+      }, 2200);
+    }
+
+    function copyEmail(email) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        return navigator.clipboard.writeText(email);
+      }
+      return new Promise(function (resolve, reject) {
+        var input = document.createElement('textarea');
+        input.value = email;
+        input.setAttribute('readonly', '');
+        input.style.position = 'fixed';
+        input.style.left = '-9999px';
+        document.body.appendChild(input);
+        input.select();
+        try {
+          document.execCommand('copy');
+          resolve();
+        } catch (err) {
+          reject(err);
+        }
+        document.body.removeChild(input);
+      });
+    }
+
+    link.addEventListener('click', function () {
+      var email = link.getAttribute('data-email') || 'admin@amirhessam.com';
+      // Side effect only — native href="mailto:..." handles opening the mail app
+      copyEmail(email).then(function () {
+        showToast('Email copied');
+      }).catch(function () { /* ignore */ });
+    });
+  })();
 
 })(jQuery);
