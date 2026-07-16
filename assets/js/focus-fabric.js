@@ -41,12 +41,15 @@
     container.appendChild(renderer.domElement);
 
     // Corner origins: TL blue, BL purple, TR orange, BR green
+    // Fewer streams / particles on small screens for performance
+    var isCompact = window.innerWidth < 992;
+    var streamCount = isCompact ? 2 : 3;
     var streams = [];
     var groups = [
-      { x: -6, y: 4, color: 0x3b82f6, n: 3 },
-      { x: -6, y: -4, color: 0xc084fc, n: 3 },
-      { x: 6, y: 4, color: 0xffb02e, n: 3 },
-      { x: 6, y: -4, color: 0x34d399, n: 3 },
+      { x: -6, y: 4, color: 0x3b82f6, n: streamCount },
+      { x: -6, y: -4, color: 0xc084fc, n: streamCount },
+      { x: 6, y: 4, color: 0xffb02e, n: streamCount },
+      { x: 6, y: -4, color: 0x34d399, n: streamCount },
     ];
 
     function makeStream(ox, oy, color) {
@@ -57,7 +60,7 @@
         new THREE.Vector3(0, 0, 0),
       ]);
 
-      var count = 80;
+      var count = isCompact ? 40 : 80;
       var geometry = new THREE.BufferGeometry();
       var positions = new Float32Array(count * 3);
       var progress = new Float32Array(count);
@@ -153,9 +156,6 @@
 
   document.addEventListener("DOMContentLoaded", function () {
     var el = document.getElementById("focus-fabric-canvas");
-    // Desktop only — mobile uses the stacked fallback
-    if (el && window.matchMedia("(min-width: 992px)").matches) {
-      initFocusFabric(el);
-    }
+    if (el) initFocusFabric(el);
   });
 })();
