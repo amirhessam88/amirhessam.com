@@ -282,75 +282,129 @@
     <!-- End Facts Section -->
 
     <!-- ======= Focus Areas Section ======= -->
-    <section id="focus-areas" class="focus-areas section-bg">
+    <section id="focus-areas" class="focus-areas">
       <div class="container">
 
-        <div class="section-title">
+        <div class="section-title focus-areas-title">
           <h2>Focus Areas</h2>
-          <p>Where I spend most of my time building, researching, and leading.
+          <p>Where I spend most of my time building, researching, and leading
+            ...
           </p>
         </div>
 
-        <div id="focus-areas-content">
-          <div class="row">
+        <div class="focus-fabric" data-aos="fade-up">
+          <div id="focus-fabric-canvas" aria-hidden="true"></div>
 
-            <div class="col-lg-3 col-md-6" data-aos="fade-up">
-              <div class="focus-box">
-                <div class="icon"><i class="icofont-brainstorming"></i></div>
-                <h4>AI/ML Systems Ops</h4>
-                <p>Production ML pipelines, model lifecycle, MLOps, CI/CD, and
-                  applied AI at scale.</p>
-              </div>
+          <article class="focus-card focus-card--tl" data-accent="blue">
+            <div class="focus-card-icon"><i class="icofont-database"></i></div>
+            <h3>Distributed Data</h3>
+            <p>Infrastructure &amp; Scale</p>
+            <div class="focus-card-tags">
+              <span>AWS</span>
+              <span>Azure</span>
+              <span>Spark</span>
+              <span>Databricks</span>
+              <span>PySpark</span>
             </div>
+            <span class="focus-card-node" aria-hidden="true"></span>
+          </article>
 
-            <div class="col-lg-3 col-md-6" data-aos="fade-up"
-              data-aos-delay="100">
-              <div class="focus-box">
-                <div class="icon"><i class="icofont-chart-histogram"></i></div>
-                <h4>Observability &amp; Platform</h4>
-                <p>Reliability frameworks, monitoring, and platform engineering
-                  for AI products.</p>
-              </div>
+          <article class="focus-card focus-card--bl" data-accent="purple">
+            <div class="focus-card-icon"><i class="icofont-brainstorming"></i>
             </div>
-
-            <div class="col-lg-3 col-md-6" data-aos="fade-up"
-              data-aos-delay="200">
-              <div class="focus-box">
-                <div class="icon"><i class="icofont-database"></i></div>
-                <h4>Distributed Data</h4>
-                <p>Large-scale data processing, Spark, and cloud-native data
-                  platforms.</p>
-              </div>
+            <h3>AI/ML Systems Ops</h3>
+            <p>Production Intelligence</p>
+            <div class="focus-card-tags">
+              <span>LLMs</span>
+              <span>MLOps</span>
+              <span>CI/CD</span>
+              <span>Python</span>
             </div>
+            <span class="focus-card-node" aria-hidden="true"></span>
+          </article>
 
-            <div class="col-lg-3 col-md-6" data-aos="fade-up"
-              data-aos-delay="300">
-              <div class="focus-box">
-                <div class="icon"><i class="icofont-file-python"></i></div>
-                <h4>Open Source &amp; Research</h4>
-                <p>Building <a
-                    href="https://github.com/slickml/slick-ml">SlickML</a> and
-                  publishing in ML &amp; scientific computing.</p>
-              </div>
+          <article class="focus-card focus-card--tr" data-accent="orange">
+            <div class="focus-card-icon"><i class="icofont-chart-histogram"></i>
             </div>
+            <h3>Observability &amp; Platform</h3>
+            <p>Reliability &amp; Engineering</p>
+            <div class="focus-card-tags">
+              <span>Databricks</span>
+              <span>MLflow</span>
+              <span>Datadog</span>
+              <span>Grafana</span>
+              <span>Dynatrace</span>
+            </div>
+            <span class="focus-card-node" aria-hidden="true"></span>
+          </article>
 
+          <article class="focus-card focus-card--br" data-accent="green">
+            <div class="focus-card-icon"><i class="icofont-file-python"></i>
+            </div>
+            <h3>Open Source &amp; Research</h3>
+            <p>Libraries &amp; Science</p>
+            <div class="focus-card-tags">
+              <span>SlickML</span>
+              <span>Python</span>
+              <span>SQL</span>
+              <span>Research</span>
+              <span>Go</span>
+              <span>Linux</span>
+              <span>Git</span>
+              <span>Bash</span>
+            </div>
+            <span class="focus-card-node" aria-hidden="true"></span>
+          </article>
+
+          <div class="focus-hub">
+            <div class="focus-hub-ring">
+              <img src="assets/img/logo_color_clear.png" alt="Amirhessam">
+            </div>
+            <h3>Unified Practice</h3>
+            <p class="focus-hub-status">● LIVE BUILDING_</p>
           </div>
+        </div>
 
-          <div class="focus-tags" data-aos="fade-up" data-aos-delay="400">
-            <span>Python</span>
-            <span>Go</span>
-            <span>SQL</span>
-            <span>Bash</span>
-            <span>LLMs</span>
-            <span>MLOps</span>
-            <span>CI/CD</span>
-            <span>PySpark</span>
-            <span>Databricks</span>
-            <span>Spark</span>
-            <span>AWS</span>
-            <span>Azure</span>
-            <span>Git</span>
-            <span>Linux</span>
+        <!-- Mobile fallback (no particle canvas) -->
+        <div class="focus-fabric-mobile">
+          <div class="focus-mobile-card" data-accent="blue">
+            <div class="focus-card-icon"><i class="icofont-database"></i></div>
+            <div>
+              <h3>Distributed Data</h3>
+              <div class="focus-card-tags">
+                <span>AWS</span><span>Azure</span><span>Spark</span><span>Databricks</span>
+              </div>
+            </div>
+          </div>
+          <div class="focus-mobile-card" data-accent="purple">
+            <div class="focus-card-icon"><i class="icofont-brainstorming"></i>
+            </div>
+            <div>
+              <h3>AI/ML Systems Ops</h3>
+              <div class="focus-card-tags">
+                <span>LLMs</span><span>MLOps</span><span>CI/CD</span><span>Python</span>
+              </div>
+            </div>
+          </div>
+          <div class="focus-mobile-card" data-accent="orange">
+            <div class="focus-card-icon"><i class="icofont-chart-histogram"></i>
+            </div>
+            <div>
+              <h3>Observability &amp; Platform</h3>
+              <div class="focus-card-tags">
+                <span>Databricks</span><span>MLflow</span><span>Datadog</span><span>Grafana</span><span>Dynatrace</span>
+              </div>
+            </div>
+          </div>
+          <div class="focus-mobile-card" data-accent="green">
+            <div class="focus-card-icon"><i class="icofont-file-python"></i>
+            </div>
+            <div>
+              <h3>Open Source &amp; Research</h3>
+              <div class="focus-card-tags">
+                <span>SlickML</span><span>Python</span><span>Research</span><span>Go</span><span>Linux</span><span>Git</span><span>Bash</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -1279,6 +1333,11 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js?v=20250709200000"></script>
+
+  <!-- Focus Areas particle fabric -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="assets/js/focus-fabric.js?v=20260716143500"></script>
 
 </body>
 
