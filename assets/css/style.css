@@ -619,14 +619,25 @@ section {
   justify-content: center;
 }
 
-#ventures .portfolio-wrap,
-#libraries .portfolio-wrap {
+#ventures .portfolio-wrap {
   max-width: 140px;
 }
 
-#ventures .portfolio-wrap img,
-#libraries .portfolio-wrap img {
+#ventures .portfolio-wrap img {
   max-height: 90px;
+  width: auto;
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+#libraries .portfolio-wrap {
+  max-width: 130px;
+}
+
+#libraries .portfolio-wrap img {
+  max-height: 72px;
   width: auto;
   max-width: 100%;
   display: block;
