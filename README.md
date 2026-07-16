@@ -1,3 +1,9 @@
+<div align="center">
+  <a href="https://www.amirhessam.com">
+    <img src="assets/img/logo_color_clear.png" alt="Amirhessam Tahmassebi" width="120">
+  </a>
+</div>
+
 # 🚀 My Personal Academic & Professional Website 🎓✨
 
 
@@ -282,6 +288,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **⭐ Star this repository if you found it helpful! ⭐**
 
-Made with ❤️ and lots of ☕ by Amirhessam
+Made with ❤️ and lots of ☕ by Amir ...
 
 </div>
