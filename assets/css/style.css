@@ -384,72 +384,345 @@ section {
 }
 
 /*--------------------------------------------------------------
-# Focus Areas
+# Focus Areas (fabric hub)
 --------------------------------------------------------------*/
-.focus-areas .focus-box {
-  background: #fff;
-  padding: 30px 20px;
-  margin-bottom: 30px;
-  text-align: center;
-  height: 100%;
-  box-shadow: 0 0 24px 0 rgba(0, 0, 0, 0.06);
+.focus-areas {
+  position: relative;
+  background: #051018;
+  overflow: hidden;
+  padding: 80px 0;
 }
 
-.focus-areas .focus-box .icon {
+.focus-areas::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 700px;
+  height: 500px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(20, 157, 221, 0.12), transparent 70%);
+  pointer-events: none;
+}
+
+.focus-areas .focus-areas-title h2,
+.focus-areas .focus-areas-title p {
+  color: #fff;
+}
+
+.focus-areas .focus-areas-title h2 {
+  color: #fff;
+}
+
+.focus-areas .focus-areas-title h2::after {
+  background: #149ddd;
+}
+
+.focus-fabric {
+  position: relative;
+  min-height: 520px;
+  display: none;
+}
+
+#focus-fabric-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+
+#focus-fabric-canvas.is-ready {
+  opacity: 1;
+}
+
+#focus-fabric-canvas canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.focus-card {
+  position: absolute;
+  z-index: 2;
+  width: 260px;
+  padding: 22px;
+  border-radius: 14px;
+  background: rgba(13, 40, 56, 0.72);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: transform 0.3s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.focus-card:hover {
+  transform: scale(1.04);
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(13, 40, 56, 0.9);
+}
+
+.focus-card--tl { top: 0; left: 0; }
+.focus-card--bl { bottom: 0; left: 0; }
+.focus-card--tr { top: 0; right: 0; }
+.focus-card--br { bottom: 0; right: 0; }
+
+.focus-card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 54px;
-  height: 54px;
-  background: #149ddd;
-  border-radius: 50%;
-  margin-bottom: 15px;
+  margin-bottom: 14px;
+  font-size: 20px;
 }
 
-.focus-areas .focus-box .icon i {
+.focus-card h3 {
   color: #fff;
-  font-size: 24px;
-}
-
-.focus-areas .focus-box h4 {
   font-size: 18px;
   font-weight: 700;
-  margin-bottom: 12px;
-  color: #050d18;
+  margin: 0 0 4px;
 }
 
-.focus-areas .focus-box p {
-  font-size: 14px;
-  line-height: 24px;
-  color: #122f57;
-  margin-bottom: 0;
+.focus-card > p {
+  color: #94a3b8;
+  font-size: 12px;
+  margin: 0 0 14px;
 }
 
-.focus-areas .focus-box a {
-  color: #149ddd;
-}
-
-.focus-areas .focus-box a:hover {
-  color: #0d6e9e;
-}
-
-.focus-areas .focus-tags {
+.focus-card-tags {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  padding-top: 10px;
+  gap: 6px;
 }
 
-.focus-areas .focus-tags span {
-  background: #fff;
-  color: #173b6c;
+.focus-card-tags span {
+  font-size: 10px;
   font-family: "Poppins", sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  padding: 8px 16px;
-  border-radius: 20px;
-  box-shadow: 0 0 12px 0 rgba(0, 0, 0, 0.06);
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 6px;
+  border: 1px solid;
+}
+
+.focus-card-node {
+  position: absolute;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+
+.focus-card--tl .focus-card-node,
+.focus-card--bl .focus-card-node {
+  right: -5px;
+}
+
+.focus-card--tr .focus-card-node,
+.focus-card--br .focus-card-node {
+  left: -5px;
+}
+
+.focus-card[data-accent="blue"] .focus-card-icon {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+.focus-card[data-accent="blue"] .focus-card-tags span {
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.35);
+  background: rgba(59, 130, 246, 0.12);
+}
+.focus-card[data-accent="blue"] .focus-card-node {
+  background: #3b82f6;
+  box-shadow: 0 0 12px #3b82f6;
+}
+
+.focus-card[data-accent="purple"] .focus-card-icon {
+  background: rgba(192, 132, 252, 0.2);
+  color: #c084fc;
+}
+.focus-card[data-accent="purple"] .focus-card-tags span {
+  color: #c084fc;
+  border-color: rgba(192, 132, 252, 0.35);
+  background: rgba(192, 132, 252, 0.12);
+}
+.focus-card[data-accent="purple"] .focus-card-node {
+  background: #c084fc;
+  box-shadow: 0 0 12px #c084fc;
+}
+
+.focus-card[data-accent="orange"] .focus-card-icon {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+.focus-card[data-accent="orange"] .focus-card-tags span {
+  color: #f59e0b;
+  border-color: rgba(245, 158, 11, 0.35);
+  background: rgba(245, 158, 11, 0.12);
+}
+.focus-card[data-accent="orange"] .focus-card-node {
+  background: #f59e0b;
+  box-shadow: 0 0 12px #f59e0b;
+}
+
+.focus-card[data-accent="green"] .focus-card-icon {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+.focus-card[data-accent="green"] .focus-card-tags span {
+  color: #34d399;
+  border-color: rgba(16, 185, 129, 0.35);
+  background: rgba(16, 185, 129, 0.12);
+}
+.focus-card[data-accent="green"] .focus-card-node {
+  background: #10b981;
+  box-shadow: 0 0 12px #10b981;
+}
+
+.focus-hub {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.focus-hub-ring {
+  width: 110px;
+  height: 110px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: #051018;
+  border: 1px solid rgba(20, 157, 221, 0.35);
+  box-shadow: 0 0 40px rgba(20, 157, 221, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.focus-hub-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border-top: 1px solid #149ddd;
+  animation: focus-spin 10s linear infinite;
+  opacity: 0.6;
+}
+
+.focus-hub-ring img {
+  width: 58px;
+  height: auto;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 12px rgba(20, 157, 221, 0.55));
+}
+
+.focus-hub h3 {
+  color: #fff;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 6px;
+}
+
+.focus-hub-status {
+  color: #149ddd;
+  font-family: "Poppins", monospace;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+  animation: focus-pulse 2s ease-in-out infinite;
+}
+
+@keyframes focus-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes focus-pulse {
+  50% { opacity: 0.45; }
+}
+
+.focus-fabric-mobile {
+  display: grid;
+  gap: 12px;
+}
+
+.focus-mobile-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.focus-mobile-card h3 {
+  color: #fff;
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+
+.focus-mobile-card .focus-card-icon {
+  margin-bottom: 0;
+  flex-shrink: 0;
+}
+
+.focus-mobile-card[data-accent="blue"] .focus-card-icon {
+  background: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+.focus-mobile-card[data-accent="purple"] .focus-card-icon {
+  background: rgba(192, 132, 252, 0.2);
+  color: #c084fc;
+}
+.focus-mobile-card[data-accent="orange"] .focus-card-icon {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
+.focus-mobile-card[data-accent="green"] .focus-card-icon {
+  background: rgba(16, 185, 129, 0.2);
+  color: #34d399;
+}
+
+.focus-mobile-card .focus-card-tags span {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+@media (min-width: 992px) {
+  .focus-fabric {
+    display: block;
+  }
+
+  .focus-fabric-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .focus-card {
+    width: 280px;
+  }
+
+  .focus-card--tl,
+  .focus-card--bl {
+    left: 24px;
+  }
+
+  .focus-card--tr,
+  .focus-card--br {
+    right: 24px;
+  }
 }
 
 /*--------------------------------------------------------------
