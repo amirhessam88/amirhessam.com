@@ -166,6 +166,40 @@ h1, h2, h3, h4, h5, h6 {
   color: #149ddd;
 }
 
+/* 2-Cents nested article list in sidebar */
+.nav-menu .nav-two-cents > a {
+  margin-bottom: 4px;
+}
+
+.nav-menu .nav-two-cents-articles {
+  margin: 0 0 12px 15px;
+  padding: 0 0 0 12px;
+  border-left: 2px solid rgba(20, 157, 221, 0.35);
+}
+
+.nav-menu .nav-two-cents-articles li {
+  white-space: normal;
+}
+
+.nav-menu .nav-two-cents-articles a {
+  display: block;
+  padding: 8px 10px;
+  margin-bottom: 2px;
+  font-size: 13px;
+  line-height: 1.35;
+  color: #8b8d9a;
+}
+
+.nav-menu .nav-two-cents-articles a:hover,
+.nav-menu .nav-two-cents-articles .active > a {
+  color: #fff;
+}
+
+.nav-menu .nav-two-cents-articles .active > a {
+  color: #149ddd;
+  font-weight: 600;
+}
+
 /* Mobile Navigation */
 .mobile-nav-toggle {
   position: fixed;
@@ -1409,6 +1443,294 @@ section {
 }
 
 /*--------------------------------------------------------------
+# 2-Cents
+--------------------------------------------------------------*/
+#two-cents.two-cents {
+  background: #f5f8fd;
+}
+
+.two-cents-grid {
+  margin-top: 0.5rem;
+}
+
+.two-cents-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-bottom: 24px;
+  padding: 1.5rem 1.6rem 1.4rem;
+  background: #fff;
+  border: 1px solid rgba(23, 59, 108, 0.08);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(23, 59, 108, 0.06);
+  color: inherit;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.two-cents-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(20, 157, 221, 0.35);
+  box-shadow: 0 14px 32px rgba(20, 157, 221, 0.12);
+  color: inherit;
+  text-decoration: none;
+}
+
+.two-cents-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  color: #6c7a89;
+}
+
+.two-cents-card-tag {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  background: rgba(20, 157, 221, 0.1);
+  color: #0d7eaf;
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+}
+
+.two-cents-card-title {
+  margin: 0 0 0.7rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #173b6c;
+}
+
+.two-cents-card:hover .two-cents-card-title {
+  color: #149ddd;
+}
+
+.two-cents-card-excerpt {
+  flex: 1;
+  margin: 0 0 1.1rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #5a6a7a;
+}
+
+.two-cents-card-cta {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #149ddd;
+}
+
+.two-cents-article {
+  padding-top: 40px;
+  padding-bottom: 70px;
+}
+
+.two-cents-article-body {
+  max-width: 740px;
+  margin: 0 auto;
+}
+
+.two-cents-article-header {
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(23, 59, 108, 0.1);
+}
+
+.two-cents-article-header h1 {
+  margin: 0.75rem 0 0.65rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: #173b6c;
+}
+
+.two-cents-article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6c7a89;
+}
+
+.two-cents-inspiration {
+  margin: 0 0 1.5rem;
+  padding: 1rem 1.15rem;
+  background: rgba(20, 157, 221, 0.08);
+  border-left: 3px solid #149ddd;
+  border-radius: 0 4px 4px 0;
+}
+
+.two-cents-inspiration p,
+.two-cents-aside p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: #3d4f63;
+}
+
+.two-cents-aside {
+  margin: 0 0 1.5rem;
+  padding: 0.95rem 1.15rem;
+  background: rgba(23, 59, 108, 0.05);
+  border-left: 3px solid #8fa3bb;
+  border-radius: 0 4px 4px 0;
+}
+
+.two-cents-lead {
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: #3d4f63;
+  margin-bottom: 1.75rem;
+}
+
+.two-cents-article-body h2 {
+  margin: 2rem 0 0.85rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #173b6c;
+}
+
+.two-cents-article-body p,
+.two-cents-article-body li {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #445566;
+}
+
+.two-cents-article-body ul,
+.two-cents-article-body ol {
+  margin: 0 0 1.25rem;
+  padding-left: 1.25rem;
+}
+
+.two-cents-article-body li + li {
+  margin-top: 0.4rem;
+}
+
+.two-cents-article-body pre {
+  margin: 1rem 0 1.5rem;
+  padding: 1rem 1.15rem;
+  overflow-x: auto;
+  background: #0f172a;
+  border-radius: 4px;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.two-cents-article-body code {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.88em;
+}
+
+.two-cents-article-body p code,
+.two-cents-article-body li code {
+  padding: 0.1em 0.35em;
+  background: rgba(20, 157, 221, 0.08);
+  border-radius: 3px;
+  color: #0d7eaf;
+}
+
+.two-cents-article-body pre code {
+  padding: 0;
+  background: none;
+  color: inherit;
+}
+
+.two-cents-article-body h3 {
+  margin: 1.5rem 0 0.65rem;
+  font-family: "Raleway", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #173b6c;
+}
+
+.two-cents-article-body a {
+  color: #149ddd;
+  font-weight: 600;
+}
+
+.two-cents-article-body a:hover {
+  color: #0d7eaf;
+}
+
+.two-cents-diagram {
+  margin: 1.5rem 0 1.75rem;
+  padding: 1rem 1rem 0.75rem;
+  background: #fff;
+  border: 1px solid rgba(23, 59, 108, 0.1);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+
+.two-cents-diagram figcaption {
+  margin: 0 0 0.75rem;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #5a6a7a;
+}
+
+.two-cents-diagram .mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0.25rem 0 0.5rem;
+  background: transparent;
+  color: inherit;
+  font-size: 1rem;
+  line-height: normal;
+  overflow: visible;
+}
+
+.two-cents-diagram .mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.two-cents-references {
+  margin: 0 0 1.25rem;
+  padding-left: 1.25rem;
+}
+
+.two-cents-references li {
+  margin-top: 0.55rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+.two-cents-article-footer {
+  margin-top: 2.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(23, 59, 108, 0.1);
+}
+
+.two-cents-article-footer a {
+  font-weight: 600;
+  color: #149ddd;
+}
+
+.two-cents-article-footer a:hover {
+  color: #0d7eaf;
+}
+
+@media (max-width: 768px) {
+  .two-cents-article-header h1 {
+    font-size: 1.55rem;
+  }
+}
+
+/*--------------------------------------------------------------
 # Testimonials
 --------------------------------------------------------------*/
 #testimonials.testimonials {
@@ -2227,6 +2549,121 @@ html[data-theme="dark"] .services .icon-box .title a:hover {
 
 html[data-theme="dark"] .services .icon {
   background: #149ddd;
+}
+
+/* 2-Cents */
+html[data-theme="dark"] #two-cents.two-cents {
+  background: #0f172a;
+}
+
+html[data-theme="dark"] .two-cents-card {
+  background: #121a2b;
+  border-color: rgba(148, 163, 184, 0.14);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  color: #d7e0ee;
+}
+
+html[data-theme="dark"] .two-cents-card:hover {
+  border-color: rgba(20, 157, 221, 0.4);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.45);
+}
+
+html[data-theme="dark"] .two-cents-card-meta {
+  color: #8fa3bb;
+}
+
+html[data-theme="dark"] .two-cents-card-tag {
+  background: rgba(20, 157, 221, 0.16);
+  color: #4db8e8;
+}
+
+html[data-theme="dark"] .two-cents-card-title {
+  color: #e8eef8;
+}
+
+html[data-theme="dark"] .two-cents-card:hover .two-cents-card-title {
+  color: #4db8e8;
+}
+
+html[data-theme="dark"] .two-cents-card-excerpt {
+  color: #a8b7cc;
+}
+
+html[data-theme="dark"] .two-cents-card-cta {
+  color: #4db8e8;
+}
+
+html[data-theme="dark"] .two-cents-article-header {
+  border-bottom-color: rgba(148, 163, 184, 0.2);
+}
+
+html[data-theme="dark"] .two-cents-article-header h1,
+html[data-theme="dark"] .two-cents-article-body h2,
+html[data-theme="dark"] .two-cents-article-body h3 {
+  color: #e8eef8;
+}
+
+html[data-theme="dark"] .two-cents-article-body a {
+  color: #4db8e8;
+}
+
+html[data-theme="dark"] .two-cents-article-body a:hover {
+  color: #7cc8ee;
+}
+
+html[data-theme="dark"] .two-cents-diagram {
+  background: #121a2b;
+  border-color: rgba(148, 163, 184, 0.14);
+}
+
+html[data-theme="dark"] .two-cents-diagram figcaption {
+  color: #8fa3bb;
+}
+
+html[data-theme="dark"] .two-cents-article-meta {
+  color: #8fa3bb;
+}
+
+html[data-theme="dark"] .two-cents-inspiration {
+  background: rgba(20, 157, 221, 0.12);
+  border-left-color: #4db8e8;
+}
+
+html[data-theme="dark"] .two-cents-inspiration p,
+html[data-theme="dark"] .two-cents-aside p {
+  color: #c5d0de;
+}
+
+html[data-theme="dark"] .two-cents-aside {
+  background: rgba(148, 163, 184, 0.08);
+  border-left-color: #8fa3bb;
+}
+
+html[data-theme="dark"] .two-cents-lead {
+  color: #c5d0de;
+}
+
+html[data-theme="dark"] .two-cents-article-body p,
+html[data-theme="dark"] .two-cents-article-body li {
+  color: #d7e0ee;
+}
+
+html[data-theme="dark"] .two-cents-article-body p code,
+html[data-theme="dark"] .two-cents-article-body li code {
+  background: rgba(20, 157, 221, 0.14);
+  color: #4db8e8;
+}
+
+html[data-theme="dark"] .two-cents-article-footer {
+  border-top-color: rgba(148, 163, 184, 0.2);
+}
+
+html[data-theme="dark"] .two-cents-article-footer a {
+  color: #4db8e8;
+}
+
+html[data-theme="dark"] .two-cents-article-footer a:hover {
+  color: #7cc8ee;
 }
 
 /* Testimonials */

@@ -1,0 +1,30 @@
+---
+description: PR description style — detailed emoji sections, no checklist lists
+alwaysApply: true
+---
+
+# Pull Request Descriptions
+
+When creating or drafting PR descriptions for this repo:
+
+- Write a **detailed** body with clear sections
+- Use **emojis in section headings and bullets** to make the summary scannable
+- Prefer short narrative bullets that explain *what* and *why*
+
+## Do not use
+
+- Checkbox / task lists (`- [ ]`, `- [x]`)
+- Check-mark style test plans (`✅` / `☐` todo lists)
+
+## Preferred shape
+
+```markdown
+## ✨ Summary
+- 🧩 What changed and why
+
+## 🛠️ Changes
+- 📝 Concrete updates by area
+
+## 🧪 How to verify
+- 👀 Manual steps written as normal bullets (not checkboxes)
+```

@@ -1,0 +1,1708 @@
+<!-- =======================================================
+	  * Amirhessam Tahmassebi
+	  * Email: admin@amirhessam.com
+	  * Website: www.amirhessam.com
+  ======================================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored === "light" || stored === "dark"
+          ? stored
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="color-scheme" content="light dark">
+
+  <title>Building an Org Monorepo | 2-Cents</title>
+  <meta
+    content="A technical blueprint for a Python-first org monorepo: apps, libs, projects, services, IaC, uv/ruff/mypy/tox/poethepoet, and CI templates."
+    name="description">
+  <meta
+    content="monorepo, python, uv, ruff, mypy, tox, poethepoet, terraform, engineering"
+    name="keywords">
+
+  <!-- Favicons -->
+  <link href="../assets/img/logo_color_clear.png" rel="icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="../assets/vendor/owl.carousel/assets/owl.carousel.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="d-flex flex-column">
+
+      <div class="profile">
+        <img src="../assets/img/profile-img.jpg" alt=""
+          class="img-fluid rounded-circle">
+        <h1 class="text-light"><a href="../index.html">Amirhessam Tahmassebi</a>
+        </h1>
+        <div class="social-links mt-3 text-center">
+          <a href="https://www.linkedin.com/in/amirhessam/" class="linkedin"><i
+              class="bx bxl-linkedin"></i></a>
+          <a href="https://scholar.google.com/citations?user=CnHZjFAAAAAJ&hl=en"
+            class="google-plus"><i class="bx bxl-google"></i></a>
+          <a href="https://github.com/amirhessam88" class="github"><i
+              class="bx bxl-github"></i></a>
+          <a href="https://slickml.com/" class="consulting"><i
+              class="icofont-learn"></i></a>
+          <a href="https://github.com/slickml" class="library"><i
+              class="icofont-brainstorming"></i></a>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="../index.html"><i class="bx bx-home"></i>
+              <span>Home</span></a></li>
+          <li class="nav-two-cents">
+            <a href="../index.html#two-cents"><i class="bx bx-bulb"></i>
+              <span>2-Cents</span></a>
+            <ul class="nav-two-cents-articles">
+              <li class="active"><a
+                  href="building-an-org-monorepo.html">🏗️ Building an Org
+                  Monorepo</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav><!-- .nav-menu -->
+
+      <button type="button" class="theme-toggle" data-theme-toggle
+        aria-pressed="false" aria-label="Switch to dark theme"
+        title="Dark theme">
+        <i class="bx bx-moon theme-toggle-icon theme-toggle-icon-moon"
+          aria-hidden="true"></i>
+        <i class="bx bx-sun theme-toggle-icon theme-toggle-icon-sun"
+          aria-hidden="true"></i>
+        <span class="theme-toggle-label">Dark mode</span>
+      </button>
+
+      <button type="button" class="mobile-nav-toggle d-xl-none"><i
+          class="icofont-navigation-menu"></i></button>
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>🪙 2-Cents</h2>
+          <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#two-cents">2-Cents</a></li>
+            <li>Org Monorepo</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Article ======= -->
+    <section class="two-cents-article">
+      <div class="container">
+        <article class="two-cents-article-body">
+
+          <header class="two-cents-article-header">
+            <span class="two-cents-card-tag">⚙️ Engineering</span>
+            <h1>🏗️ Building an Org Monorepo</h1>
+            <p class="two-cents-article-meta">
+              <time datetime="2026-07-23">📅 July 23, 2026</time>
+              <span aria-hidden="true">·</span>
+              <span>⏱️ 28 min read</span>
+            </p>
+          </header>
+
+          <aside class="two-cents-inspiration">
+            <p>📖 <strong>Inspiration.</strong> In 2021, I first read Dan Hipschman’s
+              <a
+                href="https://medium.com/opendoor-labs/our-python-monorepo-d34028f2b6fa"
+                target="_blank" rel="noopener noreferrer">Our Python
+                Monorepo</a>
+              (Opendoor / Open House)
+              [<a
+                href="https://medium.com/opendoor-labs/our-python-monorepo-d34028f2b6fa"
+                target="_blank" rel="noopener noreferrer">1</a>]
+              when I was designing this approach. That write-up clarified the
+              polyrepo
+              failure modes — painful library bumps, untestable shared code,
+              copy-paste sprawl, and divergent lint configs — and showed that a
+              single repo with path-linked libraries + shared CI templates
+              fixes the graph. What follows is <strong>our pattern</strong>:
+              same core invariants, tightened into a stricter topology
+              (<code>apps/</code>, <code>libs/</code>, <code>projects/</code>,
+              <code>services/</code>, <code>dockers/</code>,
+              <code>cookiecutters/</code>, <code>iac/</code>,
+              <code>docs/</code>), org-namespaced packages, GitHub
+              <em>xor</em> GitLab, and a modern <code>uv</code> +
+              <code>poethepoet</code> toolchain.
+            </p>
+          </aside>
+
+          <p class="two-cents-lead">💡 An org monorepo is not “one giant Git
+            tree.” It is a <strong>versioned dependency graph</strong> with
+            enforceable import edges, a single toolchain contract, reusable
+            CI/CD templates, and IaC that ships next to the code it provisions.
+            Below is the blueprint we use.
+          </p>
+          <aside class="two-cents-aside">
+            <p>🌐 <strong>Language note.</strong> Most concrete recommendations
+              below are <strong>Python</strong>-flavored
+              (<a href="https://docs.astral.sh/uv/" target="_blank"
+                rel="noopener noreferrer"><code>uv</code></a>,
+              <a href="https://docs.astral.sh/ruff/" target="_blank"
+                rel="noopener noreferrer"><code>ruff</code></a>,
+              <a href="https://mypy-lang.org/" target="_blank"
+                rel="noopener noreferrer"><code>mypy</code></a>/<a
+                href="https://github.com/microsoft/pyright" target="_blank"
+                rel="noopener noreferrer"><code>pyright</code></a>,
+              <a href="https://poethepoet.natn.io/" target="_blank"
+                rel="noopener noreferrer"><code>poe</code></a>,
+              <a href="https://tox.wiki/" target="_blank"
+                rel="noopener noreferrer"><code>tox</code></a>). The
+              <em>pattern</em> itself is language-agnostic: the same topology
+              (<code>apps/</code>, <code>libs/</code>, <code>projects/</code>,
+              <code>services/</code>, <code>dockers/</code>,
+              <code>cookiecutters/</code>, <code>iac/</code>,
+              <code>docs/</code>), import/dependency DAG rules, leaf CI child
+              nodes, org-namespaced libraries, scaffolder CLIs, and docs portal
+              aggregation (e.g.
+              <a href="https://www.mkdocs.org/" target="_blank"
+                rel="noopener noreferrer">MkDocs</a>) work for
+              <strong>Python, Go, Rust</strong>, and other stacks in the
+              <em>same</em> monorepo — swap the per-language toolchain, keep
+              the contracts.</p>
+          </aside>
+
+          <h2>😵‍💫 Why polyrepos rot under shared code</h2>
+          <p>Most platform teams rediscover the same failure modes once shared
+            Python code shows up across services:</p>
+          <ul>
+            <li>🔁 Library updates require sequential PRs across producer +
+              consumer repos, plus an internal package index bump — merge the
+              lib, wait for the wheel to publish, then bump the consumer.</li>
+            <li>🧪 You cannot cheaply prove a lib change is safe against the
+              full dependent closure; nobody runs “every service’s tests”
+              before merging.</li>
+            <li>📋 Engineers stop extracting libraries and start
+              copy-pasting, because sharing is too expensive.</li>
+            <li>🌀 Accidental cycles and fuzzy ownership appear the moment
+              “shared helpers” leak between services inside a junk-drawer
+              repo.</li>
+            <li>🔎 Cross-repo search and IDE navigation are worse than a single
+              workspace checkout.</li>
+            <li>🧭 Per-repo lint/format/type configs diverge until
+              cross-repo contribution becomes a tax.</li>
+          </ul>
+          <p>Our monorepo collapses publish-then-consume into
+            <strong>path / editable installs</strong> via
+            <a href="https://docs.astral.sh/uv/" target="_blank"
+              rel="noopener noreferrer">uv</a> workspaces
+            [<a href="https://docs.astral.sh/uv/" target="_blank"
+              rel="noopener noreferrer">2</a>]. CI expands the affected closure
+            from the workspace graph / <code>uv.lock</code>. The invariant:
+            <em>internal packages are linked, not version-chased.</em> External
+            consumers outside the monorepo can still get versioned wheels from
+            an internal index if needed — but inside the repo, path deps are
+            law.</p>
+          <aside class="two-cents-aside">
+            <p>🎙️ <strong>Personal note.</strong> I personally have some issues
+              with Charlie Marsh’s (Astral founder) mindset
+              (<a href="https://www.youtube.com/watch?v=XzW4-KEB664"
+                target="_blank" rel="noopener noreferrer">as discussed
+                here</a>) — but <code>uv</code> is still a great product, and
+              I’d standardize an org monorepo on it anyway.</p>
+          </aside>
+
+          <h2>📁 Target topology</h2>
+          <p>Keep top-level directories semantic and mutually exclusive. Every
+            leaf package owns a <code>pyproject.toml</code> <strong>and</strong>
+            a CI entrypoint: <code>.gitlab-ci.yml</code> on GitLab, or the
+            GitHub equivalent (a thin leaf workflow / config that
+            <code>uses:</code> a reusable workflow — details below). Nothing
+            cross-cuts via relative imports into another leaf’s
+            <code>src/</code>.</p>
+          <p>🔐 <strong>VCS exclusivity:</strong> an org standardizes on
+            <em>either</em> GitHub <em>or</em> GitLab — never both as first-class
+            homes for the same monorepo. Keep exactly one of
+            <code>.github/</code> or <code>.gitlab/</code> for shared templates,
+            child-pipeline / reusable-workflow entrypoints, and ownership
+            metadata.</p>
+          <pre><code>org-monorepo/
+├── .github/                 # XOR: workflows/, actions/, CODEOWNERS
+│   # — or —
+├── .gitlab/                 # XOR: ci/ templates, includes, CODEOWNERS
+├── apps/                    # user-facing / operator-facing applications
+├── libs/                    # shared abstractions (org-namespaced packages)
+├── projects/                # domain-bounded workspaces (ETL, ML, batch, research)
+├── services/                # independently deployable microservices
+├── dockers/                 # shared Dockerfiles, base images, compose stacks
+├── cookiecutters/           # templates for poe new-* scaffolds (apps, libs, …)
+├── iac/                     # Terraform / Pulumi / cloud foundation modules
+├── docs/                    # docs portal / landing — aggregates leaf docs via CD
+├── pyproject.toml           # uv workspace root + shared tool config
+├── uv.lock                  # deterministic resolver output
+└── README.md</code></pre>
+
+          <h3>🔎 Directory contracts</h3>
+          <ul>
+            <li>🚀 <strong><code>apps/</code></strong> — deployable application
+              binaries / UIs / CLIs with a release artifact. May depend on
+              <code>libs/*</code>. Must not import <code>services/*</code> or
+              sibling apps.</li>
+            <li>📦 <strong><code>libs/</code></strong> — the only approved
+              sharing layer. Logging, auth clients, protobuf stubs, feature
+              flags, schema helpers, ML feature transforms — anything with a
+              stable public API and tests. Naming is org-namespaced (see
+              below).</li>
+            <li>🧬 <strong><code>projects/</code></strong> — domain-centric
+              workspaces (e.g. <code>projects/risk-scoring</code>,
+              <code>projects/claims-etl</code>). These are not microservices;
+              they are bounded contexts that may produce jobs, notebooks
+              (exported), or training pipelines. Depend on
+              <code>libs/*</code>, never on <code>apps/*</code>.</li>
+            <li>🛰️ <strong><code>services/</code></strong> — network-facing
+              microservices (HTTP/gRPC/workers) with their own image + deploy
+              pipeline. Import only from <code>libs/*</code>. Prefer building
+              FROM shared bases in <code>dockers/</code> rather than
+              copy-pasting Dockerfiles.</li>
+            <li>🐳 <strong><code>dockers/</code></strong> — shared container
+              assets: org base images, common Dockerfiles, multi-stage
+              templates, and local <code>compose</code> stacks (deps, mesh
+              stubs). Leaves reference these; they do not reinvent
+              <code>FROM python:…</code> in every app/service. Image
+              build/push CD still runs from the leaf that owns the final
+              artifact, using <code>dockers/</code> as build context /
+              <code>FROM</code> source.</li>
+            <li>🍪 <strong><code>cookiecutters/</code></strong> — golden-path
+              templates for new leaves (<code>python-lib</code>,
+              <code>python-service</code>, <code>js-app</code>, …). Downstream
+              engineers scaffold via task-runner CLIs
+              (<code>poe new-python-lib</code>, <code>poe new-js-app</code>) —
+              they should not need to learn the nuts and bolts of workspace
+              wiring, CI stubs, or naming maps. See the Cookiecutters
+              section.</li>
+            <li>☁️ <strong><code>iac/</code></strong> — Terraform (or
+              equivalent) modules and live stacks. App/service code does not
+              import IaC; CI wires plan/apply via path filters.</li>
+            <li>📚 <strong><code>docs/</code></strong> — the
+              <strong>docs portal landing page</strong> and shared chrome
+              (nav, style, ADRs, org-wide guides). Downstream leaves own their
+              own <code>docs/</code> nodes; CD builds them on the fly and
+              publishes one site. See the Docs section.</li>
+            <li>🧩 <strong><code>.github/</code> <em>or</em>
+              <code>.gitlab/</code></strong> — shared templates + the
+              <em>parent</em> pipelines that fan out into leaf jobs (child
+              pipelines / reusable workflows). See CI section.</li>
+          </ul>
+
+          <h3>🧾 What every leaf owns</h3>
+          <p>A leaf is not “just source.” It ships its package manifest
+            <strong>and</strong> its CI contract:</p>
+          <pre><code># GitLab leaf
+libs/foo-bar-baz-qux/
+├── pyproject.toml
+├── .gitlab-ci.yml           # child-pipeline entry (thin; includes shared template)
+├── docs/                    # leaf docs node (API + how-to) — aggregated by CD
+├── src/foo/bar/baz/qux/
+└── tests/
+
+# GitHub leaf — Actions workflows must live under repo-root .github/workflows/
+# so the leaf owns a thin config; the stub workflow lives next to shared templates
+libs/foo-bar-baz-qux/
+├── pyproject.toml
+├── ci.yml                   # leaf values: image, matrix, deploy target, …
+├── docs/                    # leaf docs node — aggregated by CD
+├── src/foo/bar/baz/qux/
+└── tests/
+
+.github/workflows/
+├── _python-leaf.yml         # reusable workflow (workflow_call) — the real jobs
+└── libs-foo-bar-baz-qux.yml # stub: path filters + uses: _python-leaf.yml</code></pre>
+          <p>GitHub’s equivalent of a per-directory
+            <code>.gitlab-ci.yml</code> is not a nested workflow file inside
+            <code>libs/…</code> (Actions only loads workflows from
+            <code>.github/workflows/</code> at the repo root). The practical
+            equivalent is: <strong>leaf <code>ci.yml</code> (values) + root
+            stub workflow that <code>uses:</code> a reusable workflow</strong>.
+            Same idea as GitLab — leaf declares intent; shared template owns
+            mechanics.</p>
+
+          <h3>🏷️ Lib naming: hyphenated distro → nested import path</h3>
+          <p>Library distribution names are <strong>org-based namespaces</strong>
+            written with hyphens. Hyphens map 1:1 to nested packages on disk
+            and in <code>site-packages</code> after install:</p>
+          <pre><code># distribution / directory name          →  import / site-packages path
+foo-bar-baz-qux                          →  foo/bar/baz/qux
+acme-ml-features-transforms              →  acme/ml/features/transforms
+acme-platform-logging                    →  acme/platform/logging</code></pre>
+          <p>Source layout inside the leaf (CI files shown above):</p>
+          <pre><code>libs/foo-bar-baz-qux/
+├── pyproject.toml          # name = "foo-bar-baz-qux"
+├── src/
+│   └── foo/
+│       └── bar/
+│           └── baz/
+│               └── qux/
+│                   ├── __init__.py
+│                   └── ...
+└── tests/</code></pre>
+          <p>After <code>uv sync</code> / <code>pip install</code>, the package
+            lands as nested modules under site-packages:</p>
+          <pre><code>site-packages/
+└── foo/
+    └── bar/
+        └── baz/
+            └── qux/
+                ├── __init__.py
+                └── ...
+
+# consumers import the namespace path, not the hyphenated distro name
+from foo.bar.baz.qux import SomeType</code></pre>
+          <p>Why this matters:</p>
+          <ul>
+            <li>🧭 <strong>Collision resistance</strong> — org prefixes
+              (<code>acme-…</code>, <code>foo-…</code>) keep internal libs from
+              clobbering top-level PyPI names in <code>site-packages</code>.
+            </li>
+            <li>📂 <strong>Discoverability</strong> — related libs cluster under
+              the same tree (<code>acme/ml/…</code>,
+              <code>acme/platform/…</code>) in both the repo and the installed
+              environment.</li>
+            <li>🔗 <strong>Stable mental model</strong> —
+              <code>libs/&lt;distro&gt;</code> ↔
+              <code>src/&lt;slash-path&gt;</code> ↔
+              <code>from &lt;dot-path&gt; import …</code> is mechanical: replace
+              <code>-</code> with <code>/</code> (or <code>.</code> for
+              imports).</li>
+          </ul>
+          <p>Hard rules: distribution name is always hyphenated kebab-case;
+            Python packages never use hyphens; do not publish a flat
+            <code>foobarbazqux</code> module that ignores the namespace map.</p>
+
+          <figure class="two-cents-diagram">
+            <figcaption>📊 Logical layers and allowed dependency edges</figcaption>
+            <pre class="mermaid">
+flowchart TB
+  subgraph consumers["Consumers"]
+    A["🚀 apps/*"]
+    P["🧬 projects/*"]
+    S["🛰️ services/*"]
+  end
+
+  L["📦 libs/*\norg-namespaced"]
+  Dk["🐳 dockers/*\nbase images / compose"]
+  Cc["🍪 cookiecutters/*\npoe new-* templates"]
+  D["📚 docs/*"]
+  I["☁️ iac/*\nTerraform / cloud"]
+  CI["🧩 .github XOR .gitlab\nCI + CODEOWNERS"]
+
+  A --> L
+  P --> L
+  S --> L
+  A -->|FROM / build context| Dk
+  S -->|FROM / build context| Dk
+  Cc -.->|scaffolds| A
+  Cc -.->|scaffolds| L
+  Cc -.->|scaffolds| S
+  Cc -.->|scaffolds| P
+  A -.->|path filters / deploy| CI
+  S -.->|path filters / deploy| CI
+  Dk -.->|rebuild bases| CI
+  I -.->|plan/apply| CI
+  D -.->|docs-only path filter| CI
+
+  A -.->|forbidden| S
+  S -.->|forbidden| A
+  P -.->|forbidden| A
+  L -.->|forbidden| A
+            </pre>
+          </figure>
+
+          <h2>🧱 Import DAG rules (non-negotiable)</h2>
+          <ul>
+            <li>✅ <code>apps|projects|services → libs</code></li>
+            <li>✅ <code>libs → libs</code> only via an <strong>acyclic</strong>
+              internal graph (enforce with import-linter / custom ruff plugin /
+              CI graph check).</li>
+            <li>🚫 <code>libs → apps|projects|services</code></li>
+            <li>🚫 <code>apps ↔ services</code> (talk over APIs / events, not
+              Python imports)</li>
+            <li>🚫 deep imports into another package’s private modules —
+              public entry points only</li>
+          </ul>
+          <p>Hard organizational rule: <code>apps/*</code>,
+            <code>projects/*</code>, and <code>services/*</code> never import
+            each other. If two leaves need the same code, it graduates into
+            <code>libs/</code>. Encode that in tooling (import-linter / CI graph
+            check), not wiki pages.</p>
+
+          <figure class="two-cents-diagram">
+            <figcaption>🔁 Affected-test expansion when a lib changes</figcaption>
+            <pre class="mermaid">
+flowchart LR
+  PR["PR diff"] --> Diff["changed paths"]
+  Diff --> Lib["libs/foo-bar-baz-qux\nchanged?"]
+  Lib -->|yes| Closure["resolve dependents\nvia uv.lock / workspace graph"]
+  Closure --> T1["test libs/foo-bar-other"]
+  Closure --> T2["test services/billing"]
+  Closure --> T3["test apps/console"]
+  Lib -->|no| Local["test only touched leaves"]
+            </pre>
+          </figure>
+
+          <h2>🧰 Base toolchain (Python)</h2>
+          <p>Standardize the developer loop on a fast resolver, one task
+            runner, strict static analysis, and multi-env tox. Every tool below
+            should be pinned in the workspace root and invoked through
+            <code>poe</code> so humans and CI share identical entrypoints.</p>
+
+          <h3>⚡ <a href="https://docs.astral.sh/uv/" target="_blank"
+              rel="noopener noreferrer">uv</a>
+            [<a href="https://docs.astral.sh/uv/" target="_blank"
+              rel="noopener noreferrer">2</a>]</h3>
+          <p>Package/project manager + workspace linker. Use
+            <code>uv sync --locked</code> at the root, path deps for
+            <code>libs/*</code>, and <code>uv.lock</code> as the source of truth
+            for affected-package computation. Constraint solving + lockfiles
+            keep local, CI, and prod on the same graph — with materially better
+            cold-install performance than older Poetry-era stacks.</p>
+
+          <h3>🧹 <a href="https://docs.astral.sh/ruff/" target="_blank"
+              rel="noopener noreferrer">Ruff</a>
+            [<a href="https://docs.astral.sh/ruff/" target="_blank"
+              rel="noopener noreferrer">3</a>]</h3>
+          <p>Single-binary lint + format. Configure once at the workspace root
+            (<code>[tool.ruff]</code>); leaf packages may only tighten, never
+            invent incompatible dialects. Wire it as
+            <code>poe format</code> / <code>ruff check</code> inside
+            <code>poe check</code>.</p>
+
+          <h3>🧠 Type checking — <a href="https://mypy-lang.org/"
+              target="_blank" rel="noopener noreferrer">mypy</a>
+            [<a href="https://mypy-lang.org/" target="_blank"
+              rel="noopener noreferrer">4</a>]
+            or <a href="https://github.com/microsoft/pyright" target="_blank"
+              rel="noopener noreferrer">Pyright</a>
+            [<a href="https://github.com/microsoft/pyright" target="_blank"
+              rel="noopener noreferrer">5</a>]</h3>
+          <p>Pick <strong>one</strong> org-wide and enforce
+            <code>disallow_untyped_defs</code> (mypy) or
+            <code>typeCheckingMode = "strict"</code> (Pyright) on
+            <code>libs/*</code> first. Apps and services can ratchet up
+            afterward. Expose the chosen checker as <code>poe mypy</code> (or
+            <code>poe pyright</code>); Pyright is the better fit if you want
+            language-server parity with VS Code / Pylance.</p>
+
+          <h3>🎭 <a href="https://poethepoet.natn.io/" target="_blank"
+              rel="noopener noreferrer">Poe the Poet</a>
+            [<a href="https://poethepoet.natn.io/" target="_blank"
+              rel="noopener noreferrer">6</a>]</h3>
+          <p>Task runner declared in <code>pyproject.toml</code>. This is the
+            control plane: <code>format</code>, <code>check</code>,
+            <code>test</code>, <code>tox</code>, <code>build</code>, codegen,
+            etc. Engineers learn <code>poe check &amp;&amp; poe test</code>; CI
+            calls the same tasks via <code>[tool.poe.tasks]</code>.</p>
+
+          <h3>🧪 <a href="https://tox.wiki/" target="_blank"
+              rel="noopener noreferrer">tox</a>
+            + <a href="https://github.com/tox-dev/tox-uv" target="_blank"
+              rel="noopener noreferrer">tox-uv</a>
+            [<a href="https://tox.wiki/" target="_blank"
+              rel="noopener noreferrer">7</a>]
+            [<a href="https://github.com/tox-dev/tox-uv" target="_blank"
+              rel="noopener noreferrer">8</a>]</h3>
+          <p>Matrix execution across Python versions / factor envs without
+            hand-rolled shell. With <code>tox-uv</code>, envs resolve through
+            uv so local and CI stay aligned. Expose as
+            <code>poe tox</code>.</p>
+
+          <figure class="two-cents-diagram">
+            <figcaption>🛠️ Canonical local / CI developer loop</figcaption>
+            <pre class="mermaid">
+flowchart LR
+  Dev["engineer"] --> Poe["poe check / test / tox"]
+  Poe --> UV["uv sync --locked"]
+  Poe --> Ruff["ruff format + check"]
+  Poe --> Types["mypy | pyright"]
+  Poe --> PyTest["pytest + coverage"]
+  Poe --> Tox["tox · multi-Py"]
+  CI["GitHub Actions XOR GitLab CI"] --> Poe
+            </pre>
+          </figure>
+
+          <pre><code># root pyproject.toml — illustrative shape
+[tool.uv.workspace]
+members = ["apps/*", "libs/*", "projects/*", "services/*"]
+
+[tool.poe.tasks.format]
+cmd = "ruff format ."
+
+[tool.poe.tasks.check]
+sequence = [
+  { cmd = "poe format --check" },
+  { cmd = "ruff check ." },
+  { cmd = "poe mypy" },
+]
+
+[tool.poe.tasks.test]
+cmd = "pytest -q"
+
+[tool.poe.tasks.tox]
+cmd = "tox"</code></pre>
+
+          <h2>🧩 CI/CD — parent templates, child nodes where jobs start</h2>
+          <p>Pick one forge and commit to it. The root
+            <code>.github/</code> <em>or</em> <code>.gitlab/</code> tree is the
+            <strong>parent</strong>: shared job definitions, images, rules, and
+            deploy primitives. Leaf CI files are <strong>child nodes</strong> —
+            thin entrypoints that start the real jobs by including / calling
+            those templates. Do not copy-paste a full pipeline into every
+            leaf.</p>
+
+          <h3>🦊 GitLab — <code>.gitlab/</code> + per-leaf
+            <code>.gitlab-ci.yml</code></h3>
+          <pre><code>.gitlab/
+├── ci/
+│   ├── python-leaf.yml      # shared jobs: lint, typecheck, test, build
+│   ├── docker-deploy.yml    # shared deploy jobs for apps/services
+│   └── iac-plan-apply.yml
+└── CODEOWNERS
+
+# root .gitlab-ci.yml — parent pipeline / dispatcher
+include:
+  - local: .gitlab/ci/python-leaf.yml   # optional defaults
+stages: [detect, test, build, deploy]
+
+# fan-out: trigger a child pipeline per affected leaf
+trigger-libs-foo-bar-baz-qux:
+  stage: test
+  trigger:
+    include:
+      - local: libs/foo-bar-baz-qux/.gitlab-ci.yml
+    strategy: depend
+  rules:
+    - changes:
+        - libs/foo-bar-baz-qux/**/*
+        - libs/foo-bar-*/**/*          # or compute dependents from uv.lock</code></pre>
+          <p>Each leaf’s <code>.gitlab-ci.yml</code> stays tiny — it includes
+            <code>.gitlab/ci/python-leaf.yml</code> and only overrides
+            variables (image, pytest path, whether to publish a wheel).
+            <strong>Jobs start in the child pipeline</strong> for that leaf,
+            not as a 500-line monolith at the repo root.</p>
+
+          <h3>🐙 GitHub — <code>.github/workflows/</code> reusable workflows</h3>
+          <p>GitHub Actions does not discover workflow YAML inside
+            <code>apps/</code> or <code>libs/</code>. Workflows live under
+            <code>.github/workflows/</code>. The equivalent of GitLab child
+            pipelines is <strong>reusable workflows</strong>
+            (<code>on: workflow_call</code>) plus per-leaf stub workflows (or
+            one dispatcher workflow) that pass leaf inputs:</p>
+          <pre><code>.github/
+├── workflows/
+│   ├── _python-leaf.yml           # reusable: the jobs (lint/test/build)
+│   ├── _docker-deploy.yml         # reusable: build/push/deploy
+│   ├── libs-foo-bar-baz-qux.yml   # child node / stub — where this leaf starts
+│   └── monorepo-dispatch.yml      # optional: path-filter → matrix of stubs
+├── actions/                       # optional composite actions
+└── CODEOWNERS
+
+# libs-foo-bar-baz-qux.yml (stub — child node)
+name: libs/foo-bar-baz-qux
+on:
+  pull_request:
+    paths: ["libs/foo-bar-baz-qux/**", "libs/**/pyproject.toml"]
+  push:
+    paths: ["libs/foo-bar-baz-qux/**"]
+jobs:
+  python:
+    uses: ./.github/workflows/_python-leaf.yml
+    with:
+      working-directory: libs/foo-bar-baz-qux
+      # or read libs/foo-bar-baz-qux/ci.yml inside the reusable workflow</code></pre>
+          <p>So: <strong>reusable workflow = shared job body</strong>;
+            <strong>stub workflow (or dispatcher matrix entry) = child node
+            where that leaf’s jobs start</strong>. Leaf-local
+            <code>ci.yml</code> holds values only — image, matrix, deploy
+            target, Slack channel, “needs DB?”, etc.</p>
+
+          <figure class="two-cents-diagram">
+            <figcaption>🧩 Parent templates → child nodes → jobs</figcaption>
+            <pre class="mermaid">
+flowchart TB
+  PR["PR / push"] --> Parent["Parent dispatcher\n.github XOR .gitlab"]
+  Parent --> Detect["detect affected leaves\npaths + uv.lock graph"]
+  Detect --> C1["Child: libs/foo-bar-baz-qux\n.gitlab-ci.yml / stub workflow"]
+  Detect --> C2["Child: services/billing\n.gitlab-ci.yml / stub workflow"]
+  Detect --> C3["Child: iac/stacks/...\nplan jobs"]
+  C1 --> Jobs1["lint · types · test"]
+  C2 --> Jobs2["lint · types · test · image · deploy"]
+  C3 --> Jobs3["terraform plan / apply"]
+  T["Shared templates\n.gitlab/ci/* or\n.github/workflows/_*.yml"] -.-> C1
+  T -.-> C2
+  T -.-> C3
+            </pre>
+          </figure>
+
+          <p>Always parameterize the same four concerns:</p>
+          <ul>
+            <li>🎯 path filters → which leaf’s child node wakes up</li>
+            <li>🕸️ workspace graph → which dependents must re-test</li>
+            <li>🐳 image build + push for <code>apps/*</code> /
+              <code>services/*</code> on leaf changes; rebuild shared bases
+              under <code>dockers/</code> when those Dockerfiles change, then
+              rebuild dependents</li>
+            <li>☁️ <code>iac/*</code> → <code>terraform plan</code> on PR,
+              apply on protected branches</li>
+          </ul>
+
+          <h2>💓 Repo-Health — if you don’t measure it, you can’t improve
+            it</h2>
+          <p>A monorepo without measurable quality is just a bigger place to
+            hide regressions. Unit tests, integration tests, version/arch
+            matrices, and repo-wide coverage are how you
+            <em>prove</em> that a change to <code>libs/*</code> is safe for
+            every downstream <code>apps/</code>, <code>projects/</code>, and
+            <code>services/</code> consumer — not hope.</p>
+
+          <h3>🧪 Unit + integration tests with pytest</h3>
+          <p>Standardize on
+            <a href="https://docs.pytest.org/" target="_blank"
+              rel="noopener noreferrer">pytest</a>
+            [<a href="https://docs.pytest.org/" target="_blank"
+              rel="noopener noreferrer">29</a>]
+            in every Python leaf:</p>
+          <ul>
+            <li>🔬 <strong>Unit tests</strong> — fast, no network, live next to
+              the package (<code>tests/unit/</code>). Required on every PR
+              child pipeline.</li>
+            <li>🔗 <strong>Integration tests</strong> —
+              <code>tests/integration/</code> against realistic boundaries
+              (Testcontainers, compose from <code>dockers/compose/</code>,
+              LocalStack, ephemeral DBs). Mark with
+              <code>@pytest.mark.integration</code>; run on PR for touched
+              leaves, and more broadly on a schedule.</li>
+            <li>📦 <strong>Libs especially</strong> — a library’s unit suite is
+              necessary but not sufficient. Prefer contract / consumer-style
+              tests that exercise the public API the way
+              <code>apps/*</code> and <code>services/*</code> will call it.
+            </li>
+          </ul>
+          <pre><code># every Python leaf
+libs/foo-bar-baz-qux/
+├── src/foo/bar/baz/qux/
+├── tests/
+│   ├── unit/
+│   └── integration/
+└── pyproject.toml          # pytest + pytest-cov config</code></pre>
+
+          <h3>🐍 tox matrices — guarantee downstream runtimes</h3>
+          <p>Downstream leaves will not all pin the same Python patch or CPU
+            arch. Use
+            <a href="https://tox.wiki/" target="_blank"
+              rel="noopener noreferrer">tox</a>
+            (+ <a href="https://github.com/tox-dev/tox-uv" target="_blank"
+              rel="noopener noreferrer">tox-uv</a>) so each
+            <code>libs/*</code> (and critical services) proves itself across
+            the matrix your org actually runs:</p>
+          <pre><code># libs/foo-bar-baz-qux/tox.ini  (illustrative)
+[tox]
+env_list = py310, py311, py312, py313
+
+[testenv]
+runner = uv-venv-lock-runner
+commands =
+    pytest tests/unit -q --cov=foo.bar.baz.qux --cov-report=xml
+
+# optional factors — OS / arch via CI matrix, not only tox envs
+# e.g. GitHub: strategy.matrix = { python: [...], os: [ubuntu, macos] }</code></pre>
+          <ul>
+            <li>🧩 <strong>PR path</strong> — affected leaf runs
+              <code>poe test</code> (current default Python) + a lean tox
+              subset if the leaf is a shared lib.</li>
+            <li>🌐 <strong>Full matrix</strong> —
+              <code>poe tox</code> on shared <code>libs/*</code> for every
+              supported CPython, and CI runners for arch/OS (amd64 / arm64,
+              linux / macos) when you ship wheels or multi-arch images.</li>
+            <li>🛡️ <strong>Why this matters</strong> — when
+              <code>services/billing</code> is on 3.11-arm64 and
+              <code>apps/console</code> is on 3.12-amd64, a green single-env
+              lib PR is a lie. The matrix is how you make downstream use
+              <em>guaranteed</em>, not assumed.</li>
+          </ul>
+
+          <h3>🌙 Nightly: crawl the monorepo, accumulate coverage</h3>
+          <p>PR CI proves the <em>diff</em>. Nightly proves the
+            <em>estate</em>. Schedule a parent pipeline (GitHub
+            <code>schedule</code> / GitLab pipeline schedule) that:</p>
+          <ol>
+            <li>🕷️ <strong>Crawls</strong> every testable leaf under
+              <code>apps/*</code>, <code>libs/*</code>,
+              <code>projects/*</code>, <code>services/*</code> (discover
+              <code>pyproject.toml</code> / <code>tox.ini</code> /
+              <code>package.json</code>, etc.).</li>
+            <li>🧪 Runs unit (+ optional integration) suites per leaf —
+              Python via <code>poe test</code> / <code>tox</code>, other
+              languages via their leaf task.</li>
+            <li>📊 Emits per-leaf coverage artifacts
+              (<code>coverage.xml</code>, lcov, …).</li>
+            <li>🧮 <strong>Accumulates</strong> into a monorepo rollup
+              (e.g. merge coverage.py data with
+              <code>coverage combine</code>, or upload all partials to
+              Codecov/Coveralls/Sonar with a monorepo flag).</li>
+            <li>📈 Publishes a trend: total %, per-top-level-dir %, worst
+              leaves, and a diff vs. last night — fail the nightly (alert;
+              don’t block product merges) if coverage drops beyond a
+              threshold.</li>
+          </ol>
+          <pre><code># conceptual nightly (forge-agnostic)
+discover leaves
+for leaf in leaves:
+    (cd $leaf && poe test --cov)   # or poe tox on libs
+upload partial coverage artifacts
+coverage combine ./coverage-partials/*   # or vendor uploader
+publish report → docs portal / coverage dashboard
+route anomalies → CODEOWNERS for failing leaves</code></pre>
+          <figure class="two-cents-diagram">
+            <figcaption>💓 PR proves the diff; nightly proves the estate and
+              pages the owners</figcaption>
+            <pre class="mermaid">
+flowchart TB
+  PR["PR / MR"] --> Aff["affected leaves\n+ dependents"]
+  Aff --> Fast["pytest unit\n+ lean tox"]
+  Night["Nightly schedule"] --> Crawl["crawl all leaves"]
+  Crawl --> Full["full suites\n+ tox matrices"]
+  Full --> Partials["per-leaf coverage.xml"]
+  Partials --> Rollup["combine / upload\nmonorepo total"]
+  Rollup --> Detect["anomaly detection"]
+  Detect --> Owners["alert CODEOWNERS\nof failing leaves"]
+  Detect --> Dash["dashboard / report\ncauses for debug"]
+            </pre>
+          </figure>
+          <p>Reference stack: pytest +
+            <a href="https://coverage.readthedocs.io/" target="_blank"
+              rel="noopener noreferrer">coverage.py</a>
+            [<a href="https://coverage.readthedocs.io/" target="_blank"
+              rel="noopener noreferrer">30</a>]
+            locally; Codecov / Coveralls / Sonar (or a simple HTML report
+            published next to the docs portal) for the accumulated nightly
+            view. Same rule as everything else: one
+            <code>poe coverage-nightly</code> (or equivalent) that CI calls —
+            no snowflake nightly scripts per leaf.</p>
+
+          <h3>🚨 Alerting CODEOWNERS on nightly anomalies</h3>
+          <p>When the nightly crawler finds something wrong, do not spam
+            <code>#engineering</code>. Route to the <strong>CODEOWNERS of the
+            failing leaf</strong> (and platform only for rollup / infra
+            symptoms). Ground the policy in Rob Ewaschuk’s
+            <a
+              href="https://docs.google.com/document/d/199PqyG3UsyXlwieHaqbGiWVa8eMWi8zzAn0YfcApr8Q/edit"
+              target="_blank" rel="noopener noreferrer">My Philosophy on
+              Alerting</a>
+            [<a
+              href="https://docs.google.com/document/d/199PqyG3UsyXlwieHaqbGiWVa8eMWi8zzAn0YfcApr8Q/edit"
+              target="_blank" rel="noopener noreferrer">31</a>]
+            (widely cited in Google SRE practice): pages should be urgent,
+            important, actionable, and real — prefer
+            <strong>symptoms</strong> over raw causes, and keep cause detail
+            on dashboards / in the alert body for debugging.</p>
+          <p>Map that to Repo-Health nightlies:</p>
+          <ul>
+            <li>🩺 <strong>Alert on symptoms</strong> — e.g. “leaf
+              <code>libs/foo-bar-baz-qux</code> nightly is red,” “monorepo
+              coverage dropped &gt; N% WoW,” “tox py312 factor failed for 3
+              shared libs,” “integration suite timed out for
+              <code>services/billing</code>.” These are user/platform pain
+              signals for that path’s owners.</li>
+            <li>🔍 <strong>Attach causes in the payload / dashboard</strong> —
+              failed test names, flake retries, Python version, runner arch,
+              coverage Δ, last green SHA — so owners can debug without a
+              second page for every proximate cause.</li>
+            <li>👤 <strong>Route by CODEOWNERS</strong> — resolve
+              <code>/libs/foo-bar-baz-qux/</code> →
+              <code>@org/foo-bar-owners</code> (Slack/Teams/PagerDuty/
+              GitHub Issues). Platform owns rollup symptoms
+              (<code>dockers/</code>, CI templates, crawler itself).</li>
+            <li>🔇 <strong>Don’t page on every cause</strong> — a single flaky
+              test failure is a ticket/dashboard item; a leaf that was green
+              for 14 days and is now red is a page. Err toward removing noisy
+              alerts.</li>
+          </ul>
+          <p>Example anomaly classes the nightly should detect and fan out:</p>
+          <ul>
+            <li>💥 Suite regression — previously green leaf now failing unit /
+              integration / tox env</li>
+            <li>📉 Coverage cliff — leaf or monorepo total drops beyond
+              threshold</li>
+            <li>🐍 Matrix break — lib fails on a Python/OS/arch still required
+              by downstream apps/services</li>
+            <li>⏱️ Health of the crawler — nightly itself didn’t finish /
+              couldn’t discover leaves (symptom: “Repo-Health blind” → page
+              platform)</li>
+            <li>🔁 Flake storms — same test fails intermittently above a rate
+              (ticket the owners; page only if a release path is blocked)</li>
+          </ul>
+          <pre><code># conceptual alert routing
+for anomaly in nightly_anomalies:
+    paths = anomaly.affected_paths          # e.g. libs/foo-bar-baz-qux/**
+    owners = resolve_codeowners(paths)      # from CODEOWNERS
+    notify(
+        owners,
+        symptom=anomaly.symptom,            # "nightly red" / "coverage cliff"
+        causes=anomaly.debug_bundle,        # logs, SHA, matrix cell, …
+        runbook=docs_url("repo-health"),
+    )</code></pre>
+          <p>Observability here is not just dashboards — it is
+            <strong>closed-loop ownership</strong>: measure the estate, detect
+            symptoms, page the people who can fix that path, and keep causes
+            visible without turning every log line into a pager event
+            [<a
+              href="https://docs.google.com/document/d/199PqyG3UsyXlwieHaqbGiWVa8eMWi8zzAn0YfcApr8Q/edit"
+              target="_blank" rel="noopener noreferrer">31</a>].</p>
+
+          <h2>🔥 Blaze / Bazel and Buck — why we did not start there</h2>
+          <p>Two hyperscale lineages dominate this design space:</p>
+          <ul>
+            <li>🟠 <strong>Google — Blaze →
+              <a href="https://bazel.build/" target="_blank"
+                rel="noopener noreferrer">Bazel</a></strong>
+              [<a href="https://bazel.build/" target="_blank"
+                rel="noopener noreferrer">13</a>]
+              — hermetic actions, fine-grained target graph, remote caching /
+              remote execution, Starlark rules. Bazel is the open-source Blaze.
+            </li>
+            <li>🔵 <strong>Meta — Buck →
+              <a href="https://buck2.build/" target="_blank"
+                rel="noopener noreferrer">Buck2</a></strong>
+              [<a href="https://buck2.build/" target="_blank"
+                rel="noopener noreferrer">22</a>]
+              — Meta’s monorepo build system (Buck1 open-sourced earlier;
+              <a
+                href="https://engineering.fb.com/2023/04/06/open-source/buck2-open-source-large-scale-build-system/"
+                target="_blank" rel="noopener noreferrer">Buck2</a>
+              is the from-scratch Rust rewrite). Same class of problem: polyglot
+              targets, hermeticity, remote execution (REAPI-compatible), rules
+              in Starlark decoupled from the core
+              [<a
+                href="https://engineering.fb.com/2023/04/06/open-source/buck2-open-source-large-scale-build-system/"
+                target="_blank" rel="noopener noreferrer">23</a>].</li>
+          </ul>
+          <p>For a hyperscale polyglot monorepo, Bazel <em>or</em> Buck2 is
+            often the correct endgame. Both are the wrong <em>first</em> move
+            for most orgs that just need shared libs + services in one Git
+            repo.</p>
+
+          <h3>✅ Pros (Bazel / Buck2 class)</h3>
+          <ul>
+            <li>🧮 <strong>Hermetic, reproducible builds</strong> — inputs hash
+              to outputs; “works on my machine” shrinks dramatically.</li>
+            <li>⚡ <strong>Incremental + remote cache</strong> — unchanged
+              targets are fetched, not rebuilt; CI and laptops can share a
+              cache.</li>
+            <li>🕸️ <strong>Precise affected graph</strong> — test/build only
+              what the target graph says changed, across languages.</li>
+            <li>🌍 <strong>Polyglot-native</strong> — one system for Python,
+              Go, Rust, Java/C++, protos, container images, etc.</li>
+            <li>🔁 <strong>Buck2-specific upside</strong> — dynamic
+              dependencies (graph can grow mid-build from tool output), rules
+              fully outside the Rust core, strong parallelism story vs Buck1 /
+              vs phase-heavy designs.</li>
+          </ul>
+
+          <h3>❌ Cons (same tax either way)</h3>
+          <ul>
+            <li>🧗 <strong>Steep learning curve</strong> —
+              <code>BUILD</code>/<code>BUCK</code> files, Starlark rules,
+              cells/workspaces, and rule ecosystems become a specialization.
+            </li>
+            <li>🧰 <strong>Toolchain takeover</strong> — everyday language UX
+              (<code>uv</code>, <code>pytest</code>, <code>cargo test</code>,
+              IDE runners) often needs wrappers; onboarding tax is real.</li>
+            <li>👥 <strong>Platform bottleneck</strong> — one or two engineers
+              become the only people who can land build changes.</li>
+            <li>💸 <strong>Ops cost</strong> — remote cache / RBE, rules
+              upgrades, and language-rules churn are ongoing platform work, not
+              a weekend migration.</li>
+            <li>🥜 <strong>Overkill early</strong> — for dozens of leaves,
+              Blaze/Buck-class hermeticity is a sledgehammer.</li>
+            <li>🧪 <strong>Ecosystem maturity tradeoffs</strong> — Bazel has
+              the broader open-source rules surface today; Buck2 is battle-tested
+              at Meta but the public ecosystem / release cadence is younger —
+              picking either is a multi-year platform bet.</li>
+          </ul>
+
+          <h3>🚫 Why we did not use Bazel or Buck first</h3>
+          <p>We wanted a monorepo that engineers can extend on day two without
+            learning a second build language. The uv workspace + poe tasks +
+            forge-native child pipelines give us path deps, affected CI, and
+            shared templates with tools people already know. Blaze/Bazel and
+            Buck/Buck2 stay on the roadmap for when polyglot scale or CI
+            minutes force hermetic remote execution — not as the admission
+            price to have <code>libs/</code> and <code>services/</code> in one
+            Git repo.</p>
+          <p>Rule of thumb: <strong>earn Bazel or Buck2</strong>. Start with
+            the graph + CI contracts in this post; graduate to hermetic
+            monorepo builders when the complexity tax is clearly cheaper than
+            the CI bill — then choose based on your language mix, rules
+            ecosystem, and whether you already have REAPI infrastructure.</p>
+
+          <h2>🐳 Shared container assets — <code>dockers/</code></h2>
+          <p>Centralize image plumbing so every leaf does not ship a private
+            snowflake Dockerfile:</p>
+          <pre><code>dockers/
+├── bases/
+│   ├── python-runtime/Dockerfile    # org Python base
+│   └── go-runtime/Dockerfile
+├── templates/
+│   └── python-service/Dockerfile    # multi-stage template leaves COPY from
+├── compose/
+│   ├── local-deps.yml               # postgres, redis, localstack, …
+│   └── mesh-stub.yml
+└── README.md</code></pre>
+          <p>Leaves keep a thin Dockerfile (or build args) that
+            <code>FROM</code> the org base / template. CD rebuilds
+            <code>dockers/bases/*</code> on change, then rebuilds dependent
+            <code>apps/*</code> / <code>services/*</code> images.</p>
+
+          <h2>🍪 Cookiecutters — scaffold, don’t teach the bolts</h2>
+          <p>The monorepo’s internal contracts (workspaces, CI stubs, naming
+            maps, docs nodes, CODEOWNERS rows) are <em>platform</em> knowledge.
+            Downstream users should not need to learn them. Keep golden-path
+            generators under <code>cookiecutters/</code> (name is historical —
+            the engine can be any of the tools below) and expose them
+            <strong>only</strong> through task-runner entrypoints
+            (<code>poe new-*</code>).</p>
+
+          <h3>🛠️ Scaffolding engines — pick one org-wide</h3>
+          <ul>
+            <li>🍪 <strong><a
+                href="https://github.com/cookiecutter/cookiecutter"
+                target="_blank" rel="noopener noreferrer">Cookiecutter</a></strong>
+              [<a href="https://github.com/cookiecutter/cookiecutter"
+                target="_blank" rel="noopener noreferrer">26</a>]
+              — classic Jinja templates; fire-and-forget generation. Simple,
+              ubiquitous, polyglot. Weak at <em>updating</em> already-scaffolded
+              leaves when the template evolves.</li>
+            <li>📋 <strong><a href="https://copier.readthedocs.io/"
+                target="_blank" rel="noopener noreferrer">Copier</a></strong>
+              [<a href="https://github.com/copier-org/copier" target="_blank"
+                rel="noopener noreferrer">27</a>]
+              — Cookiecutter’s smarter cousin: Jinja templates + answers file +
+              template <em>updates</em> with 3-way merges. Strong default when
+              you want a golden path that can evolve without rewriting every
+              leaf by hand.</li>
+            <li>🧬 <strong><a href="https://projen.io/" target="_blank"
+                rel="noopener noreferrer">Projen</a></strong>
+              [<a href="https://github.com/projen/projen" target="_blank"
+                rel="noopener noreferrer">28</a>]
+              — project config as code (synthesize
+              <code>package.json</code>, CI, lint, … from a typed
+              <code>.projenrc</code>). Generated files are managed, not
+              hand-edited — best when you want “cattle, not pets” consistency
+              and a central push of config upgrades (popular in TS/CDK worlds;
+              works beyond JS via jsii).</li>
+            <li>📦 Other options in the same niche — Yeoman, Crane, language
+              CLIs (<code>cargo new</code>, <code>npm create</code>) wrapped by
+              <code>poe</code> so the <em>user</em> surface stays
+              <code>poe new-*</code> regardless of engine.</li>
+          </ul>
+          <p><strong>Recommendation:</strong> Copier for polyglot monorepos
+            that need template upgrades; Cookiecutter if you only need
+            create-once scaffolding; Projen when most leaves are TS/Node (or
+            CDK) and you want synthesized, non-editable project config. Do not
+            mix three engines without a very good reason — the directory can
+            still be called <code>cookiecutters/</code> even if the binary is
+            <code>copier</code>.</p>
+
+          <pre><code>cookiecutters/
+├── python-lib/               # Copier/Cookiecutter template — or
+├── python-service/           #   projen project type definitions
+├── python-project/
+├── js-app/
+├── go-service/
+└── README.md                 # which poe task → which template/engine
+
+# root pyproject.toml — illustrative (swap cookiecutter ↔ copier as needed)
+[tool.poe.tasks.new-python-lib]
+help = "Scaffold a namespaced Python lib under libs/"
+cmd = "copier copy cookiecutters/python-lib libs"
+
+[tool.poe.tasks.new-python-service]
+cmd = "copier copy cookiecutters/python-service services"
+
+[tool.poe.tasks.new-js-app]
+cmd = "copier copy cookiecutters/js-app apps"
+
+# if using projen instead:
+# [tool.poe.tasks.new-js-app]
+# cmd = "projen new --from ./cookiecutters/js-app …"</code></pre>
+          <p>Each template / project type should emit a
+            <strong>complete leaf</strong> in one shot:</p>
+          <ul>
+            <li>📦 correct directory + org-namespaced package layout</li>
+            <li>🧾 <code>pyproject.toml</code> / language manifest wired into
+              the workspace</li>
+            <li>🧩 CI child stub (<code>.gitlab-ci.yml</code> or GitHub stub +
+              <code>ci.yml</code>)</li>
+            <li>📚 starter <code>docs/</code> node</li>
+            <li>👤 CODEOWNERS snippet / team placeholder</li>
+            <li>🐳 thin Dockerfile that uses <code>FROM</code> with
+              <code>dockers/</code> bases when relevant</li>
+          </ul>
+          <p>UX goal: <code>poe new-python-lib</code> → answer three prompts →
+            open a PR. No wiki spelunking required. Platform owns the
+            templates; product teams consume the CLIs.</p>
+
+          <h2>🛡️ CODEOWNERS, ACL, and merge gates</h2>
+          <p>A monorepo without path-level ownership is a shared writable
+            disk. Every downstream leaf needs an explicit owner set, and the
+            forge must refuse to ship without their approval.</p>
+          <pre><code># .github/CODEOWNERS  (or .gitlab/CODEOWNERS)
+# Default — platform team
+*                                @org/platform
+
+# Leaf ownership — required reviewers for that path
+/libs/foo-bar-baz-qux/           @org/ml-platform @org/foo-bar-owners
+/services/billing/               @org/billing
+/apps/console/                   @org/console
+/dockers/                        @org/platform
+/cookiecutters/                  @org/platform
+/iac/                            @org/platform @org/sre
+/docs/                           @org/platform</code></pre>
+          <ul>
+            <li>🔒 <strong>Branch protection / MR approval rules</strong> —
+              require CODEOWNERS review on the default branch; dismiss stale
+              approvals on new pushes; block merge if checks fail.</li>
+            <li>👥 <strong>Leaf teams own leaves</strong> — product groups are
+              listed on their paths; platform owns
+              <code>dockers/</code>, <code>cookiecutters/</code>, CI
+              templates, and shared <code>libs/*</code> that many consumers
+              depend on (or a dedicated libs review group).</li>
+            <li>🚫 <strong>No self-merge of critical paths</strong> — especially
+              <code>iac/</code>, deploy templates, and base images.</li>
+            <li>🪪 <strong>ACL beyond Git</strong> — registry push, cloud
+              deploy roles, and secrets access mapped to the same owner teams
+              (OIDC / environment protection rules on GitHub; protected
+              environments on GitLab). CODEOWNERS stops bad merges; cloud ACL
+              stops bad deploys.</li>
+            <li>📜 <strong>Document the contract</strong> in
+              <code>docs/</code> / <code>CONTRIBUTING.md</code> — who owns
+              what, how to request ownership changes, and that unapproved path
+              changes do not ship.</li>
+          </ul>
+
+          <h2>🤖 How AI tools help maintain the repo</h2>
+          <p>Treat AI the same way you treat CI: <strong>encoded policy, not
+            vibes</strong>. The monorepo should teach agents (and humans) the
+            contracts so scaffolds, refactors, docs, and reviews stay on the
+            golden path. Below is a practical operating model.</p>
+
+          <figure class="two-cents-diagram">
+            <figcaption>🤖 AI in the monorepo lifecycle</figcaption>
+            <pre class="mermaid">
+flowchart LR
+  Rules[".cursor/rules\nCLAUDE.md\ndocs/ai/*"]
+  Author["Authoring agents\nCursor / Claude / …"]
+  MCP["MCP servers\nforge · docs · registry"]
+  PR["PR / MR opened"]
+  Review["Review agent\npolicy check"]
+  Humans["CODEOWNERS\nhuman approve"]
+  Merge["Merge + CD"]
+
+  Rules --> Author
+  MCP --> Author
+  Author --> PR
+  PR --> Review
+  Rules --> Review
+  MCP --> Review
+  Review --> Humans
+  Humans --> Merge
+            </pre>
+          </figure>
+
+          <h3>📐 1. Encode the contracts where agents look first</h3>
+          <ul>
+            <li>📁 <strong><code>.cursor/rules/</code></strong> — short
+              Cursor rules for topology, naming
+              (<code>foo-bar</code> → <code>foo/bar</code>), import DAG bans,
+              “use <code>poe new-*</code> — don’t hand-roll leaves,” docs-node
+              requirements, and PR style.</li>
+            <li>📝 <strong><code>CLAUDE.md</code></strong> / Claude project
+              rules — same invariants for Claude Code / Claude in the IDE so
+              you are not maintaining two contradictory policy worlds.</li>
+            <li>📖 <strong><code>docs/</code> +
+              <code>CONTRIBUTING.md</code> + ADRs</strong> — source of truth;
+              rules should <em>link</em> here, not duplicate novels.</li>
+            <li>🧪 <strong><code>docs/ai/</code></strong> — versioned prompts
+              and checklists (<code>pr-review.md</code>,
+              <code>scaffold-leaf.md</code>) that both humans and bots run.
+            </li>
+          </ul>
+
+          <h3>🛠️ 2. Day-to-day maintainer jobs AI is good at</h3>
+          <ul>
+            <li>🍪 <strong>Scaffold leaves</strong> — “add
+              <code>libs/acme-billing-client</code>” → agent runs
+              <code>poe new-python-lib</code> (Copier/Cookiecutter/Projen),
+              fills prompts, opens a branch. No free-form file inventing.</li>
+            <li>📚 <strong>Keep docs honest</strong> — when a public API
+              changes, agent updates the leaf <code>docs/</code> node and
+              flags portal nav gaps before merge.</li>
+            <li>🔁 <strong>Propagate template upgrades</strong> — after
+              <code>cookiecutters/</code> or CI templates change, agent opens
+              MRs that re-sync leaves (especially strong with Copier update /
+              Projen synth).</li>
+            <li>🧹 <strong>Repo hygiene</strong> — find import-DAG violations,
+              missing CODEOWNERS rows, orphaned Dockerfiles, stale path
+              filters, docs-only leaves without <code>poe docs</code>
+              coverage.</li>
+            <li>🧾 <strong>Changelog / migration notes</strong> — draft ADR
+              stubs and contributor-facing migration steps when a shared lib
+              breaks consumers.</li>
+            <li>🐛 <strong>CI archaeology</strong> — read failing job logs via
+              MCP, propose the minimal fix, re-run the leaf child pipeline.
+            </li>
+          </ul>
+
+          <h3>🔌 3. MCP — give agents tools, not pastebins</h3>
+          <ul>
+            <li>🧰 Wire <strong>MCP servers</strong> for the forge
+              (GitHub/GitLab), issue tracker, docs search, and package
+              registry metadata so agents can open MRs, inspect checks, and
+              query ownership without brittle shell one-offs.</li>
+            <li>🔐 Scope credentials: read-heavy for review bots; write only
+              for a bot identity that obeys the same ACL as humans.</li>
+            <li>🧭 Prefer MCP + in-repo rules over stuffing the entire monorepo
+              into a single prompt context window.</li>
+          </ul>
+
+          <h3>🕵️ 4. Review agents on every PR / MR</h3>
+          <ul>
+            <li>🤖 On <code>pull_request</code> /
+              <code>merge_request</code> open/sync, run a review agent
+              (Actions / GitLab job, or hosted bots such as Copilot /
+              CodeRabbit-class reviewers) against
+              <code>docs/ai/pr-review.md</code>.</li>
+            <li>Checklist the agent should enforce:
+              <ul>
+                <li>import DAG + no leaf→leaf Python imports</li>
+                <li>org namespace naming on new libs</li>
+                <li>CI stub + <code>docs/</code> node present for new leaves</li>
+                <li>no secrets; Dockerfiles <code>FROM</code> org bases</li>
+                <li>CODEOWNERS path touched has owners listed</li>
+              </ul>
+            </li>
+            <li>✅ Make the result a <strong>required check</strong> (pass /
+              fail) or at least a blocking “changes requested” comment style —
+              not a silent Slack side-channel.</li>
+            <li>👤 Agents <strong>never bypass CODEOWNERS</strong> — humans
+              still approve; the bot only fails the check or leaves review
+              comments.</li>
+          </ul>
+
+          <h3>⚠️ 5. Guardrails — what AI must not do</h3>
+          <ul>
+            <li>🚫 Invent a new top-level directory or skip
+              <code>poe new-*</code> for “speed.”</li>
+            <li>🚫 Self-approve or merge using admin tokens.</li>
+            <li>🚫 Edit <code>iac/</code>, deploy templates, or
+              <code>dockers/bases</code> without the owning team in the
+              loop.</li>
+            <li>🚫 Treat generated Projen/Copier-managed files as free-edit
+              surfaces when the engine owns them.</li>
+          </ul>
+
+          <p><strong>Bottom line:</strong> AI maintains the monorepo by
+            <em>executing and enforcing written contracts</em> — Cursor/Claude
+            rules for authors, MCP for tool access, PR/MR agents for review —
+            while ACL + CODEOWNERS remain the hard gate that prevents
+            unapproved changes from shipping.</p>
+
+          <h2>☁️ IaC next to the graph</h2>
+          <p>Keep Terraform (or Pulumi) under <code>iac/</code> with the usual
+            module vs. stack split:</p>
+          <pre><code>iac/
+├── modules/          # reusable primitives (network, k8s, bucket, db)
+├── stacks/
+│   ├── platform/     # shared cluster / mesh / observability
+│   └── services/     # per-service wiring (IAM, DNS, secrets refs)
+└── README.md</code></pre>
+          <p>Hard rule: 🔐 no secrets in Git — remote state + vault /
+            cloud secret manager only. Service deploy pipelines consume
+            outputs; they do not embed credentials.</p>
+          <p>Reference: <a href="https://developer.hashicorp.com/terraform/docs"
+              target="_blank" rel="noopener noreferrer">Terraform docs</a>
+            [<a href="https://developer.hashicorp.com/terraform/docs"
+              target="_blank" rel="noopener noreferrer">9</a>].</p>
+
+          <h2>📚 Docs portal — landing page + aggregate from leaves</h2>
+          <p>Top-level <code>docs/</code> is not a junk drawer of markdown. It
+            is the <strong>documentation portal</strong>: the landing page,
+            global nav, org ADRs, onboarding, and the glue that mounts every
+            downstream leaf’s docs into one published site.</p>
+          <pre><code>docs/                              # portal root (landing + chrome)
+├── index.md                       # landing page
+├── getting-started.md
+├── adr/                           # architecture decision records
+├── architecture/                  # C4 / Mermaid / D2
+├── mkdocs.yml                     # or conf.py — portal config
+└── overrides/                     # theme chrome
+
+libs/foo-bar-baz-qux/docs/         # downstream docs node
+├── index.md
+└── api/                           # or rely on autodoc / mkdocstrings
+
+services/billing/docs/
+├── index.md
+├── runbooks/
+└── diagrams/
+
+projects/claims-etl/docs/
+└── index.md</code></pre>
+
+          <h3>🚢 CD builds docs on the fly and publishes</h3>
+          <p>Do not ask humans to copy leaf markdown into
+            <code>docs/</code>. A docs CD child node (same parent/child pattern
+            as CI) should:</p>
+          <ol>
+            <li>🔍 Discover docs nodes under
+              <code>apps/*/docs</code>, <code>libs/*/docs</code>,
+              <code>projects/*/docs</code>, <code>services/*/docs</code>.</li>
+            <li>🧩 Generate / assemble the portal nav (mount each leaf under
+              e.g. <code>/libs/foo-bar-baz-qux/</code>,
+              <code>/services/billing/</code>).</li>
+            <li>⚙️ Build API reference from docstrings where configured
+              (autodoc / mkdocstrings).</li>
+            <li>📦 Emit a static site artifact.</li>
+            <li>🚀 Publish on merge to the default branch (GitHub Pages, GitLab
+              Pages, S3+CloudFront, or Read the Docs).</li>
+          </ol>
+          <p>Path filters: a leaf-only docs change rebuilds that leaf’s
+            section (or a cheap full static rebuild — usually fine). A portal
+            chrome change under top-level <code>docs/</code> rebuilds the
+            whole site. Wire this as <code>poe docs</code> locally and the
+            same task in the docs CD child.</p>
+
+          <figure class="two-cents-diagram">
+            <figcaption>📚 Portal aggregates downstream docs nodes</figcaption>
+            <pre class="mermaid">
+flowchart LR
+  subgraph leaves["Downstream docs nodes"]
+    L1["libs/*/docs"]
+    L2["services/*/docs"]
+    L3["apps/*/docs"]
+    L4["projects/*/docs"]
+  end
+  Portal["docs/\nlanding + nav + ADRs"]
+  CD["Docs CD child\npoe docs → build"]
+  Site["Published site\nPages / S3 / RTD"]
+
+  L1 --> CD
+  L2 --> CD
+  L3 --> CD
+  L4 --> CD
+  Portal --> CD
+  CD --> Site
+            </pre>
+          </figure>
+
+          <h3>🐍 Python docs tooling — options</h3>
+          <p>Pick one stack org-wide. Mixing Sphinx in half the leaves and
+            MkDocs in the other half is how portals die.</p>
+          <ul>
+            <li>📘 <strong><a href="https://www.mkdocs.org/" target="_blank"
+                rel="noopener noreferrer">MkDocs</a>
+              + <a href="https://squidfunk.github.io/mkdocs-material/"
+                target="_blank" rel="noopener noreferrer">Material for
+                MkDocs</a>
+              + <a href="https://mkdocstrings.github.io/" target="_blank"
+                rel="noopener noreferrer">mkdocstrings</a></strong>
+              [<a href="https://www.mkdocs.org/" target="_blank"
+                rel="noopener noreferrer">14</a>]
+              [<a href="https://squidfunk.github.io/mkdocs-material/"
+                target="_blank" rel="noopener noreferrer">15</a>]
+              [<a href="https://mkdocstrings.github.io/" target="_blank"
+                rel="noopener noreferrer">16</a>]
+              — markdown-first portal, excellent UX, easy multi-section nav.
+              <code>mkdocstrings</code> pulls Python API docs from docstrings.
+              <em>Best default for a monorepo landing page that aggregates
+                many leaves.</em></li>
+            <li>📗 <strong><a href="https://www.sphinx-doc.org/"
+                target="_blank" rel="noopener noreferrer">Sphinx</a>
+              + autodoc + <a href="https://myst-parser.readthedocs.io/"
+                target="_blank" rel="noopener noreferrer">MyST</a>
+              + <a href="https://pradyunsg.me/furo/" target="_blank"
+                rel="noopener noreferrer">Furo</a></strong>
+              [<a href="https://www.sphinx-doc.org/" target="_blank"
+                rel="noopener noreferrer">17</a>]
+              [<a href="https://myst-parser.readthedocs.io/" target="_blank"
+                rel="noopener noreferrer">18</a>]
+              [<a href="https://pradyunsg.me/furo/" target="_blank"
+                rel="noopener noreferrer">24</a>]
+              — deepest Python API / cross-ref story; steeper config. Prefer
+              when you need rich intersphinx, complex API trees, or already
+              live in Sphinx. Live example:
+              <a href="https://docs.slickml.com" target="_blank"
+                rel="noopener noreferrer">docs.slickml.com</a>
+              [<a href="https://docs.slickml.com" target="_blank"
+                rel="noopener noreferrer">25</a>]
+              (Sphinx + Furo).</li>
+            <li>📄 <strong><a href="https://pdoc.dev/" target="_blank"
+                rel="noopener noreferrer">pdoc</a></strong>
+              [<a href="https://pdoc.dev/" target="_blank"
+                rel="noopener noreferrer">19</a>]
+              — low-ceremony API sites from docstrings. Great per-lib
+              artifact; weaker as the org-wide portal unless you wrap it.</li>
+            <li>📓 <strong><a href="https://jupyterbook.org/" target="_blank"
+                rel="noopener noreferrer">Jupyter Book</a></strong>
+              [<a href="https://jupyterbook.org/" target="_blank"
+                rel="noopener noreferrer">20</a>]
+              — best when <code>projects/*</code> are notebook-heavy; usually
+              a section inside the portal, not the whole portal.</li>
+            <li>☁️ <strong>Hosting</strong> —
+              <a href="https://docs.github.com/en/pages" target="_blank"
+                rel="noopener noreferrer">GitHub Pages</a> /
+              <a href="https://docs.gitlab.com/ee/user/project/pages/"
+                target="_blank" rel="noopener noreferrer">GitLab Pages</a>
+              for forge-native CD; <a href="https://readthedocs.org/"
+                target="_blank" rel="noopener noreferrer">Read the Docs</a>
+              [<a href="https://readthedocs.org/" target="_blank"
+                rel="noopener noreferrer">21</a>]
+              if you want versioned docs / PR previews without running your
+              own Pages bucket.</li>
+          </ul>
+          <p><strong>Recommendation:</strong> MkDocs Material at
+            <code>docs/</code> as the portal, mkdocstrings pointed at each
+            <code>libs/*</code> package path, leaf narrative docs living under
+            each leaf’s <code>docs/</code>, assembled by
+            <code>poe docs</code> in CD. Use Sphinx only if API cross-refs
+            become the product. Keep Jupyter Book as an opt-in section for
+            research-shaped <code>projects/*</code>.</p>
+
+          <h3>🎨 Diagrams as code (inside the portal)</h3>
+          <p>Architecture that only exists in slide decks drifts. Prefer
+            text-native diagram tools in portal + leaf docs:</p>
+          <ul>
+            <li>🧜‍♂️ <a href="https://mermaid.js.org/" target="_blank"
+                rel="noopener noreferrer">Mermaid</a>
+              [<a href="https://mermaid.js.org/" target="_blank"
+                rel="noopener noreferrer">10</a>] — flowcharts, C4-ish
+              graphs, sequences; renders in GitHub/GitLab markdown and MkDocs
+              plugins.</li>
+            <li>✏️ <a href="https://d2lang.com/" target="_blank"
+                rel="noopener noreferrer">D2</a>
+              [<a href="https://d2lang.com/" target="_blank"
+                rel="noopener noreferrer">11</a>] — declarative layouts with
+              stronger aesthetic defaults for system diagrams.</li>
+            <li>🏛️ <a href="https://structurizr.com/" target="_blank"
+                rel="noopener noreferrer">Structurizr / C4</a>
+              [<a href="https://structurizr.com/" target="_blank"
+                rel="noopener noreferrer">12</a>] — when you need formal C4
+              model → views.</li>
+          </ul>
+          <p>Minimum bar: every new <code>services/*</code> leaf ships a Mermaid
+            (or D2) context diagram in its <code>docs/</code> before the first
+            deploy template lands.</p>
+
+          <h2>🗺️ Rollout sequence</h2>
+          <ol>
+            <li>🧾 Freeze the directory contracts + import DAG in an ADR.</li>
+            <li>🧱 Stand up root <code>uv</code> workspace + shared
+              ruff/mypy/poe/tox config.</li>
+            <li>🍪 Land <code>cookiecutters/</code> +
+              <code>poe new-*</code> tasks so new leaves are never hand-rolled.
+            </li>
+            <li>👤 Turn on CODEOWNERS + branch protection / MR approval rules
+              before the repo has many writers.</li>
+            <li>📦 Extract 2–3 already-shared modules into
+              <code>libs/</code> using hyphenated org namespaces
+              (<code>acme-platform-logging</code> →
+              <code>acme/platform/logging</code>).</li>
+            <li>📚 Stand up the <code>docs/</code> portal landing page +
+              <code>poe docs</code> CD publish; require a
+              <code>docs/</code> node on each new leaf.</li>
+            <li>🤖 Add <code>.cursor/rules</code> / Claude rules + a PR/MR
+              review agent check wired to <code>CONTRIBUTING.md</code>.</li>
+            <li>📏 Require pytest on every leaf; tox matrices on shared libs;
+              schedule a nightly coverage crawl for the whole monorepo.</li>
+            <li>🛰️ Migrate one microservice into <code>services/</code> with
+              path deps + a template pipeline.</li>
+            <li>🧬 Add one domain <code>projects/</code> leaf that consumes the
+              same libs.</li>
+            <li>☁️ Land baseline <code>iac/modules</code> + one stack wired to
+              that service.</li>
+            <li>📈 Only then mass-migrate — with ownership, scaffolds, and
+              affected-test CI already green.</li>
+          </ol>
+
+          <h2>🪙 My 2 cents</h2>
+          <p>The monorepo pays rent only if the <strong>graph is real</strong>.
+            Folder names alone are cosplay.</p>
+          <p>Make these contracts non-optional:</p>
+          <ul>
+            <li>🔗 Path dependencies + an enforceable import DAG</li>
+            <li>🧩 Leaf CI child nodes under shared parent templates</li>
+            <li>🏷️ Org-namespaced libs (<code>foo-bar</code> →
+              <code>foo/bar</code>)</li>
+            <li>🍪 <code>poe new-*</code> scaffolds (Copier / Cookiecutter /
+              Projen) so teams never hand-roll leaves</li>
+            <li>📚 First-class <code>docs/</code> portal aggregated from every
+              leaf</li>
+            <li>🛡️ CODEOWNERS + ACL — unapproved path changes do not ship</li>
+            <li>🐳 Shared <code>dockers/</code> bases, not snowflake
+              Dockerfiles</li>
+            <li>💓 Repo-Health — pytest, tox matrices, nightly coverage crawl,
+              symptom-based alerts to CODEOWNERS</li>
+          </ul>
+          <p>Tooling posture:</p>
+          <ul>
+            <li>⚡ Start with <code>uv</code> + <code>poe</code> + forge-native
+              CI</li>
+            <li>🔥 Earn Blaze/Bazel or Buck/Buck2 later — don’t pay that tax on
+              day one</li>
+            <li>🤖 Encode the same contracts for AI (Cursor/Claude rules, MCP,
+              PR/MR review agents)</li>
+          </ul>
+          <p>🌱 Treat the repository itself as something you
+            <strong>design</strong> — not something that accumulates.</p>
+
+          <h2>📚 References</h2>
+          <ol class="two-cents-references">
+            <li id="ref-1">Dan Hipschman, “Our Python Monorepo,” Opendoor /
+              Open House — <em>inspiration for this design</em>,
+              <a
+                href="https://medium.com/opendoor-labs/our-python-monorepo-d34028f2b6fa"
+                target="_blank" rel="noopener noreferrer">medium.com/opendoor-labs/our-python-monorepo-d34028f2b6fa</a>
+            </li>
+            <li id="ref-2">Astral, <em>uv</em> documentation,
+              <a href="https://docs.astral.sh/uv/" target="_blank"
+                rel="noopener noreferrer">docs.astral.sh/uv</a>
+            </li>
+            <li id="ref-3">Astral, <em>Ruff</em> documentation,
+              <a href="https://docs.astral.sh/ruff/" target="_blank"
+                rel="noopener noreferrer">docs.astral.sh/ruff</a>
+            </li>
+            <li id="ref-4">mypy, <em>mypy</em> — static typing for Python,
+              <a href="https://mypy-lang.org/" target="_blank"
+                rel="noopener noreferrer">mypy-lang.org</a>
+            </li>
+            <li id="ref-5">Microsoft, <em>Pyright</em>,
+              <a href="https://github.com/microsoft/pyright" target="_blank"
+                rel="noopener noreferrer">github.com/microsoft/pyright</a>
+            </li>
+            <li id="ref-6">Nat Knight et al., <em>Poe the Poet</em>,
+              <a href="https://poethepoet.natn.io/" target="_blank"
+                rel="noopener noreferrer">poethepoet.natn.io</a>
+            </li>
+            <li id="ref-7">tox, <em>tox</em> documentation,
+              <a href="https://tox.wiki/" target="_blank"
+                rel="noopener noreferrer">tox.wiki</a>
+            </li>
+            <li id="ref-8">tox-dev, <em>tox-uv</em>,
+              <a href="https://github.com/tox-dev/tox-uv" target="_blank"
+                rel="noopener noreferrer">github.com/tox-dev/tox-uv</a>
+            </li>
+            <li id="ref-9">HashiCorp, <em>Terraform</em> documentation,
+              <a href="https://developer.hashicorp.com/terraform/docs"
+                target="_blank"
+                rel="noopener noreferrer">developer.hashicorp.com/terraform/docs</a>
+            </li>
+            <li id="ref-10">Mermaid, documentation,
+              <a href="https://mermaid.js.org/" target="_blank"
+                rel="noopener noreferrer">mermaid.js.org</a>
+            </li>
+            <li id="ref-11">Terrastruct, <em>D2</em>,
+              <a href="https://d2lang.com/" target="_blank"
+                rel="noopener noreferrer">d2lang.com</a>
+            </li>
+            <li id="ref-12">Structurizr, C4 model tooling,
+              <a href="https://structurizr.com/" target="_blank"
+                rel="noopener noreferrer">structurizr.com</a>
+            </li>
+            <li id="ref-13">Bazel (open-source Blaze),
+              <a href="https://bazel.build/" target="_blank"
+                rel="noopener noreferrer">bazel.build</a>
+            </li>
+            <li id="ref-14">MkDocs,
+              <a href="https://www.mkdocs.org/" target="_blank"
+                rel="noopener noreferrer">www.mkdocs.org</a>
+            </li>
+            <li id="ref-15">Material for MkDocs,
+              <a href="https://squidfunk.github.io/mkdocs-material/"
+                target="_blank"
+                rel="noopener noreferrer">squidfunk.github.io/mkdocs-material</a>
+            </li>
+            <li id="ref-16">mkdocstrings,
+              <a href="https://mkdocstrings.github.io/" target="_blank"
+                rel="noopener noreferrer">mkdocstrings.github.io</a>
+            </li>
+            <li id="ref-17">Sphinx,
+              <a href="https://www.sphinx-doc.org/" target="_blank"
+                rel="noopener noreferrer">sphinx-doc.org</a>
+            </li>
+            <li id="ref-18">MyST Parser,
+              <a href="https://myst-parser.readthedocs.io/" target="_blank"
+                rel="noopener noreferrer">myst-parser.readthedocs.io</a>
+            </li>
+            <li id="ref-19">pdoc,
+              <a href="https://pdoc.dev/" target="_blank"
+                rel="noopener noreferrer">pdoc.dev</a>
+            </li>
+            <li id="ref-20">Jupyter Book,
+              <a href="https://jupyterbook.org/" target="_blank"
+                rel="noopener noreferrer">jupyterbook.org</a>
+            </li>
+            <li id="ref-21">Read the Docs,
+              <a href="https://readthedocs.org/" target="_blank"
+                rel="noopener noreferrer">readthedocs.org</a>
+            </li>
+            <li id="ref-22">Buck2 (Meta),
+              <a href="https://buck2.build/" target="_blank"
+                rel="noopener noreferrer">buck2.build</a>
+            </li>
+            <li id="ref-23">Meta Engineering, “Build faster with Buck2: Our
+              open source build system,”
+              <a
+                href="https://engineering.fb.com/2023/04/06/open-source/buck2-open-source-large-scale-build-system/"
+                target="_blank"
+                rel="noopener noreferrer">engineering.fb.com/…/buck2-open-source-large-scale-build-system</a>
+            </li>
+            <li id="ref-24">Furo (Sphinx theme),
+              <a href="https://pradyunsg.me/furo/" target="_blank"
+                rel="noopener noreferrer">pradyunsg.me/furo</a>
+            </li>
+            <li id="ref-25">SlickML documentation (Sphinx + Furo example),
+              <a href="https://docs.slickml.com" target="_blank"
+                rel="noopener noreferrer">docs.slickml.com</a>
+            </li>
+            <li id="ref-26">Cookiecutter,
+              <a href="https://github.com/cookiecutter/cookiecutter"
+                target="_blank"
+                rel="noopener noreferrer">github.com/cookiecutter/cookiecutter</a>
+            </li>
+            <li id="ref-27">Copier,
+              <a href="https://github.com/copier-org/copier" target="_blank"
+                rel="noopener noreferrer">github.com/copier-org/copier</a>
+              /
+              <a href="https://copier.readthedocs.io/" target="_blank"
+                rel="noopener noreferrer">copier.readthedocs.io</a>
+            </li>
+            <li id="ref-28">Projen,
+              <a href="https://github.com/projen/projen" target="_blank"
+                rel="noopener noreferrer">github.com/projen/projen</a>
+              /
+              <a href="https://projen.io/" target="_blank"
+                rel="noopener noreferrer">projen.io</a>
+            </li>
+            <li id="ref-29">pytest,
+              <a href="https://docs.pytest.org/" target="_blank"
+                rel="noopener noreferrer">docs.pytest.org</a>
+            </li>
+            <li id="ref-30">Coverage.py,
+              <a href="https://coverage.readthedocs.io/" target="_blank"
+                rel="noopener noreferrer">coverage.readthedocs.io</a>
+            </li>
+            <li id="ref-31">Rob Ewaschuk, “My Philosophy on Alerting,”
+              <a
+                href="https://docs.google.com/document/d/199PqyG3UsyXlwieHaqbGiWVa8eMWi8zzAn0YfcApr8Q/edit"
+                target="_blank"
+                rel="noopener noreferrer">docs.google.com/document/d/199PqyG3UsyXlwieHaqbGiWVa8eMWi8zzAn0YfcApr8Q</a>
+            </li>
+          </ol>
+
+          <footer class="two-cents-article-footer">
+            <a href="../index.html#two-cents">← Back to 2-Cents</a>
+          </footer>
+
+        </article>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; <strong><span>Amirhessam Tahmassebi</span></strong>
+      </div>
+      <div class="credits">
+      </div>
+    </div>
+  </footer>
+  <!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/jquery/jquery.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="../assets/vendor/counterup/counterup.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/venobox/venobox.min.js"></script>
+  <script src="../assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="../assets/vendor/typed.js/typed.min.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+
+  <!-- Theme toggle -->
+  <script src="../assets/js/theme-toggle.js?v=20260716174000"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Mermaid diagrams -->
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    var theme =
+      document.documentElement.getAttribute("data-theme") === "dark"
+        ? "dark"
+        : "default";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: theme,
+      securityLevel: "loose",
+      flowchart: { curve: "basis", padding: 12 }
+    });
+  </script>
+
+</body>
+
+</html>

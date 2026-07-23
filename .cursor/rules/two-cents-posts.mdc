@@ -1,0 +1,59 @@
+---
+description: Conventions for 2-Cents blog posts — emojis, structure, and sidebar
+globs: two-cents/**/*.html,index.html
+alwaysApply: false
+---
+
+# 2-Cents Posts
+
+## Emojis
+
+Maximize related emojis in every post. Use them in:
+
+- Section headings (e.g. `🏗️ A structure that scales`)
+- Lead paragraphs and list items where they reinforce meaning
+- Homepage card titles / tags when natural
+
+Prefer topic-relevant emojis over generic ones. Do not sprinkle them randomly — each emoji should map to the idea next to it.
+
+## Article pages sidebar
+
+On every `two-cents/*.html` page, the left nav must include:
+
+1. **Home** → `../index.html`
+2. **2-Cents** → `../index.html#two-cents`
+3. **Nested article list** under 2-Cents with every available post
+
+When adding a new post, update the nested article list on **all** existing post pages so readers can jump between articles without returning home.
+
+Mark the current article with `class="active"` on its `<li>`.
+
+On every article page, the breadcrumbs header should use the cents emoji:
+
+```html
+<section id="breadcrumbs" class="breadcrumbs">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center">
+      <h2>🪙 2-Cents</h2>
+      …
+    </div>
+  </div>
+</section>
+```
+
+Do **not** put the cents emoji in the left sidebar nav label.
+
+```html
+<nav class="nav-menu">
+  <ul>
+    <li><a href="../index.html"><i class="bx bx-home"></i> <span>Home</span></a></li>
+    <li class="nav-two-cents">
+      <a href="../index.html#two-cents"><i class="bx bx-bulb"></i> <span>2-Cents</span></a>
+      <ul class="nav-two-cents-articles">
+        <li class="active"><a href="building-an-org-monorepo.html">🏗️ Building an Org Monorepo</a></li>
+        <!-- add new articles here -->
+      </ul>
+    </li>
+  </ul>
+</nav>
+```
