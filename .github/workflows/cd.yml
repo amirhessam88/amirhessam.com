@@ -44,5 +44,10 @@ jobs:
                   port: 21
                   timeout: 60000
                   local-dir: ./
+                  # Custom exclude replaces action defaults — keep .git excluded
                   exclude: |
+                      **/.git*
+                      **/.git*/**
+                      **/node_modules/**
+                      .github/
                       admin/
