@@ -22,9 +22,11 @@
     - [Scripts:](#scripts)
   - [🎨 Features](#-features)
     - [🏠 Homepage](#-homepage)
+    - [🪙 2-Cents](#-2-cents)
     - [📚 Publications](#-publications)
     - [🎯 Portfolio](#-portfolio)
     - [📞 Contact](#-contact)
+  - [🪙 2-Cents Articles](#-2-cents-articles)
   - [📝 Publications](#-publications-1)
   - [🔧 Scripts](#-scripts)
     - [Statistics Management](#statistics-management)
@@ -48,6 +50,9 @@ The website features:
 - 🏆 **Academic Achievements** - Citations, H-index, and research metrics
 - 💼 **Professional Experience** - CV, resume, and career highlights
 - 🎯 **Portfolio Projects** - Showcasing my work and applications
+- 🐍 **Python Libraries & Ventures** - Open-source tools and side projects
+- 🪙 **2-Cents** - Opinionated technical essays on engineering and MLOps
+- 🌓 **Light / Dark Theme** - Theme toggle with system preference support
 - 📞 **Contact Information** - Easy ways to get in touch
 
 ## 🛠️ Tech Stack
@@ -56,6 +61,7 @@ The website features:
 - **Styling**: Bootstrap 5, Custom CSS
 - **Icons**: Boxicons, Icofont
 - **Animations**: AOS (Animate On Scroll)
+- **Diagrams**: Mermaid (2-Cents articles)
 - **Backend**: PHP 8.2+
 - **Data Processing**: Python 3.10
 - **Deployment**: GitHub Actions + FTP
@@ -66,20 +72,32 @@ The website features:
 ```
 amirhessam.com/
 ├── 📄 index.html                 # Main homepage
+├── 📁 two-cents/                 # Blog articles
+│   ├── 🏗️ building-an-org-monorepo.html
+│   └── 🚀 mlops-deployment-strategies.html
 ├── 📁 assets/
 │   ├── 🎨 css/                   # Stylesheets
 │   ├── 📊 data/                  # Statistics and data files
+│   │   ├── stats.json
+│   │   └── focus_areas.json
 │   ├── 🖼️ img/                   # Images and media
 │   │   ├── 📱 apps/              # App screenshots
 │   │   ├── 🖼️ portfolio/         # Portfolio images
 │   │   ├── 👥 testimonials/      # Testimonial photos
 │   │   └── 🚀 ventures/          # Venture logos
 │   ├── 📜 js/                    # JavaScript files
+│   │   ├── theme-toggle.js       # Light / dark theme
+│   │   ├── focus-fabric.js       # Focus areas canvas
+│   │   ├── resume-timeline.js
+│   │   └── …                     # Portfolio / testimonial effects
 │   ├── 🐘 php/                   # PHP scripts
 │   │   ├── fetch_citations.php   # Google Scholar scraper
-│   │   └── update_stats.php      # Statistics updater
+│   │   ├── update_stats.php      # Statistics updater
+│   │   ├── fetch_focus_areas.php
+│   │   └── cache_buster.php      # Cache helpers
 │   ├── 🐚 bash/                  # Bash scripts
-│   │   └── update_stats.sh       # Statistics wrapper
+│   │   ├── update_stats.sh       # Statistics wrapper
+│   │   └── update_cache_version.sh
 │   └── 📦 vendor/                # Third-party libraries
 ├── 📁 publications/              # Publication pages
 │   ├── 📚 books.html
@@ -88,6 +106,7 @@ amirhessam.com/
 │   ├── 📖 journals.html
 │   └── 📋 posters.html
 ├── 📁 forms/                     # Contact forms
+├── 📁 .cursor/rules/             # Agent conventions (posts, PRs)
 ├── 📁 .github/workflows/         # CI/CD pipelines
 └── 📄 README.md                  # This file! 😊
 ```
@@ -97,7 +116,7 @@ amirhessam.com/
 ### Prerequisites
 
 - 🌐 Web server (Apache/Nginx)
-- 🐘 PHP 7.4 or higher
+- 🐘 PHP 8.2 or higher
 - 🐍 Python 3.10 (for statistics processing)
 - 📦 Git
 
@@ -157,10 +176,23 @@ The website includes an automated statistics system that fetches data from Googl
 ### 🏠 Homepage
 - **Hero Section** with animated background
 - **About Me** with professional photo
-- **Statistics Counter** with real-time data
-- **Portfolio Showcase** with project highlights
+- **Focus Areas** interactive canvas
+- **Statistics Counter** with real-time Scholar data
+- **Résumé** timeline (academia + industry tracks)
+- **Python Libraries** showcase
+- **2-Cents** article cards
+- **Academic Portfolio** with project highlights
+- **Publications** overview
+- **Ventures** logos and links
 - **Testimonials** from colleagues and mentors
-- **Contact Form** for easy communication
+- **Contact** section
+- **Light / Dark Theme** toggle
+
+### 🪙 2-Cents
+- **Opinionated technical essays** on engineering and MLOps
+- **Mermaid diagrams** for architecture and workflows
+- **Nested article nav** on every post page
+- Each article closes with a **🪙 My 2 cents** signature section
 
 ### 📚 Publications
 - **Organized by Type**: Journals, conferences, books, dissertations
@@ -179,6 +211,15 @@ The website includes an automated statistics system that fetches data from Googl
 - **Contact Form** with validation
 - **Location Information**
 - **Social Media Links**
+
+## 🪙 2-Cents Articles
+
+Opinionated posts live under [`two-cents/`](two-cents/). Conventions for new posts are in [`.cursor/rules/two-cents-posts.mdc`](.cursor/rules/two-cents-posts.mdc).
+
+| Article | Tag | Summary |
+| --- | --- | --- |
+| [🏗️ Building an Org Monorepo](two-cents/building-an-org-monorepo.html) | ⚙️ Engineering | Org monorepo blueprint — apps/libs/services, dockers, cookiecutters, docs portal, CODEOWNERS, AI review agents, and GitHub *or* GitLab child pipelines |
+| [🚀 MLOps Deployment Strategies](two-cents/mlops-deployment-strategies.html) | 🤖 MLOps | Serving modes, deploy-code vs deploy-model, recreate → rolling → blue/green → canary → A/B → shadow, environments, and rules of thumb |
 
 ## 📝 Publications
 
@@ -203,6 +244,12 @@ php assets/php/update_stats.php
 
 # Test web API
 curl https://yourdomain.com/assets/php/fetch_citations.php
+```
+
+### Cache Version Bump
+
+```bash
+./assets/bash/update_cache_version.sh
 ```
 
 ### Cron Job Setup
@@ -230,6 +277,7 @@ The website is deployed using GitHub Actions! 🚀
 - **FTP Server**: Configured via GitHub Secrets
 - **Deployment**: Automatic on push to master
 - **Rollback**: Manual via Git revert
+- **Workflow**: [`.github/workflows/cd.yml`](.github/workflows/cd.yml)
 
 ## 📈 Analytics
 
@@ -259,6 +307,7 @@ Contributions are welcome! 🎉
 - 📖 Update documentation as needed
 - 🎨 Follow existing code style
 - 🔍 Add comments for complex logic
+- 🪙 New 2-Cents posts should follow [`.cursor/rules/two-cents-posts.mdc`](.cursor/rules/two-cents-posts.mdc) and end with **🪙 My 2 cents**
 
 ## 📄 License
 
