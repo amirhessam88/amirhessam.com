@@ -16,6 +16,10 @@ Maximize related emojis in every post. Use them in:
 
 Prefer topic-relevant emojis over generic ones. Do not sprinkle them randomly — each emoji should map to the idea next to it.
 
+## Closing signature
+
+Every post ends with a **`🪙 My 2 cents`** section (right before References). That is the brand closing — opinionated takeaways, not a generic “bottom line.” Match the tone of existing posts: short punchy setup, emoji bullet contracts, one final line that lands the thesis.
+
 ## Article pages sidebar
 
 On every `two-cents/*.html` page, the left nav must include:

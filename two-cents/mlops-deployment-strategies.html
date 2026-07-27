@@ -180,15 +180,14 @@
               section for when to use what.</p>
           </aside>
 
-          <p class="two-cents-lead">💡 Shipping a model is not one decision —
-            it is <strong>three</strong> climbing one ladder: how predictions
-            are
-            <em>served</em>, what artifact you
-            <em>promote</em>, and how traffic is
-            <em>shifted</em> — across
-            <strong>🧪 Dev → 🎭 Staging → 🏭 Prod</strong>. Mix them wrong and
-            you get downtime, silent regressions, or a GPU bill that eats the
-            roadmap. Mix them right and you get boring, reversible releases.</p>
+          <p class="two-cents-lead">💡 Shipping a model isn’t one decision —
+            it’s <strong>three decisions</strong> that all climb the same
+            ladder (<strong>🧪 Dev → 🎭 Staging → 🏭 Prod</strong>): how you
+            <em>serve</em> predictions, what you
+            <em>promote</em>, and how you
+            <em>shift</em> traffic. Mix them wrong and you get downtime,
+            silent regressions, or a GPU bill that eats the roadmap. Mix them
+            right and you get boring, reversible releases.</p>
 
           <h2>🗺️ The three-axis map</h2>
           <p>Most “deployment strategy” posts collapse these axes. Keep them
@@ -959,21 +958,31 @@ flowchart TD
               ends.</li>
           </ul>
 
-          <h2>🎯 Bottom line</h2>
-          <p>Stop asking “what’s the best deployment strategy?” Ask:</p>
-          <ol>
+          <h2>🪙 My 2 cents</h2>
+          <p>Stop asking “what’s the best deployment strategy?” Ask the
+            questions that force one:</p>
+          <ul>
             <li>🍽️ How fresh must the score be?</li>
             <li>📦 Can we train where the data lives?</li>
             <li>🧪🎭🏭 Which rung are we on — and what is allowed to fail
               there?</li>
             <li>🛡️ What’s the blast radius if v2 is wrong?</li>
             <li>📊 Do we have a closed-loop business metric?</li>
-          </ol>
-          <p>Answer those four and the strategy almost picks itself: shadow
-            when wrong answers are fatal, canary when you need live ops
-            confidence, A/B when you need product proof, blue/green when you
-            need a clean flip, batch when latency is a lie you don’t have to
-            tell.</p>
+          </ul>
+          <p>Answer those and the strategy almost picks itself:</p>
+          <ul>
+            <li>👻 <strong>Shadow</strong> when wrong answers are fatal</li>
+            <li>🐦 <strong>Canary</strong> when you need live ops
+              confidence</li>
+            <li>🅰️🅱️ <strong>A/B</strong> when you need product proof</li>
+            <li>🔵🟢 <strong>Blue/green</strong> when you need a clean
+              flip</li>
+            <li>📦 <strong>Batch</strong> when latency is a lie you don’t have
+              to tell</li>
+          </ul>
+          <p>🌱 Treat deployment as something you
+            <strong>design</strong> across serve → promote → shift — not a
+            last-mile “ship the pickle.”</p>
 
           <h2>📚 References</h2>
           <ol>
