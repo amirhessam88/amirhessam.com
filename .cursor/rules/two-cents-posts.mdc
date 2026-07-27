@@ -16,6 +16,63 @@ Maximize related emojis in every post. Use them in:
 
 Prefer topic-relevant emojis over generic ones. Do not sprinkle them randomly — each emoji should map to the idea next to it.
 
+## Social / OG thumbnails — image grammar
+
+Every post needs a dedicated Open Graph image at **1200×627** under `assets/img/two-cents/og-<article-slug>.png`.
+
+Generate with the brand grammar script (do **not** freehand AI art for share cards):
+
+```bash
+# all default cards
+.venv-og/bin/python scripts/generate_two_cents_og.py
+
+# one-off
+.venv-og/bin/python scripts/generate_two_cents_og.py \
+  --title "My Article Title" \
+  --out assets/img/two-cents/og-my-article-slug.png
+```
+
+### Required elements (every card)
+
+| Slot | Content | Notes |
+| --- | --- | --- |
+| Logo | `assets/img/logo_color_clear.png` | Navy + red AT mark, top-left |
+| Series | `2-Cents` | Top-right, accent color |
+| Title | Article title | Centered, wraps if needed — **only variable** |
+| Author | `Amirhessam Tahmassebi` | Bottom-left |
+| Website | `amirhessam.com` | Bottom-right |
+
+### Color scheme (site dark theme)
+
+| Token | Hex | Use |
+| --- | --- | --- |
+| Background | `#0f172a` | Card fill |
+| Foreground | `#e8eef8` | Title + logo ink |
+| Muted | `#94a3b8` | Author + website |
+| Accent | `#4db8e8` | Series label, left rail, rule under title |
+
+### Layout
+
+```
+┌────────────────────────────────────────────────┐
+│ ▌ [LOGO]                          2-Cents      │
+│ ▌                                              │
+│ ▌              Article Title                   │
+│ ▌                   ────                       │
+│ ▌                                              │
+│ ▌ Amirhessam Tahmassebi        amirhessam.com  │
+└────────────────────────────────────────────────┘
+```
+
+### Meta wiring
+
+- `og:image` + `og:image:width=1200` + `og:image:height=627`
+- `twitter:card=summary_large_image` + `twitter:image`
+- BlogPosting JSON-LD `image`
+- No cartoons / stock photos / decorative clutter
+
+After deploy, refresh LinkedIn via [Post Inspector](https://www.linkedin.com/post-inspector/).
+
 ## Closing signature
 
 Every post ends with a **`🪙 My 2 cents`** section (right before References). That is the brand closing — opinionated takeaways, not a generic “bottom line.” Match the tone of existing posts: short punchy setup, emoji bullet contracts, one final line that lands the thesis.
