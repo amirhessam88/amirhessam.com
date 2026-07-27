@@ -1857,6 +1857,26 @@ section {
   word-break: break-word;
 }
 
+.two-cents-table {
+  margin: 1.25rem 0 1.5rem;
+  font-size: 0.92rem;
+  color: #45505b;
+}
+
+.two-cents-table thead th {
+  border-bottom-width: 2px;
+  border-color: rgba(23, 59, 108, 0.15);
+  color: #173b6c;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.two-cents-table td,
+.two-cents-table th {
+  vertical-align: middle;
+  padding: 0.65rem 0.75rem;
+}
+
 .two-cents-article-footer {
   margin-top: 2.5rem;
   padding-top: 1.25rem;
@@ -2830,6 +2850,20 @@ html[data-theme="dark"] .two-cents-article-body li code {
 
 html[data-theme="dark"] .two-cents-article-footer {
   border-top-color: rgba(148, 163, 184, 0.2);
+}
+
+html[data-theme="dark"] .two-cents-table {
+  color: #c5ccd6;
+}
+
+html[data-theme="dark"] .two-cents-table thead th {
+  border-color: rgba(148, 163, 184, 0.25);
+  color: #e8eef6;
+}
+
+html[data-theme="dark"] .two-cents-table td,
+html[data-theme="dark"] .two-cents-table th {
+  border-color: rgba(148, 163, 184, 0.15);
 }
 
 html[data-theme="dark"] .two-cents-article-footer a {

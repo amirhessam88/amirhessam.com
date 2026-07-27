@@ -1,0 +1,1082 @@
+<!-- =======================================================
+	  * Amirhessam Tahmassebi
+	  * Email: admin@amirhessam.com
+	  * Website: www.amirhessam.com
+  ======================================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored === "light" || stored === "dark"
+          ? stored
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="color-scheme" content="light dark">
+
+  <title>MLOps Deployment Strategies | 2-Cents</title>
+  <meta
+    content="A practical map of MLOps deployment: serving modes, deploy-code vs deploy-model, recreate, rolling, blue/green, canary, linear, A/B, shadow, champion-challenger — plus rules of thumb for when to use what."
+    name="description">
+  <meta
+    content="mlops, model deployment, canary, blue green, shadow deployment, a/b testing, sagemaker, batch inference, real-time inference"
+    name="keywords">
+
+  <!-- Favicons -->
+  <link href="../assets/img/logo_color_clear.png" rel="icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="../assets/vendor/owl.carousel/assets/owl.carousel.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="d-flex flex-column">
+
+      <div class="profile">
+        <img src="../assets/img/profile-img.jpg" alt=""
+          class="img-fluid rounded-circle">
+        <h1 class="text-light"><a href="../index.html">Amirhessam Tahmassebi</a>
+        </h1>
+        <div class="social-links mt-3 text-center">
+          <a href="https://www.linkedin.com/in/amirhessam/" class="linkedin"><i
+              class="bx bxl-linkedin"></i></a>
+          <a href="https://scholar.google.com/citations?user=CnHZjFAAAAAJ&hl=en"
+            class="google-plus"><i class="bx bxl-google"></i></a>
+          <a href="https://github.com/amirhessam88" class="github"><i
+              class="bx bxl-github"></i></a>
+          <a href="https://slickml.com/" class="consulting"><i
+              class="icofont-learn"></i></a>
+          <a href="https://github.com/slickml" class="library"><i
+              class="icofont-brainstorming"></i></a>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="../index.html"><i class="bx bx-home"></i>
+              <span>Home</span></a></li>
+          <li class="nav-two-cents">
+            <a href="../index.html#two-cents"><i class="bx bx-bulb"></i>
+              <span>2-Cents</span></a>
+            <ul class="nav-two-cents-articles">
+              <li><a href="building-an-org-monorepo.html">🏗️ Building an Org
+                  Monorepo</a></li>
+              <li class="active"><a
+                  href="mlops-deployment-strategies.html">🚀 MLOps Deployment
+                  Strategies</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav><!-- .nav-menu -->
+
+      <button type="button" class="theme-toggle" data-theme-toggle
+        aria-pressed="false" aria-label="Switch to dark theme"
+        title="Dark theme">
+        <i class="bx bx-moon theme-toggle-icon theme-toggle-icon-moon"
+          aria-hidden="true"></i>
+        <i class="bx bx-sun theme-toggle-icon theme-toggle-icon-sun"
+          aria-hidden="true"></i>
+        <span class="theme-toggle-label">Dark mode</span>
+      </button>
+
+      <button type="button" class="mobile-nav-toggle d-xl-none"><i
+          class="icofont-navigation-menu"></i></button>
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>🪙 2-Cents</h2>
+          <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#two-cents">2-Cents</a></li>
+            <li>MLOps Deployment</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Article ======= -->
+    <section class="two-cents-article">
+      <div class="container">
+        <article class="two-cents-article-body">
+
+          <header class="two-cents-article-header">
+            <span class="two-cents-card-tag">🤖 MLOps</span>
+            <h1>🚀 MLOps Deployment Strategies</h1>
+            <p class="two-cents-article-meta">
+              <time datetime="2026-07-27">📅 July 27, 2026</time>
+              <span aria-hidden="true">·</span>
+              <span>⏱️ 35 min read</span>
+            </p>
+          </header>
+
+          <aside class="two-cents-inspiration">
+            <p>📖 <strong>Inspiration.</strong> Deployment write-ups are
+              fragmented: some cover
+              <em>traffic strategies</em>
+              [<a href="https://towardsdatascience.com/ml-model-deployment-strategies-72044b3c1410/"
+                target="_blank" rel="noopener noreferrer">1</a>],
+              some cover
+              <em>serving modes</em>
+              [<a href="https://medium.com/@FrankAdams7/the-four-machine-learning-model-deployment-types-you-should-know-e7577251959"
+                target="_blank" rel="noopener noreferrer">2</a>]
+              [<a href="https://dagshub.com/blog/model-deployment-types-strategies-and-best-practices/"
+                target="_blank" rel="noopener noreferrer">3</a>],
+              some cover
+              <em>cloud guardrails</em>
+              [<a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+                target="_blank" rel="noopener noreferrer">4</a>],
+              and some cover
+              <em>what you promote</em> (code vs artifact)
+              [<a href="https://docs.databricks.com/aws/en/machine-learning/mlops/deployment-patterns"
+                target="_blank" rel="noopener noreferrer">5</a>].
+              Principles live elsewhere
+              [<a href="https://ml-ops.org/content/mlops-principles"
+                target="_blank" rel="noopener noreferrer">6</a>]
+              [<a href="https://greennode.ai/blog/how-to-deploy-machine-learning-models"
+                target="_blank" rel="noopener noreferrer">7</a>].
+              What follows is <strong>one map</strong>: three axes, every
+              common strategy with a diagram, and a rule-of-thumb
+              section for when to use what.</p>
+          </aside>
+
+          <p class="two-cents-lead">💡 Shipping a model is not one decision —
+            it is <strong>three</strong> climbing one ladder: how predictions
+            are
+            <em>served</em>, what artifact you
+            <em>promote</em>, and how traffic is
+            <em>shifted</em> — across
+            <strong>🧪 Dev → 🎭 Staging → 🏭 Prod</strong>. Mix them wrong and
+            you get downtime, silent regressions, or a GPU bill that eats the
+            roadmap. Mix them right and you get boring, reversible releases.</p>
+
+          <h2>🗺️ The three-axis map</h2>
+          <p>Most “deployment strategy” posts collapse these axes. Keep them
+            separate:</p>
+          <ol>
+            <li>🍽️ <strong>Serving mode</strong> — batch, online, streaming,
+              edge. Answers: <em>how fresh</em> must the prediction be?</li>
+            <li>📦 <strong>Promotion pattern</strong> — deploy
+              <em>code</em> vs deploy the
+              <em>model artifact</em>. Answers: <em>what</em> moves toward
+              production?</li>
+            <li>🚦 <strong>Traffic / release strategy</strong> — recreate,
+              rolling, blue/green, canary, linear, A/B, shadow,
+              champion–challenger. Answers: <em>how</em> do users meet the new
+              version?</li>
+          </ol>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Three axes of MLOps deployment">
+            <pre class="mermaid">
+flowchart TB
+  subgraph SERVE["🍽️ Serving mode"]
+    B["📦 Batch"]
+    O["⚡ Online"]
+    S["🌊 Streaming"]
+    E["📱 Edge"]
+  end
+  subgraph PROMOTE["📦 What you promote"]
+    C["🧩 Deploy code"]
+    M["🎁 Deploy model"]
+  end
+  subgraph TRAFFIC["🚦 How traffic moves"]
+    R["💥 Recreate"]
+    RO["🔄 Rolling"]
+    BG["🔵🟢 Blue/Green"]
+    CA["🐦 Canary"]
+    LI["📶 Linear"]
+    AB["🅰️🅱️ A/B"]
+    SH["👻 Shadow"]
+    CC["🏆🆚 Challenger"]
+  end
+  SERVE --> PROMOTE --> TRAFFIC
+            </pre>
+          </div>
+
+          <aside class="two-cents-aside">
+            <p>🧠 <strong>Mental model.</strong> Serving mode is product
+              latency. Promotion pattern is org security + reproducibility.
+              Traffic strategy is risk. You can run canary on a batch job; you
+              can blue/green an edge binary. The axes compose.</p>
+          </aside>
+
+          <h2>🍽️ Axis 1 — Serving modes</h2>
+          <p>Pick the serving mode from
+            <strong>SLA</strong>, not from fashion. An LLM chatbot wants
+            online; a nightly churn score wants batch; a fraud check on a
+            clickstream wants streaming; a camera on a forklift wants
+            edge.</p>
+
+          <h3>📦 Batch predictions</h3>
+          <p><strong>WHAT.</strong> Score a table (or lake) on a schedule or
+            trigger. Write predictions to storage; apps read later.
+            Orchestrators: Airflow, Dagster, Prefect, SageMaker Processing /
+            Batch Transform, Databricks Jobs.</p>
+          <p><strong>WHERE.</strong> Recs that can be stale by minutes–hours,
+            risk scores for morning dashboards, offline eval / backtests.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Batch serving cartoon">
+            <pre class="mermaid">
+flowchart LR
+  DATA["🗄️ Features / table"] --> JOB["🤖 Batch job<br/>⏰ cron"]
+  JOB --> MODEL["🧠 Model vN"]
+  MODEL --> OUT["📄 Predictions<br/>Parquet / warehouse"]
+  OUT --> APP["📱 App / BI<br/>reads later"]
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Cheap, simple rollback (re-run old job), easy offline
+              eval.</li>
+            <li>❌ Stale by definition; not for “user clicked → score
+              now.”</li>
+          </ul>
+
+          <h3>⚡ Online / real-time inference</h3>
+          <p><strong>WHAT.</strong> Request → features → model → response in
+            the same call path. REST/gRPC behind FastAPI, TorchServe, Triton,
+            SageMaker real-time endpoints, KServe, BentoML, etc.</p>
+          <p><strong>WHERE.</strong> Rankers in the request path, fraud at
+            checkout, personalized UI that must feel live.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Online serving cartoon">
+            <pre class="mermaid">
+flowchart LR
+  USER["👤 User"] --> GW["🚪 API gateway"]
+  GW --> LB["⚖️ Load balancer"]
+  LB --> SVC["🛎️ Serving pods<br/>🧠 model in memory"]
+  SVC --> FS["🧩 Feature store<br/>optional"]
+  SVC --> USER
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Low latency; natural home for canary / A/B / shadow.</li>
+            <li>❌ Always-on cost; cold starts and model size matter a
+              lot.</li>
+          </ul>
+
+          <h3>🌊 Streaming / near-real-time</h3>
+          <p><strong>WHAT.</strong> Consume events (Kafka, Kinesis, Pub/Sub),
+            score asynchronously, write results to a store; a thin API serves
+            the precomputed score. Hybrid of batch freshness + online
+            read path.</p>
+          <p><strong>WHERE.</strong> High-QPS entity scores that update every
+            few seconds–minutes without blocking the user request on the
+            model.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Streaming serving cartoon">
+            <pre class="mermaid">
+flowchart LR
+  EVT["📨 Event stream"] --> CONS["👂 Consumer<br/>🧠 model"]
+  CONS --> DB["🗄️ Score store"]
+  USER["👤 User"] --> API["⚡ Thin API"]
+  API --> DB
+  API --> USER
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Decouples inference cost from request latency.</li>
+            <li>❌ Eventual consistency; harder debugging + backpressure.</li>
+          </ul>
+
+          <h3>📱 Edge / on-device</h3>
+          <p><strong>WHAT.</strong> Ship a quantized / compiled artifact to
+            phones, browsers, gateways, robots. Inference happens offline or
+            with tiny round-trips.</p>
+          <p><strong>WHERE.</strong> Privacy, offline UX, camera/IoT with
+            bandwidth or latency constraints.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Edge serving cartoon">
+            <pre class="mermaid">
+flowchart LR
+  REG["🏛️ Model registry"] --> OTA["📡 OTA / app update"]
+  OTA --> DEV["📱 Device<br/>🧠 local model"]
+  SENSOR["📷 Sensor"] --> DEV
+  DEV --> UX["✨ Local UX"]
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Privacy + offline; no per-request GPU bill.</li>
+            <li>❌ Fragmented fleet versions; hard shadow traffic; slow
+              rollbacks.</li>
+          </ul>
+
+          <h2>📦 Axis 2 — Deploy code vs deploy model</h2>
+          <p>Databricks frames this cleanly
+            [<a href="https://docs.databricks.com/aws/en/machine-learning/mlops/deployment-patterns"
+              target="_blank" rel="noopener noreferrer">5</a>]: models and
+            training code move
+            <em>asynchronously</em>. Weekly fraud retrain may change weights
+            without touching serving code; a DNN may retrain rarely while
+            monitoring code ships weekly.</p>
+
+          <h3>🧩 Deploy code <em>(usually recommended)</em></h3>
+          <p>Training / pipeline code is reviewed, tested, and promoted. The
+            model is
+            <strong>retrained in each environment</strong> (dev → staging
+            subset → prod full data). Same code, environment-specific data.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Deploy code pattern">
+            <pre class="mermaid">
+flowchart LR
+  DEV["🧪 Dev<br/>train + experiment"] --> STG["🎭 Staging<br/>train on sample<br/>integration tests"]
+  STG --> PROD["🏭 Prod<br/>train on full data<br/>register champion"]
+  PROD --> SERVE["🛎️ Serve"]
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Safer automated retrain; works when prod data cannot leave
+              prod.</li>
+            <li>❌ Steeper handoff for DS; need templates + review culture.</li>
+          </ul>
+
+          <h3>🎁 Deploy model artifact</h3>
+          <p>Train once (often in dev), promote the binary / MLflow run /
+            model package through staging → prod. Prefer when training is
+            ruinously expensive or everything lives in one workspace with no
+            real CI.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Deploy model pattern">
+            <pre class="mermaid">
+flowchart LR
+  DEV["🧪 Dev<br/>train once 🎁"] --> STG["🎭 Staging<br/>validate artifact"]
+  STG --> PROD["🏭 Prod<br/>load same artifact"]
+  PROD --> SERVE["🛎️ Serve"]
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Simpler DS handoff; train once.</li>
+            <li>❌ Weak if prod data is sealed away; automated retrain gets
+              awkward; supporting code still needs its own path.</li>
+          </ul>
+
+          <aside class="two-cents-aside">
+            <p>🔀 <strong>Hybrid.</strong> Deploy code to staging, train on
+              full(ish) data there, then promote the
+              <em>artifact</em> to prod. Saves prod training cost; adds staging
+              ops cost
+              [<a href="https://docs.databricks.com/aws/en/machine-learning/mlops/deployment-patterns"
+                target="_blank" rel="noopener noreferrer">5</a>].</p>
+          </aside>
+
+          <h2>🧪🎭🏭 The environment ladder — Dev → Staging → Prod</h2>
+          <p>Serving mode, promotion pattern, and traffic strategy all climb the
+            same ladder. An environment is not a folder name — it is
+            <strong>isolation + data access + blast radius + who can approve
+              a promote</strong>. Mature setups often map each rung to a
+            separate cloud account / Unity Catalog / workspace so prod
+            credentials never leak into notebooks
+            [<a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+              target="_blank" rel="noopener noreferrer">4</a>]
+            [<a href="https://docs.databricks.com/aws/en/machine-learning/mlops/deployment-patterns"
+              target="_blank" rel="noopener noreferrer">5</a>].</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Dev staging prod promotion ladder">
+            <pre class="mermaid">
+flowchart TB
+  subgraph DEV["🧪 Dev"]
+    D1["📓 Experiment / notebooks"]
+    D2["🏋️ Train candidates"]
+    D3["💥 Recreate freely"]
+  end
+  subgraph STG["🎭 Staging / Test"]
+    S1["🔗 Integration + contract tests"]
+    S2["⏱️ Latency / load smoke"]
+    S3["🔄 Rolling or B/G dry-run"]
+  end
+  subgraph PROD["🏭 Prod"]
+    P1["👻 Shadow · 🐦 Canary · 🅰️🅱️ A/B"]
+    P2["🔵🟢 Guardrailed cutover"]
+    P3["📡 Monitor → CT / rollback"]
+  end
+  DEV -->|"✅ PR + CI"| STG
+  STG -->|"✍️ Manual or gated auto-approve<br/>in model registry"| PROD
+            </pre>
+          </div>
+
+          <h3>🧪 Dev</h3>
+          <p><strong>Job.</strong> Learn fast. Break things on purpose.</p>
+          <ul>
+            <li>📓 Experimentation, feature ideas, hyperparameter thrash —
+              tracked in an experiment store, not “mystery S3.”</li>
+            <li>💥 Recreate / short-lived endpoints are fine; SLAs are
+              optional.</li>
+            <li>🔐 Use
+              <em>dev-shaped</em> data (samples, synthetic, or tightly scoped
+              prod extracts) — not a second copy of the crown jewels unless
+              policy allows.</li>
+            <li>🎁 Viable candidates get registered (or the
+              <em>training code</em> does) — that is the handoff, not a Slack
+              “works on my laptop.”</li>
+          </ul>
+
+          <h3>🎭 Staging (aka ML test)</h3>
+          <p><strong>Job.</strong> Prove the
+            <em>system</em> works before real users pay the price. This is
+            where ops tests live — not where you discover product winners.</p>
+          <ul>
+            <li>🧪 Unit + integration + schema/contract tests against the
+              serving API.</li>
+            <li>⏱️ Latency, cold-start, and payload-size smoke under
+              realistic traffic shapes.</li>
+            <li>🔄 Prefer rolling or a cheap blue/green dry-run of the same
+              deploy path you will use in prod — staging should exercise the
+              <em>pipeline</em>, not a one-off manual copy.</li>
+            <li>🚫 Do
+              <strong>not</strong> treat staging A/B as proof of business lift.
+              Staging traffic is fake; closed-loop metrics need prod
+              [<a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+                target="_blank" rel="noopener noreferrer">4</a>].</li>
+          </ul>
+
+          <h3>🏭 Prod</h3>
+          <p><strong>Job.</strong> Serve users. Change slowly. Roll back
+            faster than you rolled forward.</p>
+          <ul>
+            <li>👻 Shadow, 🐦 canary, 📶 linear, 🔵🟢 blue/green, 🅰️🅱️ A/B,
+              and 🏆 champion–challenger belong
+              <em>here</em> — against real distribution and real side
+              effects.</li>
+            <li>🏛️ Registry approval (human or policy) triggers the deploy;
+              CloudWatch / Prometheus alarms own auto-rollback during the bake
+              window
+              [<a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+                target="_blank" rel="noopener noreferrer">4</a>].</li>
+            <li>📡 Continuous monitoring feeds the next retrain — CT is not
+              the same as auto-promote.</li>
+            <li>🧱 Keep the previous champion warm until the bake ends.</li>
+          </ul>
+
+          <aside class="two-cents-aside">
+            <p>🪪 <strong>Multi-account rule of thumb.</strong> Dev account
+              for science + CI builders. Staging/test account for integration
+              and load. Prod account for serving + shadow/canary/A/B. Same IaC
+              modules, different backends — cost and blast radius stay
+              honest.</p>
+          </aside>
+
+          <h3>📋 What belongs on each rung</h3>
+          <div class="table-responsive">
+            <table class="table table-sm two-cents-table">
+              <thead>
+                <tr>
+                  <th>Rung</th>
+                  <th>Data</th>
+                  <th>Typical traffic strategy</th>
+                  <th>Promote when…</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>🧪 Dev</td>
+                  <td>Sample / synthetic</td>
+                  <td>💥 Recreate</td>
+                  <td>Candidate beats offline gates</td>
+                </tr>
+                <tr>
+                  <td>🎭 Staging</td>
+                  <td>Masked / subset / replay</td>
+                  <td>🔄 Rolling · dry-run B/G</td>
+                  <td>Contracts + latency + smoke pass</td>
+                </tr>
+                <tr>
+                  <td>🏭 Prod</td>
+                  <td>Full production</td>
+                  <td>👻🐦📶🔵🟢🅰️🅱️🏆</td>
+                  <td>Bake window + business/ops gates</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h2>🚦 Axis 3 — Traffic &amp; release strategies</h2>
+          <p>These are mostly borrowed from DevOps / UX, then applied to
+            model variants behind a load balancer or serving mesh
+            [<a href="https://towardsdatascience.com/ml-model-deployment-strategies-72044b3c1410/"
+              target="_blank" rel="noopener noreferrer">1</a>]
+            [<a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+              target="_blank" rel="noopener noreferrer">4</a>]. Factors that
+            force a strategy: model size/packaging, retrain cadence,
+            routing needs, and drift
+            [<a href="https://towardsdatascience.com/ml-model-deployment-strategies-72044b3c1410/"
+              target="_blank" rel="noopener noreferrer">1</a>].</p>
+
+          <h3>💥 Recreate / Big Bang</h3>
+          <p><strong>WHAT.</strong> Tear down the old deployment; stand up the
+            new one. Downtime is a feature, not a bug.</p>
+          <p><strong>WHERE.</strong> Dev sandboxes, throwaway demos, batch
+            jobs you can pause.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Recreate deployment">
+            <pre class="mermaid">
+sequenceDiagram
+  participant 👤 as Users
+  participant 🔵 as v1 (live)
+  participant 💥 as Tear-down
+  participant 🟢 as v2 (new)
+  👤->>🔵: traffic
+  Note over 🔵,💥: ⛔ downtime window
+  💥-->>🔵: RIP
+  🟢-->>🟢: boot + load weights
+  👤->>🟢: traffic resumes
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Dead simple; great for iterating infra.</li>
+            <li>❌ Unacceptable for customer-facing SLAs.</li>
+          </ul>
+
+          <h3>🔄 Rolling update</h3>
+          <p><strong>WHAT.</strong> Replace instances one-by-one (or
+            N-at-a-time). Zero planned downtime; mixed versions briefly
+            coexist.</p>
+          <p><strong>WHERE.</strong> Staging fleets; prod only when you truly
+            want 100% of the new model and trust it.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Rolling update">
+            <pre class="mermaid">
+flowchart TB
+  subgraph T0["⏱️ t0"]
+    A1["🔵"] --- A2["🔵"] --- A3["🔵"] --- A4["🔵"]
+  end
+  subgraph T1["⏱️ t1"]
+    B1["🟢"] --- B2["🔵"] --- B3["🔵"] --- B4["🔵"]
+  end
+  subgraph T2["⏱️ t2"]
+    C1["🟢"] --- C2["🟢"] --- C3["🟢"] --- C4["🔵"]
+  end
+  subgraph T3["⏱️ t3"]
+    D1["🟢"] --- D2["🟢"] --- D3["🟢"] --- D4["🟢"]
+  end
+  T0 --> T1 --> T2 --> T3
+            </pre>
+          </div>
+          <ul>
+            <li>✅ No big-bang cutover; easy rollback mid-roll.</li>
+            <li>❌ Transient heterogeneity; bad if v1/v2 outputs must stay
+              comparable in one session.</li>
+          </ul>
+
+          <h3>🔵🟢 Blue / Green</h3>
+          <p><strong>WHAT.</strong> Two parallel environments. Live traffic
+            hits blue; green gets the new model. Flip the balancer when green
+            is healthy. Instant rollback = flip back.</p>
+          <p><strong>WHERE.</strong> Prod cutovers where you can afford double
+            capacity for a baking window — SageMaker’s default model-update
+            style is blue/green with guardrails
+            [<a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+              target="_blank" rel="noopener noreferrer">4</a>].</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Blue green deployment">
+            <pre class="mermaid">
+flowchart LR
+  U["👤 Users"] --> LB["⚖️ Balancer"]
+  LB -->|"100% live"| BLUE["🔵 Blue<br/>🧠 v1"]
+  LB -.->|"0% until flip"| GREEN["🟢 Green<br/>🧠 v2"]
+  BLUE <-.->|"🔁 swap"| GREEN
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Near-zero downtime; clean rollback story.</li>
+            <li>❌ ~2× infra during overlap — painful for big GPU
+              models.</li>
+          </ul>
+
+          <h4>📶 Blue/Green traffic-shift flavors</h4>
+          <p>Same blue/green pair; different <em>how fast</em> traffic moves
+            [<a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+              target="_blank" rel="noopener noreferrer">4</a>]:</p>
+          <ul>
+            <li>⚡ <strong>All-at-once</strong> — 100% flip after green is
+              ready; short baking period; fastest; blast radius = everyone.</li>
+            <li>🐦 <strong>Canary size</strong> — tiny % to green first, then
+              full flip if alarms stay quiet.</li>
+            <li>📶 <strong>Linear / stepped</strong> — e.g. 10% → 20% → …
+              with a bake at each step; slowest, safest, priciest.</li>
+          </ul>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Traffic shift flavors">
+            <pre class="mermaid">
+flowchart TB
+  ALL["⚡ All-at-once<br/>0% → 100%"]
+  CAN["🐦 Canary<br/>5% bake → 100%"]
+  LIN["📶 Linear<br/>10% → 30% → 60% → 100%"]
+  ALL --- CAN --- LIN
+            </pre>
+          </div>
+
+          <h3>🐦 Canary</h3>
+          <p><strong>WHAT.</strong> Expose a
+            <em>small, sticky</em> slice of users/traffic to v2 (often
+            5–30%, never “half the world”). Goal: prove the new model is
+            operationally healthy before a full rollout
+            [<a href="https://towardsdatascience.com/ml-model-deployment-strategies-72044b3c1410/"
+              target="_blank" rel="noopener noreferrer">1</a>].</p>
+          <p><strong>WHERE.</strong> Staging + prod when you need live
+            signal without betting the company.</p>
+          <p>Two implementations:</p>
+          <ul>
+            <li>🩹 <strong>Canary rolling</strong> — patch a few pods inside
+              the same cluster.</li>
+            <li>👯 <strong>Canary parallel</strong> — spin a small sibling
+              fleet; route a tagged percentage to it.</li>
+          </ul>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Canary deployment">
+            <pre class="mermaid">
+flowchart LR
+  U["👥 Users"] --> LB["⚖️ LB<br/>session affinity"]
+  LB -->|"🐥 ~10% sticky"| V2["🟢 Canary<br/>🧠 v2"]
+  LB -->|"🦉 ~90%"| V1["🔵 Stable<br/>🧠 v1"]
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Small blast radius; great with latency / 5xx alarms.</li>
+            <li>❌ Not a substitute for statistical product A/B; sticky
+              cohorts can bias results.</li>
+          </ul>
+
+          <h3>🅰️🅱️ A/B testing</h3>
+          <p><strong>WHAT.</strong> Randomly assign users/requests to variants
+            to learn which model wins on
+            <em>business / UX metrics</em> (CTR, conversion, retention), not
+            just model loss
+            [<a href="https://towardsdatascience.com/ml-model-deployment-strategies-72044b3c1410/"
+              target="_blank" rel="noopener noreferrer">1</a>]
+            [<a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+              target="_blank" rel="noopener noreferrer">4</a>].</p>
+          <p><strong>WHERE.</strong> Recommenders, ranking, personalization —
+            anywhere closed-loop feedback maps predictions → money.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="A/B testing">
+            <pre class="mermaid">
+flowchart LR
+  U["🎲 Users<br/>random split"] --> A["🅰️ Variant A<br/>🧠 v1"]
+  U --> B["🅱️ Variant B<br/>🧠 v2"]
+  A --> M["📊 Metrics<br/>CTR / $ / NPS"]
+  B --> M
+  M --> WIN["🏆 Promote winner"]
+            </pre>
+          </div>
+
+          <aside class="two-cents-aside">
+            <p>🆚 <strong>Canary ≠ A/B.</strong>
+              Canary = sticky small cohort to prove
+              <em>it works</em>. A/B = random assignment to prove
+              <em>users prefer it</em>. Canary traffic stays &lt; ~35–50%; A/B
+              often runs 50/50 until significance
+              [<a href="https://towardsdatascience.com/ml-model-deployment-strategies-72044b3c1410/"
+                target="_blank" rel="noopener noreferrer">1</a>].</p>
+          </aside>
+
+          <h3>👻 Shadow / dark launch</h3>
+          <p><strong>WHAT.</strong> Mirror production requests to v2; only v1
+            answers the user. Log v2 outputs for offline compare (quality,
+            latency, errors)
+            [<a href="https://towardsdatascience.com/ml-model-deployment-strategies-72044b3c1410/"
+              target="_blank" rel="noopener noreferrer">1</a>]
+            [<a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+              target="_blank" rel="noopener noreferrer">4</a>]
+            [<a href="https://dagshub.com/blog/model-deployment-types-strategies-and-best-practices/"
+              target="_blank" rel="noopener noreferrer">3</a>].</p>
+          <p><strong>WHERE.</strong> High-traffic prod when you lack a clean
+            business feedback loop, or when a wrong answer is catastrophic
+            (payments, medical triage, safety).</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Shadow deployment">
+            <pre class="mermaid">
+flowchart LR
+  U["👤 User"] --> LB["⚖️"]
+  LB --> V1["🔵 Prod v1<br/>💬 reply"]
+  LB -.->|"👻 copy"| V2["🟢 Shadow v2<br/>📝 log only"]
+  V1 --> U
+  V2 --> LOG["📒 Diff / metrics"]
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Zero user risk; true prod distribution.</li>
+            <li>❌ ~2× inference cost; need careful PII / side-effect
+              handling (shadow must not write money, send email, etc.).</li>
+          </ul>
+
+          <h3>🏆🆚 Champion–Challenger</h3>
+          <p><strong>WHAT.</strong> Continuous loop: production
+            <em>champion</em> stays live; new candidates are
+            <em>challengers</em> via shadow and/or A/B; promote only when
+            challenger beats champion on agreed gates
+            [<a href="https://dagshub.com/blog/model-deployment-types-strategies-and-best-practices/"
+              target="_blank" rel="noopener noreferrer">3</a>].</p>
+          <p><strong>WHERE.</strong> Mature platforms with a model registry,
+            automated eval, and ownership of promotion criteria.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Champion challenger loop">
+            <pre class="mermaid">
+flowchart TB
+  CH["🏆 Champion<br/>in prod"] --> SH["👻 Shadow / 🅰️🅱️ A/B"]
+  NEW["🧪 New candidate"] --> SH
+  SH --> GATE{"📊 Beats gates?"}
+  GATE -->|"✅ yes"| PROMOTE["🚀 Challenger → Champion"]
+  GATE -->|"❌ no"| KEEP["🗑️ Keep champion<br/>archive challenger"]
+  PROMOTE --> CH
+            </pre>
+          </div>
+
+          <h2>🏭 Generic production shape</h2>
+          <p>Regardless of strategy, real-time stacks usually look like:
+            gateway → load balancer → service mesh / variants → model →
+            feature + metadata stores, with monitoring feeding the next
+            retrain
+            [<a href="https://towardsdatascience.com/ml-model-deployment-strategies-72044b3c1410/"
+              target="_blank" rel="noopener noreferrer">1</a>]
+            [<a href="https://ml-ops.org/content/mlops-principles"
+              target="_blank" rel="noopener noreferrer">6</a>].</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Generic model deployment stack">
+            <pre class="mermaid">
+flowchart TB
+  APP["📱 App"] --> GW["🚪 Gateway"]
+  GW --> LB["⚖️ LB / mesh<br/>routing rules live here"]
+  LB --> V1["🔵 Variant A"]
+  LB --> V2["🟢 Variant B"]
+  V1 --> FS["🧩 Features"]
+  V2 --> FS
+  V1 --> REG["🏛️ Registry / artifacts"]
+  V2 --> REG
+  V1 --> MON["📡 Monitor<br/>drift · latency · $"]
+  V2 --> MON
+  MON -->|"🔁 CT trigger"| TRAIN["🏋️ Retrain pipeline"]
+  TRAIN --> REG
+            </pre>
+          </div>
+
+          <h2>🧭 Rules of thumb — when to use what</h2>
+          <p>Start from constraints, not from cool words on a slide.</p>
+
+          <h3>1️⃣ Pick serving mode first</h3>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Serving mode decision">
+            <pre class="mermaid">
+flowchart TD
+  Q1{"⏱️ Need score<br/>in &lt; ~100–300ms<br/>on the request?"}
+  Q1 -->|"No"| Q2{"📨 Events<br/>arrive continuously?"}
+  Q1 -->|"Yes"| ONLINE["⚡ Online"]
+  Q2 -->|"Yes"| STREAM["🌊 Streaming"]
+  Q2 -->|"No"| Q3{"📱 Offline / privacy<br/>or no reliable net?"}
+  Q3 -->|"Yes"| EDGE["📱 Edge"]
+  Q3 -->|"No"| BATCH["📦 Batch"]
+            </pre>
+          </div>
+
+          <h3>2️⃣ Pick promotion pattern</h3>
+          <ul>
+            <li>🔐 Prod data cannot leave prod → <strong>deploy
+                code</strong>.</li>
+            <li>💰 Training costs a fortune / is barely reproducible →
+              <strong>deploy model</strong> (or hybrid).</li>
+            <li>🔁 Automated weekly retrain you trust → <strong>deploy
+                code</strong> + continuous training
+              [<a href="https://ml-ops.org/content/mlops-principles"
+                target="_blank" rel="noopener noreferrer">6</a>].</li>
+          </ul>
+
+          <h3>3️⃣ Respect the environment ladder</h3>
+          <ul>
+            <li>🧪 Dev proves
+              <em>ideas</em>; 🎭 staging proves
+              <em>pipelines</em>; 🏭 prod proves
+              <em>users + money</em>.</li>
+            <li>🚫 Never skip staging “because the notebook looked good.”</li>
+            <li>👻 Shadow / 🅰️🅱️ A/B need prod traffic — staging cannot fake
+              that distribution.</li>
+          </ul>
+
+          <h3>4️⃣ Pick traffic strategy</h3>
+          <ul>
+            <li>🧪 Dev / infra thrash → 💥 <strong>Recreate</strong>.</li>
+            <li>🎭 Staging “just make it the new default” → 🔄
+              <strong>Rolling</strong>.</li>
+            <li>🏭 First prod cutover with spare capacity → 🔵🟢
+              <strong>Blue/Green</strong> (all-at-once if low risk).</li>
+            <li>⚠️ New model, scary blast radius, need live ops signal → 🐦
+              <strong>Canary</strong> (or B/G + canary size).</li>
+            <li>🐢 Highest caution, willing to pay double longer → 📶
+              <strong>Linear</strong>.</li>
+            <li>📈 Optimize business metric with closed loop → 🅰️🅱️
+              <strong>A/B</strong>.</li>
+            <li>🛡️ No closed loop / wrong answer is catastrophic → 👻
+              <strong>Shadow</strong> first, then canary/B/G.</li>
+            <li>🏛️ Platform with registry + gates → 🏆
+              <strong>Champion–Challenger</strong> as the forever loop.</li>
+          </ul>
+
+          <h3>5️⃣ Cheat-sheet matrix</h3>
+          <div class="table-responsive">
+            <table class="table table-sm two-cents-table">
+              <thead>
+                <tr>
+                  <th>Strategy</th>
+                  <th>Downtime</th>
+                  <th>User risk</th>
+                  <th>Infra cost</th>
+                  <th>Best signal</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>💥 Recreate</td>
+                  <td>High</td>
+                  <td>High</td>
+                  <td>Low</td>
+                  <td>None (dev)</td>
+                </tr>
+                <tr>
+                  <td>🔄 Rolling</td>
+                  <td>None*</td>
+                  <td>Medium</td>
+                  <td>Low</td>
+                  <td>Ops metrics</td>
+                </tr>
+                <tr>
+                  <td>🔵🟢 Blue/Green</td>
+                  <td>None</td>
+                  <td>Medium→Low</td>
+                  <td>High (~2×)</td>
+                  <td>Ops + bake</td>
+                </tr>
+                <tr>
+                  <td>🐦 Canary</td>
+                  <td>None</td>
+                  <td>Low</td>
+                  <td>Medium</td>
+                  <td>Ops on sticky %</td>
+                </tr>
+                <tr>
+                  <td>📶 Linear</td>
+                  <td>None</td>
+                  <td>Lowest</td>
+                  <td>Highest</td>
+                  <td>Ops per step</td>
+                </tr>
+                <tr>
+                  <td>🅰️🅱️ A/B</td>
+                  <td>None</td>
+                  <td>Controlled</td>
+                  <td>Medium</td>
+                  <td>Business metrics</td>
+                </tr>
+                <tr>
+                  <td>👻 Shadow</td>
+                  <td>None</td>
+                  <td>Zero (users)</td>
+                  <td>High (~2×)</td>
+                  <td>Parity / latency</td>
+                </tr>
+                <tr>
+                  <td>🏆 Challenger</td>
+                  <td>None</td>
+                  <td>Policy-bound</td>
+                  <td>Varies</td>
+                  <td>Gate suite</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p><small>*Rolling has no planned downtime but briefly mixes
+              versions.</small></p>
+
+          <h3>6️⃣ Compositions that actually ship</h3>
+          <ul>
+            <li>👻 Shadow → 🐦 Canary → 🔵🟢 Blue/Green flip — classic
+              “prove parity, prove health, then cut over.”</li>
+            <li>🐦 Canary ops bake → 🅰️🅱️ A/B for product win — don’t A/B a
+              model that 500s.</li>
+            <li>📦 Batch: “canary” = score 5% of keys with v2, compare offline;
+              “blue/green” = dual output tables + swap the read view.</li>
+            <li>📱 Edge: staged store rings / percentage rollout in the app
+              store; shadow is rare (mirror to cloud if you must).</li>
+          </ul>
+
+          <h2>📡 Don’t skip the boring gates</h2>
+          <p>Strategies fail without the MLOps hygiene around them
+            [<a href="https://ml-ops.org/content/mlops-principles"
+              target="_blank" rel="noopener noreferrer">6</a>]
+            [<a href="https://dagshub.com/blog/model-deployment-types-strategies-and-best-practices/"
+              target="_blank" rel="noopener noreferrer">3</a>]:</p>
+          <ul>
+            <li>🏷️ Version <strong>code + data + model</strong>; registry is
+              the source of truth for “what is live.”</li>
+            <li>🧪 CI validates more than unit tests — data schema, training
+              smoke, inference contract, latency budget.</li>
+            <li>🔁 Continuous Training (CT) is not Continuous Delivery —
+              retrain ≠ auto-promote.</li>
+            <li>📡 Monitor quality, drift, latency, and
+              <em>business</em> KPIs; wire auto-rollback alarms into the
+              traffic strategy
+              [<a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+                target="_blank" rel="noopener noreferrer">4</a>].</li>
+            <li>↩️ Keep the previous champion warm until the bake window
+              ends.</li>
+          </ul>
+
+          <h2>🎯 Bottom line</h2>
+          <p>Stop asking “what’s the best deployment strategy?” Ask:</p>
+          <ol>
+            <li>🍽️ How fresh must the score be?</li>
+            <li>📦 Can we train where the data lives?</li>
+            <li>🧪🎭🏭 Which rung are we on — and what is allowed to fail
+              there?</li>
+            <li>🛡️ What’s the blast radius if v2 is wrong?</li>
+            <li>📊 Do we have a closed-loop business metric?</li>
+          </ol>
+          <p>Answer those four and the strategy almost picks itself: shadow
+            when wrong answers are fatal, canary when you need live ops
+            confidence, A/B when you need product proof, blue/green when you
+            need a clean flip, batch when latency is a lie you don’t have to
+            tell.</p>
+
+          <h2>📚 References</h2>
+          <ol>
+            <li id="ref-1">Yashaswi Nayak, “ML Model Deployment Strategies,”
+              Towards Data Science,
+              <a href="https://towardsdatascience.com/ml-model-deployment-strategies-72044b3c1410/"
+                target="_blank"
+                rel="noopener noreferrer">towardsdatascience.com/ml-model-deployment-strategies-72044b3c1410</a>
+            </li>
+            <li id="ref-2">Frank Adams, “The Four Machine Learning Model
+              Deployment Types You Should Know,” Medium,
+              <a href="https://medium.com/@FrankAdams7/the-four-machine-learning-model-deployment-types-you-should-know-e7577251959"
+                target="_blank"
+                rel="noopener noreferrer">medium.com/@FrankAdams7/…</a>
+            </li>
+            <li id="ref-3">Manuel Martin, “Model Deployment: Types, Strategies
+              and Best Practices,” DagsHub,
+              <a href="https://dagshub.com/blog/model-deployment-types-strategies-and-best-practices/"
+                target="_blank"
+                rel="noopener noreferrer">dagshub.com/blog/model-deployment-types-strategies-and-best-practices</a>
+            </li>
+            <li id="ref-4">Maira Ladeira Tanke et al., “MLOps deployment best
+              practices for real-time inference model serving endpoints with
+              Amazon SageMaker,” AWS Machine Learning Blog,
+              <a href="https://aws.amazon.com/blogs/machine-learning/mlops-deployment-best-practices-for-real-time-inference-model-serving-endpoints-with-amazon-sagemaker/"
+                target="_blank"
+                rel="noopener noreferrer">aws.amazon.com/blogs/machine-learning/…</a>
+            </li>
+            <li id="ref-5">Databricks, “Model deployment patterns,”
+              <a href="https://docs.databricks.com/aws/en/machine-learning/mlops/deployment-patterns"
+                target="_blank"
+                rel="noopener noreferrer">docs.databricks.com/…/deployment-patterns</a>
+            </li>
+            <li id="ref-6">MLOps.org, “MLOps Principles,”
+              <a href="https://ml-ops.org/content/mlops-principles"
+                target="_blank"
+                rel="noopener noreferrer">ml-ops.org/content/mlops-principles</a>
+            </li>
+            <li id="ref-7">GreenNode, “How to Deploy Machine Learning Models,”
+              <a href="https://greennode.ai/blog/how-to-deploy-machine-learning-models"
+                target="_blank"
+                rel="noopener noreferrer">greennode.ai/blog/how-to-deploy-machine-learning-models</a>
+            </li>
+          </ol>
+
+          <footer class="two-cents-article-footer">
+            <a href="../index.html#two-cents">← Back to 2-Cents</a>
+          </footer>
+
+        </article>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; <strong><span>Amirhessam Tahmassebi</span></strong>
+      </div>
+      <div class="credits">
+      </div>
+    </div>
+  </footer>
+  <!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/jquery/jquery.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="../assets/vendor/counterup/counterup.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/venobox/venobox.min.js"></script>
+  <script src="../assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="../assets/vendor/typed.js/typed.min.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+
+  <!-- Theme toggle -->
+  <script src="../assets/js/theme-toggle.js?v=20260716174000"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Mermaid diagrams -->
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    var theme =
+      document.documentElement.getAttribute("data-theme") === "dark"
+        ? "dark"
+        : "default";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: theme,
+      securityLevel: "loose",
+      flowchart: { curve: "basis", padding: 12 }
+    });
+  </script>
+
+</body>
+
+</html>
