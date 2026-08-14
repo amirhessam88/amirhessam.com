@@ -15,6 +15,7 @@ $versionFiles = [
     __DIR__ . '/../img/profile-img2.jpg',
     __DIR__ . '/../img/logo_color_clear.png',
     __DIR__ . '/../img/logo_black_clear.png',
+    __DIR__ . '/../img/logo_ai.png',
     __DIR__ . '/../css/style.css',
     __DIR__ . '/../js/main.js',
     __DIR__ . '/../data/focus_areas.json'

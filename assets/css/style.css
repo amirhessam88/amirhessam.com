@@ -452,6 +452,19 @@ section {
   background: #149ddd;
 }
 
+.focus-areas .focus-areas-portfolio {
+  margin-top: 14px;
+}
+
+.focus-areas .focus-areas-title a {
+  color: #149ddd;
+  font-weight: 600;
+}
+
+.focus-areas .focus-areas-title a:hover {
+  color: #0d86c2;
+}
+
 .focus-fabric {
   position: relative;
   min-height: 640px;
@@ -624,18 +637,24 @@ section {
   pointer-events: none;
 }
 
+.focus-hub .focus-hub-ring {
+  pointer-events: auto;
+  text-decoration: none;
+}
+
 .focus-hub-ring {
   width: 110px;
   height: 110px;
   margin: 0 auto 14px;
   border-radius: 50%;
-  background: #fff;
+  background: #000;
   border: 1px solid rgba(20, 157, 221, 0.35);
   box-shadow: 0 0 40px rgba(20, 157, 221, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+  overflow: hidden;
 }
 
 .focus-hub-ring::before {
@@ -646,14 +665,15 @@ section {
   border-top: 1px solid #149ddd;
   animation: focus-spin 10s linear infinite;
   opacity: 0.6;
+  z-index: 2;
 }
 
 .focus-hub-ring img {
-  width: 58px;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   position: relative;
   z-index: 1;
-  filter: drop-shadow(0 0 10px rgba(20, 157, 221, 0.35));
 }
 
 .focus-hub h3 {
@@ -719,7 +739,8 @@ section {
 }
 
 .focus-hub-ring img {
-  width: 38px;
+  width: 100%;
+  height: 100%;
 }
 
 .focus-hub h3 {
@@ -768,7 +789,8 @@ section {
   }
 
   .focus-hub-ring img {
-    width: 50px;
+    width: 100%;
+    height: 100%;
   }
 
   .focus-hub h3 {
@@ -792,6 +814,11 @@ section {
 
   .focus-card h3 {
     font-size: 18px;
+  }
+
+  .focus-hub-ring {
+    width: 110px;
+    height: 110px;
   }
 }
 
@@ -1473,10 +1500,40 @@ section {
   }
 }
 
+#libraries .portfolio-container,
+#ventures .portfolio-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 #ventures .portfolio-item,
 #libraries .portfolio-item {
   display: flex;
   justify-content: center;
+}
+
+#libraries .portfolio-item {
+  flex: 0 0 50%;
+  max-width: 50%;
+}
+
+@media (min-width: 768px) {
+  #libraries .portfolio-item {
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+
+#libraries .portfolio-wrap .portfolio-links,
+#ventures .portfolio-wrap .portfolio-links {
+  opacity: 0;
+}
+
+#libraries .portfolio-wrap:hover .portfolio-links,
+#ventures .portfolio-wrap:hover .portfolio-links {
+  opacity: 1;
 }
 
 #ventures .portfolio-wrap,
@@ -2591,6 +2648,14 @@ html[data-theme="dark"] .focus-areas .focus-areas-title p {
   color: #e8eef8;
 }
 
+html[data-theme="dark"] .focus-areas .focus-areas-title a {
+  color: #4db8e8;
+}
+
+html[data-theme="dark"] .focus-areas .focus-areas-title a:hover {
+  color: #7ccdf0;
+}
+
 html[data-theme="dark"] .focus-card {
   background: #121a2b;
   border-color: rgba(148, 163, 184, 0.16);
@@ -2611,7 +2676,7 @@ html[data-theme="dark"] .focus-card-tags span {
 }
 
 html[data-theme="dark"] .focus-hub-ring {
-  background: #121a2b;
+  background: #000;
   border-color: rgba(20, 157, 221, 0.45);
   box-shadow: 0 0 40px rgba(20, 157, 221, 0.22);
 }

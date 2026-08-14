@@ -420,9 +420,9 @@
     time: 1000
   });
 
-  // Porfolio isotope and filter
+  // Academic Portfolio isotope and filter (do not layout libraries/ventures)
   $(window).on('load', function () {
-    var portfolioIsotope = $('.portfolio-container').isotope({
+    var portfolioIsotope = $('#portfolio .portfolio-container').isotope({
       itemSelector: '.portfolio-item',
       layoutMode: 'fitRows'
     });
