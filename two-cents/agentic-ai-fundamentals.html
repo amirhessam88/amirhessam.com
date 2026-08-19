@@ -1,0 +1,1611 @@
+<!-- =======================================================
+	  * Amirhessam Tahmassebi
+	  * Email: admin@amirhessam.com
+	  * Website: www.amirhessam.com
+  ======================================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored === "light" || stored === "dark"
+          ? stored
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="color-scheme" content="light dark">
+
+  <title>Agentic AI Fundamentals | 2-Cents</title>
+  <meta
+    content="A complete map of agentic AI: LLM vs workflow vs agent, ReAct, plan-and-execute, reflection, MCP, multi-agent patterns, memory, guardrails, and LLMOps — with diagrams for every pattern."
+    name="description">
+  <meta
+    content="Amirhessam Tahmassebi, Agentic AI, AI agents, ReAct, LangGraph, MCP, LLMOps, multi-agent, tool calling, prompt injection, Anthropic"
+    name="keywords">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Amirhessam Tahmassebi">
+  <meta property="og:url"
+    content="https://www.amirhessam.com/two-cents/agentic-ai-fundamentals.html">
+  <meta property="og:title" content="Agentic AI Fundamentals | 2-Cents">
+  <meta property="og:description"
+    content="A complete map of agentic AI: LLM vs workflow vs agent, ReAct, plan-and-execute, reflection, MCP, multi-agent patterns, memory, guardrails, and LLMOps.">
+  <meta property="og:image"
+    content="https://www.amirhessam.com/assets/img/two-cents/og-agentic-ai-fundamentals.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="627">
+  <meta property="og:image:alt" content="Agentic AI Fundamentals — 2-Cents">
+  <meta property="article:published_time" content="2026-08-18">
+  <meta property="article:tag" content="Agents">
+  <meta property="article:tag" content="Agentic AI">
+  <meta property="article:tag" content="LLMOps">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Agentic AI Fundamentals | 2-Cents">
+  <meta name="twitter:description"
+    content="LLM vs workflow vs agent, ReAct, MCP, multi-agent patterns, memory, guardrails, and LLMOps — with diagrams.">
+  <meta name="twitter:image"
+    content="https://www.amirhessam.com/assets/img/two-cents/og-agentic-ai-fundamentals.png">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Agentic AI Fundamentals",
+    "description": "A complete map of agentic AI: LLM vs workflow vs agent, ReAct, plan-and-execute, reflection, MCP, multi-agent patterns, memory, guardrails, and LLMOps — with diagrams for every pattern.",
+    "datePublished": "2026-08-18",
+    "dateModified": "2026-08-18",
+    "mainEntityOfPage": "https://www.amirhessam.com/two-cents/agentic-ai-fundamentals.html",
+    "image": "https://www.amirhessam.com/assets/img/two-cents/og-agentic-ai-fundamentals.png",
+    "keywords": [
+      "Agentic AI",
+      "AI agents",
+      "ReAct",
+      "MCP",
+      "LangGraph",
+      "LLMOps",
+      "multi-agent"
+    ],
+    "author": {
+      "@type": "Person",
+      "name": "Amirhessam Tahmassebi",
+      "url": "https://www.amirhessam.com/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Amirhessam Tahmassebi",
+      "url": "https://www.amirhessam.com/"
+    }
+  }
+  </script>
+
+  <!-- Favicons -->
+  <link href="../assets/img/logo_color_clear.png" rel="icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="../assets/vendor/owl.carousel/assets/owl.carousel.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="d-flex flex-column">
+
+      <div class="profile">
+        <img src="../assets/img/profile-img.jpg" alt=""
+          class="img-fluid rounded-circle">
+        <h1 class="text-light"><a href="../index.html">Amirhessam Tahmassebi</a>
+        </h1>
+        <div class="social-links mt-3 text-center">
+          <a href="https://www.linkedin.com/in/amirhessam/" class="linkedin"><i
+              class="bx bxl-linkedin"></i></a>
+          <a href="https://scholar.google.com/citations?user=CnHZjFAAAAAJ&hl=en"
+            class="google-plus"><i class="bx bxl-google"></i></a>
+          <a href="https://github.com/amirhessam88" class="github"><i
+              class="bx bxl-github"></i></a>
+          <a href="https://slickml.com/" class="consulting"><i
+              class="icofont-learn"></i></a>
+          <a href="https://github.com/slickml" class="library"><i
+              class="icofont-brainstorming"></i></a>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="../index.html"><i class="bx bx-home"></i>
+              <span>Home</span></a></li>
+          <li class="nav-two-cents">
+            <a href="../index.html#two-cents"><i class="bx bx-bulb"></i>
+              <span>2-Cents</span></a>
+            <ul class="nav-two-cents-articles">
+              <li><a href="building-an-org-monorepo.html">🏗️ Building an Org
+                  Monorepo</a></li>
+              <li><a href="mlops-deployment-strategies.html">🚀 MLOps Deployment
+                  Strategies</a></li>
+              <li class="active"><a
+                  href="agentic-ai-fundamentals.html">🧠 Agentic AI
+                  Fundamentals</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav><!-- .nav-menu -->
+
+      <button type="button" class="theme-toggle" data-theme-toggle
+        aria-pressed="false" aria-label="Switch to dark theme"
+        title="Dark theme">
+        <i class="bx bx-moon theme-toggle-icon theme-toggle-icon-moon"
+          aria-hidden="true"></i>
+        <i class="bx bx-sun theme-toggle-icon theme-toggle-icon-sun"
+          aria-hidden="true"></i>
+        <span class="theme-toggle-label">Dark mode</span>
+      </button>
+
+      <button type="button" class="mobile-nav-toggle d-xl-none"><i
+          class="icofont-navigation-menu"></i></button>
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>🪙 2-Cents</h2>
+          <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#two-cents">2-Cents</a></li>
+            <li>Agentic AI</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Article ======= -->
+    <section class="two-cents-article">
+      <div class="container">
+        <article class="two-cents-article-body">
+
+          <header class="two-cents-article-header">
+            <span class="two-cents-card-tag">🧠 Agents</span>
+            <h1>🧠 Agentic AI Fundamentals</h1>
+            <p class="two-cents-article-meta">
+              <time datetime="2026-08-18">📅 August 18, 2026</time>
+              <span aria-hidden="true">·</span>
+              <span>⏱️ 45 min read</span>
+            </p>
+          </header>
+
+          <aside class="two-cents-inspiration">
+            <p>📖 <strong>Inspiration.</strong> “Agent” is the most overloaded
+              word in AI right now. Interview decks collapse it into a
+              prompt. Vendor decks inflate it into a platform. The useful
+              sources sit in between: Anthropic’s
+              <em>Building Effective Agents</em>
+              [<a href="https://www.anthropic.com/engineering/building-effective-agents"
+                target="_blank" rel="noopener noreferrer">1</a>]
+              draws the line between
+              <em>workflows</em> and
+              <em>agents</em>; ReAct
+              [<a href="https://arxiv.org/abs/2210.03629"
+                target="_blank" rel="noopener noreferrer">2</a>],
+              Tree of Thoughts
+              [<a href="https://arxiv.org/abs/2305.10601"
+                target="_blank" rel="noopener noreferrer">3</a>],
+              and Reflexion
+              [<a href="https://arxiv.org/abs/2303.11366"
+                target="_blank" rel="noopener noreferrer">4</a>]
+              give the control-loop patterns; MCP
+              [<a href="https://modelcontextprotocol.io"
+                target="_blank" rel="noopener noreferrer">5</a>]
+              standardizes tools; OWASP
+              [<a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/"
+                target="_blank" rel="noopener noreferrer">6</a>]
+              reminds you the model is not a security boundary. What
+              follows is <strong>one map</strong>: the ladder from a single
+              LLM call to a production agent, every pattern with a diagram,
+              and the rules of thumb for when
+              <em>not</em> to build one.</p>
+          </aside>
+
+          <p class="two-cents-lead">💡 An LLM <strong>answers</strong>. An
+            agent <strong>acts</strong>. The difference is not a longer
+            prompt — it is a <strong>control loop</strong> with tools,
+            memory, a permission envelope, and a stop condition. Mix those
+            wrong and you get a token furnace that can also
+            <code>DROP TABLE</code>. Mix them right and you get boring,
+            reversible work.</p>
+
+          <h2>🗺️ The map</h2>
+          <p>Read this as a curriculum, not a glossary. Five layers, each
+            one only justified when the layer below is not enough:</p>
+          <ol>
+            <li>🎯 <strong>Definition</strong> — LLM vs workflow vs agent.
+              Answers: <em>who</em> chooses the next step?</li>
+            <li>🧩 <strong>Anatomy</strong> — model, planner, tools, memory,
+              guardrails, orchestrator. Answers: <em>what</em> is the
+              system besides the LLM?</li>
+            <li>🔁 <strong>Patterns</strong> — ReAct, plan-and-execute,
+              reflection, Anthropic’s five workflows. Answers:
+              <em>how</em> does control flow?</li>
+            <li>🔧 <strong>Integration</strong> — function calling, MCP,
+              multi-agent, skills. Answers: <em>how</em> does it touch
+              the world?</li>
+            <li>🏭 <strong>Production</strong> — memory, LLMOps, HITL (or HIL),
+              prompt injection, evals. Answers: <em>how</em> do you
+              ship it without a pager?</li>
+          </ol>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Complexity ladder from a single LLM call to multi-agent systems">
+            <pre class="mermaid">
+flowchart TB
+  subgraph LADDER["🪜 Complexity ladder"]
+    direction TB
+    A["1️⃣ 💬 Single LLM call"]
+    B["2️⃣ 📚 RAG / in-context"]
+    C["3️⃣ 🧱 Workflow<br/>code chooses the path"]
+    D["4️⃣ 🤖 Agent<br/>model chooses the path"]
+    E["5️⃣ 👥 Multi-agent<br/>roles + handoffs"]
+  end
+  A --> B --> C --> D --> E
+            </pre>
+          </div>
+
+          <aside class="two-cents-aside">
+            <p>🧠 <strong>Mental model.</strong> Climb only when the current
+              rung fails a measured eval — not because a framework made
+              the next rung feel free. Anthropic’s rule of thumb
+              [<a href="https://www.anthropic.com/engineering/building-effective-agents"
+                target="_blank" rel="noopener noreferrer">1</a>]:
+              start simple, add complexity only when it
+              <em>demonstrably</em> improves outcomes. Agents often cost
+              ~4× the tokens of a chat; multi-agent can hit ~15×.</p>
+          </aside>
+
+          <h2>🎯 What is Agentic AI?</h2>
+          <p>Classic AI already had the word. Russell &amp; Norvig treat an
+            agent as something that
+            <em>perceives</em> and
+            <em>acts</em> toward a performance measure
+            [<a href="http://aima.cs.berkeley.edu/"
+              target="_blank" rel="noopener noreferrer">7</a>].
+            PEAS — Performance, Environment, Actuators, Sensors — is still
+            the right checklist. LLM-era “agentic AI” is that idea with a
+            language model as the policy: the model interprets a goal,
+            selects actions (usually tool calls), observes results, and
+            continues until a stop condition.</p>
+          <p>The useful distinction is not “chatbot vs agent.” It is
+            <strong>who owns control flow</strong>
+            [<a href="https://www.anthropic.com/engineering/building-effective-agents"
+              target="_blank" rel="noopener noreferrer">1</a>]:</p>
+          <ul>
+            <li>💬 <strong>Traditional LLM generation</strong> — prompt →
+              response. One shot, maybe a few turns of chat. No tools,
+              no state machine, no side effects.</li>
+            <li>🧱 <strong>Workflow</strong> — LLMs and tools orchestrated
+              through <em>predefined code paths</em>. You wrote the
+              graph. The model fills in nodes. Predictable, cheap to
+              debug.</li>
+            <li>🤖 <strong>Agent</strong> — the LLM
+              <em>dynamically</em> directs its own process and tool use.
+              Runtime observations change what happens next. Flexible,
+              expensive, compounding-error-prone.</li>
+          </ul>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Single-shot LLM versus an agent control loop">
+            <pre class="mermaid">
+flowchart LR
+  subgraph SHOT["💬 Single-shot LLM"]
+    P1["📝 Prompt"] --> M1["🧠 Model"] --> R1["📤 Response"]
+  end
+  subgraph LOOP["🤖 Agentic loop"]
+    G["🎯 Goal"] --> PL["🗺️ Plan"]
+    PL --> ACT["🛠️ Action / tool"]
+    ACT --> OBS["👁️ Observation"]
+    OBS --> ST["📦 Updated state"]
+    ST --> DEC{"✅ Done?"}
+    DEC -->|no| PL
+    DEC -->|yes| OUT["🏁 Result"]
+  end
+            </pre>
+          </div>
+
+          <p>A system becomes
+            <em>meaningfully</em> agentic when all of these are true:</p>
+          <ul>
+            <li>🎯 A persistent <strong>goal</strong>, not only a response
+              request</li>
+            <li>📦 <strong>State</strong> across multiple steps</li>
+            <li>🛠️ Dynamic selection of <strong>tools</strong> or actions</li>
+            <li>👁️ <strong>Feedback</strong> from an environment (API,
+              codebase, browser, user)</li>
+            <li>🔄 <strong>Replanning</strong> after failures or new
+              information</li>
+            <li>🛑 Explicit <strong>completion and stopping</strong>
+              criteria</li>
+            <li>🛡️ Bounded <strong>autonomy</strong> — a permission envelope,
+              not “do whatever”</li>
+          </ul>
+          <p>A fixed chain of three predetermined LLM calls is a
+            <strong>workflow</strong>, not an agent. The key test:
+            <em>do runtime observations change what the system decides to
+              do next?</em></p>
+
+          <h2>🧩 Anatomy of an agent</h2>
+          <p>The LLM is not the agent. The agent is a
+            <strong>system</strong> that uses an LLM as a policy. Strip
+            the other parts and you have an eloquent intern with root
+            access.</p>
+
+          <figure class="two-cents-diagram agent-anatomy" role="img"
+            aria-label="Components of an autonomous AI agent: orchestrator over Decide, Act, and Remember">
+            <div class="agent-anatomy-orch">
+              <strong>🎛️ Orchestrator</strong>
+              <span>continue / retry / pause / stop</span>
+            </div>
+            <div class="agent-anatomy-links" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="agent-anatomy-grid">
+              <div class="agent-anatomy-group">
+                <h3>🧠 Decide</h3>
+                <ul>
+                  <li>
+                    <strong>🧠 LLM / policy</strong>
+                    <span>interpret goal, pick next action</span>
+                  </li>
+                  <li>
+                    <strong>🗺️ Planner</strong>
+                    <span>tasks, deps, success criteria</span>
+                  </li>
+                  <li>
+                    <strong>🧪 Evaluator</strong>
+                    <span>rubric / tests / schema</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="agent-anatomy-group">
+                <h3>🛠️ Act</h3>
+                <ul>
+                  <li>
+                    <strong>🛠️ Tool layer</strong>
+                    <span>APIs, DB, search, code</span>
+                  </li>
+                  <li>
+                    <strong>🛡️ Guardrails</strong>
+                    <span>auth, safety, cost, kill switch</span>
+                  </li>
+                </ul>
+              </div>
+              <div class="agent-anatomy-group">
+                <h3>📦 Remember</h3>
+                <ul>
+                  <li>
+                    <strong>🧾 Working memory</strong>
+                    <span>current task + observations</span>
+                  </li>
+                  <li>
+                    <strong>📚 Long-term memory</strong>
+                    <span>facts, prefs, experience</span>
+                  </li>
+                  <li>
+                    <strong>💾 State manager</strong>
+                    <span>checkpoints, retries, approvals</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </figure>
+
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Job</th>
+                <th>If you skip it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>🧠 LLM / policy</td>
+                <td>Interpret goal, reason, select the next action</td>
+                <td>You do not have an agent — you have a script</td>
+              </tr>
+              <tr>
+                <td>🗺️ Planner</td>
+                <td>Goal → tasks, dependencies, completion criteria</td>
+                <td>Thrashing, duplicated work, no progress metric</td>
+              </tr>
+              <tr>
+                <td>🛠️ Tool layer</td>
+                <td>Controlled access to APIs, DBs, search, code</td>
+                <td>Hallucinated side effects, or no side effects</td>
+              </tr>
+              <tr>
+                <td>🧾 Working memory</td>
+                <td>Current task, recent observations, tool results</td>
+                <td>Context overflow or amnesia mid-run</td>
+              </tr>
+              <tr>
+                <td>📚 Long-term memory</td>
+                <td>Cross-session facts, preferences, experience</td>
+                <td>Stateless intern every morning</td>
+              </tr>
+              <tr>
+                <td>💾 State manager</td>
+                <td>Checkpoints, retries, approvals, resume</td>
+                <td>Crash = start over; HITL = hope</td>
+              </tr>
+              <tr>
+                <td>🧪 Evaluator</td>
+                <td>Did the output actually satisfy the spec?</td>
+                <td>Confident wrong answers</td>
+              </tr>
+              <tr>
+                <td>🛡️ Guardrails</td>
+                <td>Auth, data, safety, cost, operational bounds</td>
+                <td>The <code>DROP TABLE</code> demo</td>
+              </tr>
+              <tr>
+                <td>🎛️ Orchestrator</td>
+                <td>Run the loop; decide continue / retry / pause / stop</td>
+                <td>Infinite loops and silent hangs</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>❌ When an agent is the wrong tool</h2>
+          <p>An agent is usually the wrong choice when the process is
+            predictable, rules-based, or high-risk without room for
+            runtime judgment. Prefer a conventional workflow (or just
+            software) when:</p>
+          <ul>
+            <li>📋 Every step can be defined in advance</li>
+            <li>🎯 Deterministic output is required</li>
+            <li>🔌 A simple API, SQL query, or rules engine solves it</li>
+            <li>⚖️ Errors have severe legal, financial, or safety
+              consequences</li>
+            <li>⏱️ Latency or cost budgets are extremely tight</li>
+            <li>🧪 There is no reliable way to
+              <em>verify</em> success</li>
+            <li>🔓 The agent would have broad permissions but limited
+              supervision</li>
+          </ul>
+          <p>Rule: <strong>deterministic software for what can be
+              specified; agentic decision-making only for the uncertain
+              portion.</strong> Anthropic’s production note is the same:
+              many apps only need a well-prompted single call with
+              retrieval
+              [<a href="https://www.anthropic.com/engineering/building-effective-agents"
+                target="_blank" rel="noopener noreferrer">1</a>].</p>
+
+          <h2>🛡️ Autonomy as a permission envelope</h2>
+          <p>Autonomy is not a vibe in the system prompt. It is a
+            <strong>permission envelope</strong> enforced
+            <em>outside</em> the model. For every tool and action,
+            specify:</p>
+          <ul>
+            <li>📂 Which resources the agent can access</li>
+            <li>🔒 Read-only vs mutating operations</li>
+            <li>🏢 Data and tenant boundaries</li>
+            <li>💸 Transaction and spending limits</li>
+            <li>🙋 Actions that require human approval</li>
+            <li>🛑 Max steps, retries, runtime, and token budget</li>
+            <li>🚫 Prohibited actions</li>
+            <li>🚨 Escalation and shutdown conditions</li>
+          </ul>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Permission envelope around an untrusted model">
+            <pre class="mermaid">
+flowchart TB
+  USER["👤 User / goal"] --> ORCH["🎛️ Orchestrator"]
+  ORCH --> LLM["🧠 LLM<br/>untrusted proposer"]
+  LLM -->|"function call request"| POL["🛡️ Policy engine<br/>schema + auth + limits"]
+  POL -->|allow| TOOL["🛠️ Tool / sandbox"]
+  POL -->|deny / HITL| HUM["🙋 Human"]
+  TOOL --> OBS["👁️ Observation"]
+  HUM --> OBS
+  OBS --> ORCH
+            </pre>
+          </div>
+
+          <p>Enforce this with authorization services, sandboxing, typed
+            tool schemas, policy engines, database roles, and approval
+            workflows. <strong>Prompt instructions are not a security
+              boundary.</strong> If the model generates
+            <code>DROP TABLE</code>, its database identity should lack
+            permission to execute it.</p>
+
+          <h2>🔁 Control-loop patterns</h2>
+          <p>Three loops cover most “real” agents. Workflows (next
+            section) cover the cases where you should not let the model
+            own the path at all.</p>
+
+          <h3>🔄 ReAct — reason, act, observe</h3>
+          <p>ReAct (Yao et al., ICLR 2023)
+            [<a href="https://arxiv.org/abs/2210.03629"
+              target="_blank" rel="noopener noreferrer">2</a>]
+            interleaves verbal reasoning traces with actions so the
+            model can <em>reason to act</em> and
+            <em>act to reason</em>. The loop:</p>
+          <ol>
+            <li>🧠 Interpret the current goal and evidence
+              (<em>Thought</em>)</li>
+            <li>🛠️ Select an action or tool
+              (<em>Action</em>)</li>
+            <li>⚙️ Execute it</li>
+            <li>👁️ Observe the result
+              (<em>Observation</em>)</li>
+            <li>🔁 Update the approach and repeat</li>
+          </ol>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="ReAct thought-action-observation loop">
+            <pre class="mermaid">
+flowchart LR
+  T["💭 Thought"] --> A["🛠️ Action"]
+  A --> O["👁️ Observation"]
+  O --> T
+            </pre>
+          </div>
+
+          <p><strong>WHERE.</strong> The correct next step depends on
+            external information — support tickets, docs search,
+            codebase inspection, browser tasks. Example: inspect an
+            order → observe it already shipped → consult refund policy
+            → propose the right resolution.</p>
+          <p><strong>TRADE-OFFS.</strong> High latency, token use, error
+            accumulation, runaway loops. In production, keep reasoning
+            internal; log actions, observations, and decisions as
+            structured traces. Cap turns. Prefer structured tool
+            arguments over free-form “thought” leaking into the UI.</p>
+
+          <h3>🗺️ Plan-and-Execute</h3>
+          <p>Separate strategy from tactics. A planner creates a list or
+            graph of subtasks. Executors complete them. The planner may
+            revise based on results.</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Plan-and-Execute with optional replan">
+            <pre class="mermaid">
+flowchart TB
+  GOAL["🎯 Goal"] --> PLANNER["🗺️ Planner"]
+  PLANNER --> GRAPH["📋 Task graph"]
+  GRAPH --> E1["⚙️ Executor A"]
+  GRAPH --> E2["⚙️ Executor B"]
+  E1 --> RES["📦 Results"]
+  E2 --> RES
+  RES --> CHECK{"🧪 Still valid?"}
+  CHECK -->|yes| DONE["🏁 Combine"]
+  CHECK -->|stale| PLANNER
+            </pre>
+          </div>
+          <ul>
+            <li>✅ Better organization for long tasks</li>
+            <li>✅ Easier parallelization and progress tracking</li>
+            <li>✅ Specialized models for plan vs execute</li>
+            <li>✅ Per-step retry and approval</li>
+            <li>⚠️ Original plan goes stale</li>
+            <li>⚠️ Planning adds latency and tokens</li>
+            <li>⚠️ A bad plan poisons many downstream tasks</li>
+            <li>⚠️ Overkill for simple tasks</li>
+          </ul>
+          <p>Strong implementations support
+            <strong>incremental replanning</strong> — patch the graph,
+            do not regenerate it from scratch after every observation.</p>
+
+          <h3>🪞 Reflection / self-correction</h3>
+          <p>After a candidate answer or action, an evaluator scores it.
+            The agent revises. Reflexion
+            [<a href="https://arxiv.org/abs/2303.11366"
+              target="_blank" rel="noopener noreferrer">4</a>]
+            stores those verbal critiques in an episodic buffer so later
+            trials improve <em>without</em> weight updates — linguistic
+            RL.</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Reflection evaluator-optimizer loop">
+            <pre class="mermaid">
+flowchart TB
+  GEN["✍️ Generate candidate"] --> EV["🧪 Evaluate vs rubric"]
+  EV --> OK{"✅ Pass?"}
+  OK -->|yes| STOP["🏁 Accept"]
+  OK -->|no, under N| FIX["🪞 Critique + revise"]
+  FIX --> GEN
+  OK -->|budget hit| FAIL["🚨 Escalate / best-so-far"]
+            </pre>
+          </div>
+
+          <p>Reflection works when grounded in
+            <strong>objective signals</strong>: tests, schema
+            validation, policy rules, compilers, citations. Asking the
+            same model to “check itself” with no external signal often
+            reinforces the original mistake and burns tokens. Cap
+            attempts. Prefer a cheaper/different evaluator than the
+            generator when you can.</p>
+
+          <h3>🪓 Goal decomposition</h3>
+          <p>Turn a wish into a task spec before you turn it into
+            steps:</p>
+          <ul>
+            <li>🏁 Desired final state</li>
+            <li>🚧 Constraints and permissions</li>
+            <li>📥 Required inputs</li>
+            <li>🛠️ Available tools</li>
+            <li>🔗 Dependencies</li>
+            <li>✅ Success criteria</li>
+            <li>🚨 Failure and escalation conditions</li>
+          </ul>
+          <p>Subtasks should map to a tool or a verifiable operation —
+            “retrieve account status,” “validate schema” — not “investigate
+            the problem.” Represent complex work as a
+            <strong>dependency graph</strong>, not only a linear
+            checklist. After each step, update state and drop steps that
+            are no longer necessary.</p>
+
+          <h3>🌳 Chain vs tree vs graph</h3>
+          <p>How the model (or orchestrator)
+            <em>explores</em> the plan:</p>
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>Shape</th>
+                <th>What it is</th>
+                <th>When</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>⛓️ Chain-of-thought
+                  [<a href="https://arxiv.org/abs/2201.11903"
+                    target="_blank" rel="noopener noreferrer">8</a>]</td>
+                <td>One main path of intermediate reasoning</td>
+                <td>Mostly sequential, low branching</td>
+              </tr>
+              <tr>
+                <td>🌳 Tree-of-thought
+                  [<a href="https://arxiv.org/abs/2305.10601"
+                    target="_blank" rel="noopener noreferrer">3</a>]</td>
+                <td>Generate candidate “thoughts,” score, search
+                  (BFS/DFS), backtrack</td>
+                <td>Search problems, diagnosis, early choices that
+                  dead-end. Game of 24: CoT 4% vs ToT 74% on GPT-4</td>
+              </tr>
+              <tr>
+                <td>🕸️ Graph planning</td>
+                <td>Shared deps, cycles, parallel branches, reusable
+                  intermediates</td>
+                <td>Software changes, research, multi-agent
+                  coordination, LangGraph-style state</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Chain of thought versus tree of thought versus graph planning">
+            <pre class="mermaid">
+flowchart LR
+  subgraph COT["⛓️ Chain"]
+    C1["A"] --> C2["B"] --> C3["C"]
+  end
+  subgraph TOT["🌳 Tree"]
+    T0["Start"] --> T1["A"]
+    T0 --> T2["B"]
+    T1 --> T3["A1"]
+    T1 --> T4["A2"]
+  end
+  subgraph GP["🕸️ Graph"]
+    G1["Parse"] --> G2["Plan"]
+    G1 --> G3["Retrieve"]
+    G2 --> G4["Edit"]
+    G3 --> G4
+    G4 --> G2
+  end
+            </pre>
+          </div>
+
+          <p>Tree and graph search improve quality and explode cost. Use
+            the simplest representation that meets the reliability bar.
+            Store <strong>structured plans</strong>; do not stream raw
+            private reasoning to users.</p>
+
+          <h2>🧱 Workflow patterns — stay on the ladder</h2>
+          <p>Anthropic’s production catalog
+            [<a href="https://www.anthropic.com/engineering/building-effective-agents"
+              target="_blank" rel="noopener noreferrer">1</a>]
+            is five composable
+            <em>workflows</em> built on an
+            <strong>augmented LLM</strong> (retrieval + tools + memory).
+            These are not agents. Code still owns the path. Use them
+            until you genuinely cannot hardcode the next step.</p>
+
+          <h3>⛓️ Prompt chaining</h3>
+          <p>Decompose into a fixed sequence. Output of call
+            <em>n</em> is input to
+            <em>n+1</em>. Put a
+            <strong>programmatic gate</strong> (schema, regex, cheap
+            classifier) between steps so a bad intermediate cannot
+            poison the rest.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Prompt chaining with a validation gate">
+            <pre class="mermaid">
+flowchart LR
+  IN["📥 Input"] --> L1["🧠 Step 1"]
+  L1 --> GATE{"🚪 Gate"}
+  GATE -->|pass| L2["🧠 Step 2"]
+  GATE -->|fail| STOP["🛑 Halt"]
+  L2 --> OUT["📤 Output"]
+            </pre>
+          </div>
+          <p><strong>WHERE.</strong> Outline → (check outline) → draft.
+            Marketing copy → translate. Each call is an easier task;
+            you trade latency for accuracy.</p>
+
+          <h3>🚏 Routing</h3>
+          <p>Classify the input, dispatch to a specialized prompt / tool
+            set / model. Optimizing one category no longer hurts the
+            others.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Routing workflow">
+            <pre class="mermaid">
+flowchart TB
+  IN["📥 Request"] --> R["🧭 Router"]
+  R --> B["💬 Billing worker"]
+  R --> T["🔧 Tech worker"]
+  R --> G["🤝 General worker"]
+            </pre>
+          </div>
+          <p><strong>WHERE.</strong> Support intents. Easy questions →
+            small model; hard ones → large model. A router is a
+            <em>classifier</em>; a manager (later) also plans and
+            aggregates.</p>
+
+          <h3>⚡ Parallelization</h3>
+          <p>Two flavors:</p>
+          <ul>
+            <li>✂️ <strong>Sectioning</strong> — independent subtasks at
+              the same time (speed + focused attention)</li>
+            <li>🗳️ <strong>Voting</strong> — same task, many attempts,
+              aggregate (confidence)</li>
+          </ul>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Parallelization sectioning and voting">
+            <pre class="mermaid">
+flowchart TB
+  IN["📥 Task"] --> W1["🧠 Worker 1"]
+  IN --> W2["🧠 Worker 2"]
+  IN --> W3["🧠 Worker 3"]
+  W1 --> AGG["🧩 Aggregate / vote"]
+  W2 --> AGG
+  W3 --> AGG
+  AGG --> OUT["📤 Result"]
+            </pre>
+          </div>
+          <p><strong>WHERE.</strong> Guardrail model in parallel with the
+            answer model. Vulnerability review with several prompts.
+            Evals that score different dimensions separately.</p>
+
+          <h3>👷 Orchestrator–workers</h3>
+          <p>A central LLM
+            <em>dynamically</em> breaks the task, delegates, synthesizes.
+            Topologically similar to parallelization; the difference is
+            flexibility — subtasks are not hardcoded
+            [<a href="https://www.anthropic.com/engineering/building-effective-agents"
+              target="_blank" rel="noopener noreferrer">1</a>].</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Orchestrator workers workflow">
+            <pre class="mermaid">
+flowchart TB
+  GOAL["🎯 Goal"] --> ORCH["👷 Orchestrator"]
+  ORCH --> W1["⚙️ Worker A"]
+  ORCH --> W2["⚙️ Worker B"]
+  ORCH --> W3["⚙️ Worker C"]
+  W1 --> SYN["🧩 Synthesize"]
+  W2 --> SYN
+  W3 --> SYN
+            </pre>
+          </div>
+          <p><strong>WHERE.</strong> Multi-file code edits. Research
+            across unknown sources. This is the closest workflow to a
+            true agent — still wrap it in budgets and structured
+            returns.</p>
+
+          <h3>🪞 Evaluator–optimizer</h3>
+          <p>Generator writes; evaluator critiques; loop until the
+            rubric passes or the budget dies. Same shape as Reflection,
+            but the path is a workflow you designed, not an open-ended
+            ReAct wander.</p>
+          <p>Two signs of fit
+            [<a href="https://www.anthropic.com/engineering/building-effective-agents"
+              target="_blank" rel="noopener noreferrer">1</a>]:
+            (1) human feedback would demonstrably improve the output;
+            (2) an LLM can provide that feedback. Literary translation,
+            iterative search, code that has tests.</p>
+
+          <aside class="two-cents-aside">
+            <p>🧰 <strong>ACI, not just HCI.</strong> Anthropic spent more
+              time optimizing
+              <em>tools</em> than the SWE-bench agent prompt
+              [<a href="https://www.anthropic.com/engineering/building-effective-agents"
+                target="_blank" rel="noopener noreferrer">1</a>].
+              Treat the agent–computer interface like a junior-dev
+              API: obvious names, example usage, poka-yoke arguments
+              (absolute paths, not relative), formats close to natural
+              text (markdown over JSON-escaped code). Bad tool schemas
+              create “dumb” agents.</p>
+          </aside>
+
+          <h2>🔧 Tool use, MCP, and trust</h2>
+          <p>Treat the model’s function call as an
+            <strong>untrusted request</strong>, not an authorized
+            command.</p>
+
+          <figure class="two-cents-diagram agent-pipeline" role="img"
+            aria-label="Secure tool-calling pipeline from untrusted model proposal through sandbox execution and tracing">
+            <ol class="agent-pipeline-steps">
+              <li>
+                <span class="agent-pipeline-num">1</span>
+                <div>
+                  <strong>🧠 Model proposes</strong>
+                  <span>untrusted function call — not a command</span>
+                </div>
+              </li>
+              <li>
+                <span class="agent-pipeline-num">2</span>
+                <div>
+                  <strong>📐 Typed schema</strong>
+                  <span>allowlisted tools + JSON Schema only</span>
+                </div>
+              </li>
+              <li>
+                <span class="agent-pipeline-num">3</span>
+                <div>
+                  <strong>✅ Validate / normalize</strong>
+                  <span>reject malformed or out-of-range args</span>
+                </div>
+              </li>
+              <li>
+                <span class="agent-pipeline-num">4</span>
+                <div>
+                  <strong>🔐 AuthN + AuthZ</strong>
+                  <span>user identity and resource ACL, independently</span>
+                </div>
+              </li>
+              <li>
+                <span class="agent-pipeline-num">5</span>
+                <div>
+                  <strong>📏 Least privilege</strong>
+                  <span>scoped credentials, not the model’s wishlist</span>
+                </div>
+              </li>
+              <li class="agent-pipeline-fork">
+                <span class="agent-pipeline-num">6</span>
+                <div>
+                  <strong>⚠️ Sensitive?</strong>
+                  <span>payments, deletes, messages, infra, regulated calls</span>
+                  <div class="agent-pipeline-branch">
+                    <p><em>yes</em> → 🙋 Human approve — bind to this exact action; expire if state drifts</p>
+                    <p><em>no</em> → continue</p>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <span class="agent-pipeline-num">7</span>
+                <div>
+                  <strong>📦 Sandbox execute</strong>
+                  <span>isolated runtime, timeouts, idempotency keys</span>
+                </div>
+              </li>
+              <li>
+                <span class="agent-pipeline-num">8</span>
+                <div>
+                  <strong>🧹 Sanitize result</strong>
+                  <span>strip secrets and hostile instructions before the model sees them</span>
+                </div>
+              </li>
+              <li>
+                <span class="agent-pipeline-num">9</span>
+                <div>
+                  <strong>📜 Trace</strong>
+                  <span>log request, policy decision, and outcome</span>
+                </div>
+              </li>
+            </ol>
+          </figure>
+          <p>Also: allowlists, idempotency keys, timeouts, rate limits,
+            output-size caps, and protection against SSRF, SQL
+            injection, path traversal, and command injection. Expose
+            <strong>high-level parameterized tools</strong> (“refund
+            order”) rather than arbitrary shells or SQL.</p>
+
+          <h3>🔌 Model Context Protocol</h3>
+          <p>MCP
+            [<a href="https://modelcontextprotocol.io"
+              target="_blank" rel="noopener noreferrer">5</a>]
+            is an open JSON-RPC protocol for connecting LLM apps to
+            external context. Three roles:</p>
+          <ul>
+            <li>🏠 <strong>Host</strong> — the app the user sees (IDE,
+              desktop, your agent)</li>
+            <li>📎 <strong>Client</strong> — connector inside the host,
+              1:1 with a server</li>
+            <li>🖥️ <strong>Server</strong> — exposes capabilities</li>
+          </ul>
+          <p>Servers offer:</p>
+          <ul>
+            <li>🛠️ <strong>Tools</strong> — model-controlled functions
+              with JSON Schema (side effects allowed)</li>
+            <li>📄 <strong>Resources</strong> — application-controlled,
+              mostly read-only context (files, schemas, docs)</li>
+            <li>📝 <strong>Prompts</strong> — user-controlled templates
+              for a domain workflow</li>
+          </ul>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="MCP host client server">
+            <pre class="mermaid">
+flowchart LR
+  U["👤 User"] --> HOST["🏠 Host / agent"]
+  HOST --> C1["📎 Client"]
+  HOST --> C2["📎 Client"]
+  C1 --> S1["🖥️ MCP server<br/>tools + resources"]
+  C2 --> S2["🖥️ MCP server<br/>prompts + data"]
+            </pre>
+          </div>
+
+          <p>MCP standardizes
+            <em>discovery and message exchange</em>. It does
+            <strong>not</strong> make tools safe. Auth, consent,
+            sandboxing, and trust policy still live in the host and
+            server. A random MCP server is a supply-chain decision.</p>
+
+          <h2>🕸️ Frameworks and state</h2>
+          <p>Frameworks (LangChain, LangGraph, CrewAI, AutoGen/AG2,
+            OpenAI Agents SDK, Claude Agent SDK) are accelerators. They
+            are also abstraction traps
+            [<a href="https://www.anthropic.com/engineering/building-effective-agents"
+              target="_blank" rel="noopener noreferrer">1</a>].
+            Start with the API. If you use a framework, you should be
+            able to draw the underlying calls.</p>
+          <ul>
+            <li>🔗 <strong>LangChain</strong> — models, prompts, tools,
+              retrievers, message history. Fine for pipelines. Do not
+              hide business state, permissions, or checkpoints inside
+              a memory abstraction you cannot inspect.</li>
+            <li>🕸️ <strong>LangGraph</strong>
+              [<a href="https://docs.langchain.com/oss/python/langgraph/checkpointers"
+                target="_blank" rel="noopener noreferrer">9</a>]
+              — stateful graph (Pregel-style), not a DAG. Nodes read
+              and update a typed state. Edges can be conditional.
+              Cycles are the point: ReAct, retries, HITL pauses.
+              Checkpointers snapshot state each super-step → resume,
+              time-travel, crash recovery. Requires recursion limits,
+              reducers, and terminal states.</li>
+            <li>👥 <strong>CrewAI / AutoGen</strong> — role-playing
+              multi-agent: sequential handoffs, manager delegation,
+              group chat. Benefit is specialization. Risks:
+              duplicated work, context loss, cost, undebuggable
+              transcripts.</li>
+            <li>📦 <strong>OpenAI Agents SDK</strong> — hosted loop with
+              handoffs, guardrails, tracing. Convenient on-rails;
+              still version the whole config, not just the model.</li>
+          </ul>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="DAG pipeline versus LangGraph cyclic state">
+            <pre class="mermaid">
+flowchart LR
+  subgraph DAG["➡️ DAG / chain"]
+    D1["A"] --> D2["B"] --> D3["C"]
+  end
+  subgraph LG["🔄 Stateful graph"]
+    L1["Reason"] --> L2["Tool"]
+    L2 --> L3["Update state"]
+    L3 --> L1
+    L3 --> L4["HITL"]
+    L4 --> L1
+  end
+            </pre>
+          </div>
+
+          <p>A DAG assumes an acyclic, predetermined sequence. An agent
+            graph
+            <em>revisits</em> nodes based on updated state. That
+            flexibility is why you need explicit stop conditions — an
+            agent that can always return “needs more investigation”
+            will.</p>
+
+          <h2>👥 Multi-agent systems</h2>
+          <p>Add a second agent only when roles are clearly separable or
+            work is independently parallelizable. Otherwise you bought a
+            meeting.</p>
+
+          <h3>👔 Manager–worker vs 🚏 router–worker</h3>
+          <ul>
+            <li>🚏 <strong>Router</strong> — classify, send to
+              <em>one</em> specialist. Light.</li>
+            <li>👔 <strong>Manager</strong> — plan, delegate, dependency
+              management, retries, aggregation, conflict resolution.
+              Heavy.</li>
+          </ul>
+          <p>Workers should receive
+            <strong>minimal, task-specific context</strong> and return
+            structured payloads: result, evidence, uncertainty, errors,
+            recommended next action. The manager
+            <em>validates</em> workers; it does not automatically trust
+            them.</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Manager worker multi-agent pattern">
+            <pre class="mermaid">
+flowchart TB
+  U["👤 Goal"] --> M["👔 Manager"]
+  M --> W1["🔬 Research"]
+  M --> W2["💻 Coder"]
+  M --> W3["🧪 Reviewer"]
+  W1 -->|"structured result"| M
+  W2 -->|"structured result"| M
+  W3 -->|"structured result"| M
+  M --> F["🏁 Final"]
+            </pre>
+          </div>
+
+          <h3>📨 Safe handoffs</h3>
+          <p>Prefer structured messages over dumping the full
+            transcript. A handoff should contain:</p>
+          <ul>
+            <li>🆔 Task ID and parent goal</li>
+            <li>🎯 Exact subtask</li>
+            <li>📌 Necessary facts only</li>
+            <li>🛠️ Allowed tools and resources</li>
+            <li>🏷️ Data sensitivity labels</li>
+            <li>📐 Expected output schema</li>
+            <li>⏱️ Deadline / resource budget</li>
+            <li>✅ Completion criteria</li>
+          </ul>
+          <p>Redact secrets; pass access-controlled IDs. Authorize each
+            receiving agent independently. Version shared state with
+            provenance — which agent produced this fact, from which
+            source.</p>
+
+          <h3>♾️ Loops and circular handoffs</h3>
+          <p>Enforce at the orchestrator, not in the prompt:</p>
+          <ul>
+            <li>🔢 Max turns and handoff depth</li>
+            <li>🔁 Per-agent retry limits</li>
+            <li>⏱️ Global time and token budgets</li>
+            <li>👣 Visited-state / handoff history</li>
+            <li>🧬 Duplicate-task detection (hash normalized task +
+              state)</li>
+            <li>📈 Progress metrics that must move</li>
+            <li>🏁 Explicit terminal states</li>
+            <li>🙋 Escalate after repeated failure</li>
+          </ul>
+
+          <h3>🎒 Skills</h3>
+          <p>A <strong>skill</strong> is a packaged capability:
+            instructions, tool defs, examples, validators, domain
+            knowledge. Do not stuff every tool into the system prompt.
+            Load on demand:</p>
+          <ol>
+            <li>🧭 Classify intent</li>
+            <li>🔎 Search a skill registry (metadata / embeddings)</li>
+            <li>🔐 Filter by user and tenant permissions</li>
+            <li>📥 Load instructions + tools</li>
+            <li>📦 Execute in a restricted environment</li>
+            <li>✅ Validate output</li>
+            <li>📜 Record skill version in the trace</li>
+          </ol>
+          <p>Skills should be trusted/signed, versioned, tested, and
+            permission-scoped. A skill file is prompt injection with a
+            README if you load it from the open internet.</p>
+
+          <h3>🧪 “Deterministic” multi-agent tests</h3>
+          <p>The LLM is probabilistic. Make the
+            <em>contract around it</em> deterministic:</p>
+          <ul>
+            <li>📐 Fixed state schemas and tool interfaces</li>
+            <li>🌡️ Low temperature where routing matters</li>
+            <li>📌 Pinned model, prompt, tool, and skill versions</li>
+            <li>🎭 Mocked tools and replayable fixtures</li>
+            <li>🌱 Seeded execution where the API allows</li>
+            <li>🛑 Explicit routing and stopping policies</li>
+            <li>🥇 Golden scenarios + property / invariant tests</li>
+            <li>📜 Trace comparison and repeated-run stability</li>
+          </ul>
+          <p>Measure separately: task correctness, route consistency,
+            tool selection, argument accuracy, steps, cost, latency,
+            policy compliance. Goal is
+            <strong>controlled variability</strong>, not pretending the
+            whole system is a pure function.</p>
+
+          <h2>🧠 Memory, state, and context</h2>
+          <p>Two memories, one trap:</p>
+          <ul>
+            <li>🧾 <strong>Working memory</strong> — this run: goal,
+              recent messages, plan, tool results, pending calls.
+              Lives in the prompt and/or a workflow state store.
+              Precise and temporary.</li>
+            <li>📚 <strong>Long-term semantic memory</strong> —
+              cross-session facts, preferences, prior decisions.
+              External store, retrieved when relevant. Selectively
+              written, permission-aware, provenance-tracked,
+              revisable.</li>
+          </ul>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Working memory versus long-term memory">
+            <pre class="mermaid">
+flowchart TB
+  RUN["▶️ Agent run"] --> WM["🧾 Working memory<br/>prompt + state store"]
+  RUN --> RET["🔎 Retrieve"]
+  LTM["📚 Long-term store<br/>profile / vectors / facts"] --> RET
+  RET --> WM
+  RUN --> WRITE["✍️ Validated write"]
+  WRITE --> LTM
+            </pre>
+          </div>
+
+          <h3>🧮 Context budget</h3>
+          <p>Assign tokens to buckets before the model sees anything:</p>
+          <ul>
+            <li>📜 System and policy (pinned — compaction cannot drop
+              these)</li>
+            <li>🎯 Current user request</li>
+            <li>💬 Recent interactions</li>
+            <li>🗺️ Active plan and state</li>
+            <li>📚 Retrieved evidence</li>
+            <li>🛠️ Tool results</li>
+            <li>📤 Reserved output space</li>
+          </ul>
+          <p>When you approach the limit: drop redundant tool output,
+            replace older turns with structured summaries, persist large
+            artifacts externally and pass
+            <strong>references</strong>. Limit retrieval count and
+            chunk size <em>before</em> data hits the model.</p>
+
+          <h3>🗜️ Compaction and chunking</h3>
+          <p>Chunk by semantic unit (turns, topics, tasks, documents,
+            time), not arbitrary character counts. Overlap a little so
+            references survive boundaries.</p>
+          <p>Compaction replaces old raw content with a structured
+            summary: confirmed facts, preferences, decisions +
+            rationale, open questions, completed actions, identifiers,
+            source refs. Hierarchical: recent turns stay detailed;
+            older sessions become task summaries; ancient history
+            becomes durable facts. Keep links to originals when
+            auditability matters. Compaction is
+            <strong>lossy on purpose</strong> — be honest about it.</p>
+
+          <h3>🐘 The agent that never forgets</h3>
+          <p>Permanent memory is not a feature; it is a liability
+            portfolio:</p>
+          <ul>
+            <li>🔐 Sensitive or stale data retention</li>
+            <li>🚪 Cross-user / cross-tenant leakage</li>
+            <li>⚖️ Privacy and deletion compliance (right to be
+              forgotten)</li>
+            <li>☠️ Memory poisoning via malicious inputs</li>
+            <li>📉 Irrelevant retrieval, slower vector search</li>
+            <li>💸 Larger prompts, higher cost</li>
+            <li>🧊 Personalization on outdated facts</li>
+          </ul>
+          <p>Need: retention policies, user controls, tenant isolation,
+            encryption, access logs, expiration, deletion, relevance
+            thresholds. More memory ≠ better agent.</p>
+
+          <h3>⚔️ Retrieval conflicts</h3>
+          <p>Rank by recency, source authority, confidence, and scope.
+            Current explicit user instructions normally override
+            inferred historical preferences. Verified records may
+            override an unsupported claim when the fact matters. Keep
+            value
+            <em>and</em> provenance — do not silently overwrite. For
+            high-impact clashes, ask:</p>
+          <p>“Your current request says X; the saved config says Y.
+            Which should I use?”</p>
+          <p>Memory is <strong>evidence</strong>, not truth.</p>
+
+          <h3>👤 Safe personalization across stateless sessions</h3>
+          <p>Keep the model call stateless. Store the profile
+            externally, user-scoped. Inject only relevant authorized
+            fields. Controls: strong identity, consent, field-level
+            ACL, encryption, minimization, expiration, user review +
+            deletion, provenance timestamps, separation of preferences
+            vs sensitive records. The model must not decide
+            <em>which user’s</em> memory to load.</p>
+
+          <h3>🦠 Memorization of undesirable behavior</h3>
+          <p>If a bad action, unsafe workaround, or injected “policy”
+            gets written to memory, retrieval will teach the next run
+            to repeat it. Example: a user convinces the agent that
+            approval is unnecessary; that sentence is stored as
+            procedure; later sessions skip HITL.</p>
+          <p>Mitigations: never learn security rules from conversation;
+            separate user facts from immutable system policy; validate
+            memory writes; trust + provenance scores; expire
+            low-confidence memories; review high-impact procedural
+            memories.</p>
+
+          <h3>💾 State store and vectors</h3>
+          <p>Durable transactional store as source of truth. Each run is
+            a state machine: run ID, version, current node, completed /
+            pending actions, tool results, approvals, retries,
+            timestamps. Want: atomic transitions, optimistic
+            concurrency, idempotency keys, checkpoint after material
+            steps, replication, queues with DLQ, worker leases, recover
+            from latest checkpoint, audit log. Side effects via outbox
+            so state and the real world cannot diverge.</p>
+          <p>For vectors: stable ID + version + timestamp + source on
+            every record. Write the primary row first; embed
+            asynchronously. Readers filter by active version. Dedup
+            with content hashes and novelty thresholds — long-running
+            agents otherwise embed the same observation forever,
+            inflating index size, latency, and prompt tokens.</p>
+
+          <h2>🏭 LLMOps for agents</h2>
+          <p>Classic MLOps versions datasets, training jobs, and model
+            artifacts
+            [<a href="mlops-deployment-strategies.html">10</a>].
+            <strong>LLMOps</strong> versions the
+            <em>behavior-producing system</em>:</p>
+          <ul>
+            <li>🧠 Foundation model + provider version</li>
+            <li>📜 System prompt</li>
+            <li>🛠️ Tools and schemas</li>
+            <li>📚 Retrieval / memory config</li>
+            <li>🕸️ Agent graph</li>
+            <li>🛡️ Guardrails and evaluators</li>
+            <li>📖 Knowledge sources</li>
+          </ul>
+          <p>The weights can sit still while a tool description change
+            wrecks production. Treat the whole bundle as one release
+            manifest.</p>
+
+          <h3>🙋 Human-in-the-loop</h3>
+          <p>Pause before irreversible, expensive, sensitive, or
+            low-confidence actions: external messages, payments,
+            deletes, infra changes, regulated decisions.</p>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Human in the loop checkpoint">
+            <pre class="mermaid">
+flowchart LR
+  A["🛠️ Proposed action"] --> CP["💾 Checkpoint"]
+  CP --> UI["🙋 Approval UI"]
+  UI -->|approve, unexpired| X["▶️ Execute"]
+  UI -->|deny| ALT["↩️ Replan"]
+  UI -->|state drifted| RE["🔄 Re-request"]
+            </pre>
+          </div>
+          <p>The screen shows: proposed action, exact target, arguments,
+            evidence, expected impact, risk, alternatives. Bind the
+            approval to the
+            <em>exact</em> action; expire it if state changed so an old
+            yes cannot authorize a mutated call.</p>
+
+          <h3>☠️ Prompt injection</h3>
+          <p>OWASP still ranks prompt injection as LLM01
+            [<a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/"
+              target="_blank" rel="noopener noreferrer">6</a>].
+            Retrieved pages, emails, PDFs, images, and tool outputs may
+            contain hostile instructions. For agents this is not a
+            parlor trick — it is
+            <strong>confused-deputy with tools</strong>.</p>
+          <ul>
+            <li>🧱 Separate trusted instructions from untrusted content;
+              label origin and trust</li>
+            <li>🚫 Never treat retrieved text as system policy</li>
+            <li>🛠️ Least-privilege tools for the current task</li>
+            <li>🛡️ External policy checks on every action</li>
+            <li>🙋 HITL for high-risk ops</li>
+            <li>🔐 Do not put secrets in the prompt</li>
+            <li>🌐 Restrict network and filesystem</li>
+            <li>🧹 Sanitize tool output; test with adversarial content</li>
+          </ul>
+          <p>Content can inform an answer. Content cannot grant itself
+            permissions.</p>
+
+          <h3>💣 Destructive actions</h3>
+          <p>Defense in depth, not a polite system prompt:</p>
+          <ul>
+            <li>👀 Read-only DB credentials by default</li>
+            <li>🧩 Parameterized tools, not arbitrary SQL</li>
+            <li>✅ Allowlisted statements and tables; AST-parse SQL;
+              reject DDL</li>
+            <li>🙋 HITL for authorized destruction</li>
+            <li>🧪 Transactions, dry-run previews, row and time limits</li>
+            <li>💾 Backups and audit logs</li>
+          </ul>
+
+          <h3>💸 Cost of the loop</h3>
+          <p>Optimize at the workflow, measure
+            <strong>cost per successful task</strong> (a cheap model
+            that retries forever is expensive):</p>
+          <ul>
+            <li>🧭 Route simple work to small models; large models for
+              hard planning / validation</li>
+            <li>🗜️ Compact context; retrieve fewer, better chunks</li>
+            <li>💾 Cache stable prompts, embeddings, tool results</li>
+            <li>⚡ Parallelize independent steps</li>
+            <li>📐 Structured tool outputs (less prose to re-ingest)</li>
+            <li>🛑 Stop when marginal gain is flat; cap reflection</li>
+            <li>🧱 Replace LLM decisions with rules where you can</li>
+          </ul>
+
+          <h3>📡 Tracing</h3>
+          <p>One trace ID per user request. Every model call, retrieval,
+            tool call, handoff, state transition, approval, and error
+            is a child span (LangSmith, OpenTelemetry, your tracer).
+            Record: model/prompt versions, sanitized I/O, tool name +
+            validated args, latency, tokens, cost, retrieved IDs,
+            routing decisions, retries, policy decisions, outcome,
+            user feedback. Redact before log. Dashboards: success,
+            latency, cost, loop rate, tool failures, escalations,
+            policy violations.</p>
+
+          <h3>🛡️ Layered guardrails</h3>
+          <div class="two-cents-diagram" role="img"
+            aria-label="Layered guardrails around an agent">
+            <pre class="mermaid">
+flowchart TB
+  IN["📥 Input checks"] --> PLAN["🗺️ Plan checks"]
+  PLAN --> TOOL["🛠️ Tool checks"]
+  TOOL --> OUT["📤 Output checks"]
+  OUT --> POST["🔍 Post-action checks"]
+  POST --> RUN["⏱️ Runtime<br/>budgets / kill switch"]
+            </pre>
+          </div>
+          <p>Prefer deterministic validators when the rule is
+            code-shaped. Model-based judges are for semantic quality —
+            calibrate them, version them, and never let a judge be the
+            only lock on a high-risk action.</p>
+
+          <h3>📺 Streaming UI</h3>
+          <p>Separate user-visible events from internal tokens. Publish
+            structured events: accepted, planning, searching, tool
+            running, waiting for approval, partial answer, retrying,
+            done/failed. Stream safe response text; show concise tool
+            status. Do
+            <strong>not</strong> stream private reasoning or unvalidated
+            tool dumps. Support cancel, reconnectable streams, ordered
+            event IDs, backpressure, resumable state.</p>
+
+          <h3>📦 Versioning, rollback, A/B</h3>
+          <p>Ship a manifest, canary it, keep the previous bundle
+            deployable. Pin in-flight runs to the version they started
+            on. For A/B: assign users or stable sessions so a
+            conversation does not switch mid-thread; change one major
+            factor at a time; pre-register metrics (completion,
+            accuracy, corrections, tool success, steps, latency, cost
+            per success, escalations, safety, satisfaction). Stratify
+            by task difficulty — a win on easy tickets can hide a
+            regression on hard ones. Sequence: replay → shadow →
+            limited live → rollback thresholds. Same traffic-strategy
+            instincts as model serving
+            [<a href="mlops-deployment-strategies.html">10</a>].</p>
+
+          <h2>🪙 My 2 cents</h2>
+          <p>Stop asking “should we use agents?” Ask the questions that
+            force an architecture:</p>
+          <ul>
+            <li>📋 Can I write the steps as a DAG
+              <em>today</em>?</li>
+            <li>💥 What is the blast radius of a wrong tool call?</li>
+            <li>🧪 How do I know the task is
+              <em>done</em> — test, schema, human?</li>
+            <li>💸 What is the token budget per successful outcome?</li>
+            <li>🙋 Who approves irreversible actions?</li>
+          </ul>
+          <p>Answer those and the pattern almost picks itself:</p>
+          <ul>
+            <li>💬 <strong>Single call + RAG</strong> when the path is a
+              paragraph</li>
+            <li>🧱 <strong>Workflow</strong> when the path is a recipe</li>
+            <li>🤖 <strong>Agent</strong> when the path is unknown
+              <em>and</em> the environment gives ground truth</li>
+            <li>👥 <strong>Multi-agent</strong> only when roles are
+              separable</li>
+            <li>🛡️ <strong>Permission envelope outside the model</strong>
+              — always</li>
+          </ul>
+          <p>Contracts that are non-optional:</p>
+          <ul>
+            <li>🎛️ Orchestrator-enforced budgets, not prompt manners</li>
+            <li>🎒 Skills over god-prompts</li>
+            <li>📜 Memory is evidence, never policy</li>
+            <li>📦 Version the whole agent config, not the weights
+              alone</li>
+            <li>📡 Traces you can replay; evals you can fail a release
+              on</li>
+          </ul>
+          <p>🌱 Treat agentic AI as something you
+            <strong>design</strong> — a control loop with a kill switch —
+            not a prompt you hope stays on the rails.</p>
+
+          <h2>📚 References</h2>
+          <ol class="two-cents-references">
+            <li id="ref-1">Erik S. and Barry Zhang, “Building effective
+              agents,” Anthropic Engineering,
+              <a href="https://www.anthropic.com/engineering/building-effective-agents"
+                target="_blank"
+                rel="noopener noreferrer">anthropic.com/engineering/building-effective-agents</a>
+            </li>
+            <li id="ref-2">Shunyu Yao et al., “ReAct: Synergizing
+              Reasoning and Acting in Language Models,” ICLR 2023,
+              <a href="https://arxiv.org/abs/2210.03629"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2210.03629</a>
+            </li>
+            <li id="ref-3">Shunyu Yao et al., “Tree of Thoughts:
+              Deliberate Problem Solving with Large Language Models,”
+              NeurIPS 2023,
+              <a href="https://arxiv.org/abs/2305.10601"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2305.10601</a>
+            </li>
+            <li id="ref-4">Noah Shinn et al., “Reflexion: Language Agents
+              with Verbal Reinforcement Learning,” NeurIPS 2023,
+              <a href="https://arxiv.org/abs/2303.11366"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2303.11366</a>
+            </li>
+            <li id="ref-5">Model Context Protocol, specification,
+              <a href="https://modelcontextprotocol.io"
+                target="_blank"
+                rel="noopener noreferrer">modelcontextprotocol.io</a>
+            </li>
+            <li id="ref-6">OWASP GenAI Security Project, “LLM01: Prompt
+              Injection,”
+              <a href="https://genai.owasp.org/llmrisk/llm01-prompt-injection/"
+                target="_blank"
+                rel="noopener noreferrer">genai.owasp.org/llmrisk/llm01-prompt-injection</a>
+            </li>
+            <li id="ref-7">Stuart Russell and Peter Norvig,
+              <em>Artificial Intelligence: A Modern Approach</em>,
+              <a href="http://aima.cs.berkeley.edu/"
+                target="_blank"
+                rel="noopener noreferrer">aima.cs.berkeley.edu</a>
+            </li>
+            <li id="ref-8">Jason Wei et al., “Chain-of-Thought Prompting
+              Elicits Reasoning in Large Language Models,” NeurIPS
+              2022,
+              <a href="https://arxiv.org/abs/2201.11903"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2201.11903</a>
+            </li>
+            <li id="ref-9">LangChain, “LangGraph checkpointers,”
+              <a href="https://docs.langchain.com/oss/python/langgraph/checkpointers"
+                target="_blank"
+                rel="noopener noreferrer">docs.langchain.com/…/langgraph/checkpointers</a>
+            </li>
+            <li id="ref-10">Amirhessam Tahmassebi, “MLOps Deployment
+              Strategies,” 2-Cents,
+              <a href="mlops-deployment-strategies.html">two-cents/mlops-deployment-strategies.html</a>
+            </li>
+            <li id="ref-11">LangChain, LangSmith tracing,
+              <a href="https://docs.smith.langchain.com/"
+                target="_blank"
+                rel="noopener noreferrer">docs.smith.langchain.com</a>
+            </li>
+            <li id="ref-12">OpenAI, Agents SDK,
+              <a href="https://openai.github.io/openai-agents-python/"
+                target="_blank"
+                rel="noopener noreferrer">openai.github.io/openai-agents-python</a>
+            </li>
+            <li id="ref-13">CrewAI, documentation,
+              <a href="https://docs.crewai.com/"
+                target="_blank"
+                rel="noopener noreferrer">docs.crewai.com</a>
+            </li>
+            <li id="ref-14">AG2 (AutoGen),
+              <a href="https://ag2.ai/"
+                target="_blank"
+                rel="noopener noreferrer">ag2.ai</a>
+            </li>
+            <li id="ref-15">OWASP, “Top 10 for Large Language Model
+              Applications,”
+              <a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+                target="_blank"
+                rel="noopener noreferrer">owasp.org/www-project-top-10-for-large-language-model-applications</a>
+            </li>
+          </ol>
+
+          <footer class="two-cents-article-footer">
+            <a href="../index.html#two-cents">← Back to 2-Cents</a>
+          </footer>
+
+        </article>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; <strong><span>Amirhessam Tahmassebi</span></strong>
+      </div>
+      <div class="credits">
+      </div>
+    </div>
+  </footer>
+  <!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/jquery/jquery.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="../assets/vendor/counterup/counterup.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/venobox/venobox.min.js"></script>
+  <script src="../assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="../assets/vendor/typed.js/typed.min.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+
+  <!-- Theme toggle -->
+  <script src="../assets/js/theme-toggle.js?v=20260716174000"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Mermaid diagrams -->
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    var theme =
+      document.documentElement.getAttribute("data-theme") === "dark"
+        ? "dark"
+        : "default";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: theme,
+      securityLevel: "loose",
+      flowchart: { curve: "basis", padding: 12 }
+    });
+  </script>
+
+</body>
+
+</html>

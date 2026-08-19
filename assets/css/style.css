@@ -1902,6 +1902,228 @@ section {
   height: auto;
 }
 
+.agent-anatomy {
+  padding: 1.35rem 1.2rem 1.4rem;
+}
+
+.agent-anatomy-orch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 0.95rem 1.15rem;
+  text-align: center;
+  background: rgba(20, 157, 221, 0.1);
+  border: 1.5px solid rgba(20, 157, 221, 0.45);
+  border-radius: 8px;
+}
+
+.agent-anatomy-orch strong {
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #173b6c;
+}
+
+.agent-anatomy-orch span {
+  font-size: 0.95rem;
+  color: #5a6a7a;
+}
+
+.agent-anatomy-links {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  height: 1.35rem;
+  margin: 0.15rem 0 0.35rem;
+}
+
+.agent-anatomy-links span {
+  display: block;
+  width: 2px;
+  height: 100%;
+  margin: 0 auto;
+  background: rgba(20, 157, 221, 0.55);
+}
+
+.agent-anatomy-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.85rem;
+}
+
+.agent-anatomy-group {
+  margin: 0;
+  padding: 0.85rem 0.8rem 0.75rem;
+  background: rgba(23, 59, 108, 0.04);
+  border: 1px solid rgba(23, 59, 108, 0.12);
+  border-radius: 8px;
+}
+
+.agent-anatomy-group h3 {
+  margin: 0 0 0.7rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(23, 59, 108, 0.1);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #173b6c;
+}
+
+.agent-anatomy-group ul {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.agent-anatomy-group li {
+  margin: 0;
+  padding: 0.7rem 0.75rem;
+  background: #fff;
+  border: 1px solid rgba(23, 59, 108, 0.12);
+  border-radius: 6px;
+}
+
+.agent-anatomy-group li + li {
+  margin-top: 0;
+}
+
+.agent-anatomy-group strong {
+  display: block;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #173b6c;
+}
+
+.agent-anatomy-group span {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #5a6a7a;
+}
+
+@media (max-width: 767px) {
+  .agent-anatomy-grid,
+  .agent-anatomy-links {
+    grid-template-columns: 1fr;
+  }
+
+  .agent-anatomy-links {
+    height: 0.85rem;
+  }
+
+  .agent-anatomy-links span:not(:first-child) {
+    display: none;
+  }
+}
+
+.agent-pipeline {
+  padding: 1.25rem 1.15rem 1.3rem;
+}
+
+.agent-pipeline-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.agent-pipeline-steps > li {
+  display: grid;
+  grid-template-columns: 2.15rem 1fr;
+  gap: 0.85rem;
+  align-items: start;
+  margin: 0;
+  padding: 0 0 1.05rem;
+  position: relative;
+}
+
+.agent-pipeline-steps > li:last-child {
+  padding-bottom: 0;
+}
+
+.agent-pipeline-steps > li + li {
+  margin-top: 0;
+}
+
+.agent-pipeline-steps > li::before {
+  content: "";
+  position: absolute;
+  left: 1.02rem;
+  top: 2.2rem;
+  bottom: 0;
+  width: 2px;
+  background: rgba(20, 157, 221, 0.35);
+}
+
+.agent-pipeline-steps > li:last-child::before {
+  display: none;
+}
+
+.agent-pipeline-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 999px;
+  background: rgba(20, 157, 221, 0.12);
+  border: 1.5px solid rgba(20, 157, 221, 0.5);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #173b6c;
+  z-index: 1;
+}
+
+.agent-pipeline-steps > li > div {
+  padding: 0.7rem 0.85rem 0.75rem;
+  background: #fff;
+  border: 1px solid rgba(23, 59, 108, 0.12);
+  border-radius: 8px;
+}
+
+.agent-pipeline-steps strong {
+  display: block;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #173b6c;
+}
+
+.agent-pipeline-steps span {
+  display: block;
+  margin-top: 0.18rem;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: #5a6a7a;
+}
+
+.agent-pipeline-branch {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.7rem;
+  padding: 0.65rem 0.75rem;
+  background: rgba(20, 157, 221, 0.06);
+  border-radius: 6px;
+}
+
+.agent-pipeline-branch p {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: #45505b;
+}
+
+.agent-pipeline-branch em {
+  font-style: normal;
+  font-weight: 700;
+  color: #173b6c;
+}
+
 .two-cents-references {
   margin: 0 0 1.25rem;
   padding-left: 1.25rem;
@@ -2873,6 +3095,72 @@ html[data-theme="dark"] .two-cents-article-body a:hover {
 html[data-theme="dark"] .two-cents-diagram {
   background: #121a2b;
   border-color: rgba(148, 163, 184, 0.14);
+}
+
+html[data-theme="dark"] .agent-anatomy-orch {
+  background: rgba(77, 184, 232, 0.12);
+  border-color: rgba(77, 184, 232, 0.4);
+}
+
+html[data-theme="dark"] .agent-anatomy-orch strong,
+html[data-theme="dark"] .agent-anatomy-group h3,
+html[data-theme="dark"] .agent-anatomy-group strong {
+  color: #e8eef8;
+}
+
+html[data-theme="dark"] .agent-anatomy-orch span,
+html[data-theme="dark"] .agent-anatomy-group span {
+  color: #94a3b8;
+}
+
+html[data-theme="dark"] .agent-anatomy-links span {
+  background: rgba(77, 184, 232, 0.55);
+}
+
+html[data-theme="dark"] .agent-anatomy-group {
+  background: rgba(15, 23, 42, 0.55);
+  border-color: rgba(148, 163, 184, 0.16);
+}
+
+html[data-theme="dark"] .agent-anatomy-group h3 {
+  border-bottom-color: rgba(148, 163, 184, 0.16);
+}
+
+html[data-theme="dark"] .agent-anatomy-group li {
+  background: #1a2438;
+  border-color: rgba(148, 163, 184, 0.16);
+}
+
+html[data-theme="dark"] .agent-pipeline-steps > li::before {
+  background: rgba(77, 184, 232, 0.35);
+}
+
+html[data-theme="dark"] .agent-pipeline-num {
+  background: rgba(77, 184, 232, 0.12);
+  border-color: rgba(77, 184, 232, 0.45);
+  color: #e8eef8;
+}
+
+html[data-theme="dark"] .agent-pipeline-steps > li > div {
+  background: #1a2438;
+  border-color: rgba(148, 163, 184, 0.16);
+}
+
+html[data-theme="dark"] .agent-pipeline-steps strong,
+html[data-theme="dark"] .agent-pipeline-branch em {
+  color: #e8eef8;
+}
+
+html[data-theme="dark"] .agent-pipeline-steps span {
+  color: #94a3b8;
+}
+
+html[data-theme="dark"] .agent-pipeline-branch {
+  background: rgba(77, 184, 232, 0.08);
+}
+
+html[data-theme="dark"] .agent-pipeline-branch p {
+  color: #c5d0de;
 }
 
 html[data-theme="dark"] .two-cents-diagram figcaption {

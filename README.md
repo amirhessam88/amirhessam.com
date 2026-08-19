@@ -51,7 +51,7 @@ The website features:
 - 💼 **Professional Experience** - CV, resume, and career highlights
 - 🎯 **Portfolio Projects** - Showcasing my work and applications
 - 🐍 **Python Libraries & Ventures** - Open-source tools and side projects
-- 🪙 **2-Cents** - Opinionated technical essays on engineering and MLOps
+- 🪙 **2-Cents** - Opinionated technical essays on engineering, MLOps, and agents
 - 🌓 **Light / Dark Theme** - Theme toggle with system preference support
 - 📞 **Contact Information** - Easy ways to get in touch
 
@@ -74,7 +74,8 @@ amirhessam.com/
 ├── 📄 index.html                 # Main homepage
 ├── 📁 two-cents/                 # Blog articles
 │   ├── 🏗️ building-an-org-monorepo.html
-│   └── 🚀 mlops-deployment-strategies.html
+│   ├── 🚀 mlops-deployment-strategies.html
+│   └── 🧠 agentic-ai-fundamentals.html
 ├── 📁 assets/
 │   ├── 🎨 css/                   # Stylesheets
 │   ├── 📊 data/                  # Statistics and data files
@@ -220,6 +221,7 @@ Opinionated posts live under [`two-cents/`](two-cents/). Conventions for new pos
 | --- | --- | --- |
 | [🏗️ Building an Org Monorepo](two-cents/building-an-org-monorepo.html) | ⚙️ Engineering | Org monorepo blueprint — apps/libs/services, dockers, cookiecutters, docs portal, CODEOWNERS, AI review agents, and GitHub *or* GitLab child pipelines |
 | [🚀 MLOps Deployment Strategies](two-cents/mlops-deployment-strategies.html) | 🤖 MLOps | Serving modes, deploy-code vs deploy-model, recreate → rolling → blue/green → canary → A/B → shadow, environments, and rules of thumb |
+| [🧠 Agentic AI Fundamentals](two-cents/agentic-ai-fundamentals.html) | 🧠 Agents | LLM vs workflow vs agent, ReAct / plan-and-execute / reflection, MCP, multi-agent, memory, guardrails, and LLMOps |
 
 ## 📝 Publications
 
