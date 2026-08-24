@@ -31,6 +31,7 @@ DEFAULTS = [
     ("Building an Org Monorepo", "og-building-an-org-monorepo.png"),
     ("MLOps Deployment Strategies", "og-mlops-deployment-strategies.png"),
     ("Agentic AI Fundamentals", "og-agentic-ai-fundamentals.png"),
+    ("Zero to One", "og-zero-to-one.png"),
 ]
 
 

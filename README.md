@@ -51,7 +51,7 @@ The website features:
 - 💼 **Professional Experience** - CV, resume, and career highlights
 - 🎯 **Portfolio Projects** - Showcasing my work and applications
 - 🐍 **Python Libraries & Ventures** - Open-source tools and side projects
-- 🪙 **2-Cents** - Opinionated technical essays on engineering, MLOps, and agents
+- 🪙 **2-Cents** - Opinionated essays on engineering, MLOps, agents, and startups
 - 🌓 **Light / Dark Theme** - Theme toggle with system preference support
 - 📞 **Contact Information** - Easy ways to get in touch
 
@@ -75,7 +75,8 @@ amirhessam.com/
 ├── 📁 two-cents/                 # Blog articles
 │   ├── 🏗️ building-an-org-monorepo.html
 │   ├── 🚀 mlops-deployment-strategies.html
-│   └── 🧠 agentic-ai-fundamentals.html
+│   ├── 🧠 agentic-ai-fundamentals.html
+│   └── 0️⃣➡️1️⃣ zero-to-one.html
 ├── 📁 assets/
 │   ├── 🎨 css/                   # Stylesheets
 │   ├── 📊 data/                  # Statistics and data files
@@ -190,7 +191,7 @@ The website includes an automated statistics system that fetches data from Googl
 - **Light / Dark Theme** toggle
 
 ### 🪙 2-Cents
-- **Opinionated technical essays** on engineering and MLOps
+- **Opinionated essays** on engineering, MLOps, agents, and startups
 - **Mermaid diagrams** for architecture and workflows
 - **Nested article nav** on every post page
 - Each article closes with a **🪙 My 2 cents** signature section
@@ -222,6 +223,7 @@ Opinionated posts live under [`two-cents/`](two-cents/). Conventions for new pos
 | [🏗️ Building an Org Monorepo](two-cents/building-an-org-monorepo.html) | ⚙️ Engineering | Org monorepo blueprint — apps/libs/services, dockers, cookiecutters, docs portal, CODEOWNERS, AI review agents, and GitHub *or* GitLab child pipelines |
 | [🚀 MLOps Deployment Strategies](two-cents/mlops-deployment-strategies.html) | 🤖 MLOps | Serving modes, deploy-code vs deploy-model, recreate → rolling → blue/green → canary → A/B → shadow, environments, and rules of thumb |
 | [🧠 Agentic AI Fundamentals](two-cents/agentic-ai-fundamentals.html) | 🧠 Agents | LLM vs workflow vs agent, ReAct / plan-and-execute / reflection, MCP, multi-agent, memory, guardrails, and LLMOps |
+| [0️⃣➡️1️⃣ Zero to One](two-cents/zero-to-one.html) | 🦄 Startups | 0→1 vs 1→n, monopoly vs competition, definite optimism, secrets, last-mover, and the seven questions — operating notes, not a book report |
 
 ## 📝 Publications
 
