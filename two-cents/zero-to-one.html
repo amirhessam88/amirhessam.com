@@ -1,0 +1,696 @@
+<!-- =======================================================
+	  * Amirhessam Tahmassebi
+	  * Email: admin@amirhessam.com
+	  * Website: www.amirhessam.com
+  ======================================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored === "light" || stored === "dark"
+          ? stored
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="color-scheme" content="light dark">
+
+  <title>Zero to One | 2-Cents</title>
+  <meta
+    content="A platform engineer's reading of Peter Thiel's Zero to One: 0→1 vs 1→n, monopoly vs competition, definite optimism, secrets, and the seven questions — operating notes, not a book report."
+    name="description">
+  <meta
+    content="Amirhessam Tahmassebi, Zero to One, Peter Thiel, Blake Masters, startups, monopoly, definite optimism, secrets, last mover, platform engineering"
+    name="keywords">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Amirhessam Tahmassebi">
+  <meta property="og:url"
+    content="https://www.amirhessam.com/two-cents/zero-to-one.html">
+  <meta property="og:title" content="Zero to One | 2-Cents">
+  <meta property="og:description"
+    content="0→1 vs 1→n, monopoly vs competition, definite optimism, secrets, and the seven questions — read as operating notes for builders, not a book report.">
+  <meta property="og:image"
+    content="https://www.amirhessam.com/assets/img/two-cents/og-zero-to-one.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="627">
+  <meta property="og:image:alt" content="Zero to One — 2-Cents">
+  <meta property="article:published_time" content="2026-08-24">
+  <meta property="article:tag" content="Startups">
+  <meta property="article:tag" content="Strategy">
+  <meta property="article:tag" content="Zero to One">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Zero to One | 2-Cents">
+  <meta name="twitter:description"
+    content="0→1 vs 1→n, monopoly vs competition, definite optimism, secrets, and the seven questions — operating notes for builders.">
+  <meta name="twitter:image"
+    content="https://www.amirhessam.com/assets/img/two-cents/og-zero-to-one.png">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Zero to One",
+    "description": "A platform engineer's reading of Peter Thiel's Zero to One: 0→1 vs 1→n, monopoly vs competition, definite optimism, secrets, and the seven questions — operating notes, not a book report.",
+    "datePublished": "2026-08-24",
+    "dateModified": "2026-08-24",
+    "mainEntityOfPage": "https://www.amirhessam.com/two-cents/zero-to-one.html",
+    "image": "https://www.amirhessam.com/assets/img/two-cents/og-zero-to-one.png",
+    "keywords": [
+      "Zero to One",
+      "Peter Thiel",
+      "startups",
+      "definite optimism",
+      "platform engineering",
+      "last mover"
+    ],
+    "author": {
+      "@type": "Person",
+      "name": "Amirhessam Tahmassebi",
+      "url": "https://www.amirhessam.com/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Amirhessam Tahmassebi",
+      "url": "https://www.amirhessam.com/"
+    }
+  }
+  </script>
+
+  <!-- Favicons -->
+  <link href="../assets/img/logo_color_clear.png" rel="icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="../assets/vendor/owl.carousel/assets/owl.carousel.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="d-flex flex-column">
+
+      <div class="profile">
+        <img src="../assets/img/profile-img.jpg" alt=""
+          class="img-fluid rounded-circle">
+        <h1 class="text-light"><a href="../index.html">Amirhessam Tahmassebi</a>
+        </h1>
+        <div class="social-links mt-3 text-center">
+          <a href="https://www.linkedin.com/in/amirhessam/" class="linkedin"><i
+              class="bx bxl-linkedin"></i></a>
+          <a href="https://scholar.google.com/citations?user=CnHZjFAAAAAJ&hl=en"
+            class="google-plus"><i class="bx bxl-google"></i></a>
+          <a href="https://github.com/amirhessam88" class="github"><i
+              class="bx bxl-github"></i></a>
+          <a href="https://slickml.com/" class="consulting"><i
+              class="icofont-learn"></i></a>
+          <a href="https://github.com/slickml" class="library"><i
+              class="icofont-brainstorming"></i></a>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="../index.html"><i class="bx bx-home"></i>
+              <span>Home</span></a></li>
+          <li class="nav-two-cents">
+            <a href="../index.html#two-cents"><i class="bx bx-bulb"></i>
+              <span>2-Cents</span></a>
+            <ul class="nav-two-cents-articles">
+              <li><a href="building-an-org-monorepo.html">🏗️ Building an Org
+                  Monorepo</a></li>
+              <li><a href="mlops-deployment-strategies.html">🚀 MLOps Deployment
+                  Strategies</a></li>
+              <li><a href="agentic-ai-fundamentals.html">🧠 Agentic AI
+                  Fundamentals</a></li>
+              <li class="active"><a href="zero-to-one.html">0️⃣➡️1️⃣ Zero to
+                  One</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav><!-- .nav-menu -->
+
+      <button type="button" class="theme-toggle" data-theme-toggle
+        aria-pressed="false" aria-label="Switch to dark theme"
+        title="Dark theme">
+        <i class="bx bx-moon theme-toggle-icon theme-toggle-icon-moon"
+          aria-hidden="true"></i>
+        <i class="bx bx-sun theme-toggle-icon theme-toggle-icon-sun"
+          aria-hidden="true"></i>
+        <span class="theme-toggle-label">Dark mode</span>
+      </button>
+
+      <button type="button" class="mobile-nav-toggle d-xl-none"><i
+          class="icofont-navigation-menu"></i></button>
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>🪙 2-Cents</h2>
+          <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#two-cents">2-Cents</a></li>
+            <li>Zero to One</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Article ======= -->
+    <section class="two-cents-article">
+      <div class="container">
+        <article class="two-cents-article-body">
+
+          <header class="two-cents-article-header">
+            <span class="two-cents-card-tag">🦄 Startups</span>
+            <h1>0️⃣➡️1️⃣ Zero to One</h1>
+            <p class="two-cents-article-meta">
+              <time datetime="2026-08-24">📅 August 24, 2026</time>
+              <span aria-hidden="true">·</span>
+              <span>⏱️ 14 min read</span>
+            </p>
+          </header>
+
+          <aside class="two-cents-inspiration">
+            <p>📖 <strong>Inspiration.</strong> In 2017, I was  a data science intern at a startup
+              in Palo Alto, CA, and my manager, <a
+                href="https://www.linkedin.com/in/arsia-takeh/"
+                target="_blank" rel="noopener noreferrer">Dr. Arsia
+                Takeh</a>, gifted me this book along with another
+              book, <em>Principles</em> by Ray Dalio. Peter Thiel's <em>Zero to One: Notes on Startups, or How to Build
+              the Future</em> (Crown Business, 2014)
+              [<a href="#ref-1">1</a>]. The book grew out of CS183 at
+              Stanford — class notes that escaped campus, then got
+              rewritten for everyone else. It is not a playbook. It is a
+              workout in first-principles thinking about
+              <em>creating</em> things, which is why it still pays rent
+              if you build platforms, ML systems, or products inside a
+              company that already exists.</p>
+          </aside>
+
+          <p class="two-cents-lead">💡 Copying takes the world from
+            <strong>1 to n</strong>. Creating something new takes it from
+            <strong>0 to 1</strong>. Most of what we congratulate as
+            “engineering excellence” in a large org is 1→n: another
+            pipeline, another service, another Slack bot (OMG Rivian loves that!!!) another dashboard of an idea that
+            already shipped. The scarce skill is 0→1 — a capability that
+            was not on last quarter’s menu. That is the book. The rest is
+            how not to chicken out of it.</p>
+
+          <h2>0️⃣➡️1️⃣ The only progress that compounds</h2>
+          <p>Thiel splits progress in two. <strong>Horizontal</strong>
+            progress is globalization: take a working pattern and stamp
+            it out. One typewriter → a hundred typewriters.
+            <strong>Vertical</strong> progress is technology: do
+            something that did not exist. Typewriter → word processor.
+            Both matter. Only one rewrites the plan of the world
+            [<a href="#ref-1">1</a>].</p>
+          <p>His contrarian answer to “what important truth do very few
+            people agree with you on?” is that most people think the
+            future will be defined by globalization, and he thinks
+            <em>technology</em> matters more. Spread yesterday’s tools
+            to every household and you do not get prosperity — you get a
+            bigger copy of a stalled present. New tools are how you get
+            more from less.</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Horizontal 1-to-n copying versus vertical 0-to-1 creation">
+            <pre class="mermaid">
+flowchart LR
+  subgraph H["➡️ Horizontal · 1 → n"]
+    T1["⌨️ Typewriter"] --> TN["⌨️ × n copies"]
+  end
+  subgraph V["⬆️ Vertical · 0 → 1"]
+    T2["⌨️ Typewriter"] --> WP["💻 Word processor"]
+  end
+            </pre>
+          </div>
+
+          <p>Translate that off the startup poster and onto a platform
+            team. Cloning another domain's dbt DAG is 1→n. A
+            <a href="building-an-org-monorepo.html">monorepo</a> that
+            makes the next ten DAGs cheap — shared libs, one CI
+            contract, path deps instead of version chase — is 0→1
+            <em>inside</em> a company. Same for
+            <a href="mlops-deployment-strategies.html">deployment</a>:
+            shipping the 14th “just pickle it / clone the cookiecutter” DAB is 1→n.
+            Designing serve → promote → shift so the 15th cannot page
+            you is 0→1.</p>
+          <aside class="two-cents-aside">
+            <p>🧭 <strong>Best practices are 1→n by definition.</strong>
+              They are what already worked for someone else. Use them as
+              floor, not ceiling. The moment your design doc is a collage
+              of vendor whitepapers, you are spreading old tools — not
+              building new ones.</p>
+          </aside>
+
+          <h2>❓ The contrarian question</h2>
+          <p>Thiel’s interview prompt is famous because it is rude to
+            consensus: <em>what important truth do very few people agree
+            with you on?</em> A good answer has the shape “most people
+            believe <em>x</em>, the opposite is true.” A bad answer is a
+            popular complaint with better adjectives. “School is
+            broken,” “America is exceptional,” “there is no God” — those
+            pick a side in a fight everyone already knows.</p>
+          <p>The question is not a party trick. It is a filter for
+            whether you can see a future that is not a remix of the
+            present. If your roadmap only contains things the industry
+            already agrees on, you do not have a plan. You have a
+            weather report.</p>
+          <p>Versions I actually use on platform and ML work:</p>
+          <ul>
+            <li>🧪 Most people believe <strong>more models = more
+              value</strong>. Opposite: one durable scoring path with
+              evals beats a zoo of notebooks.</li>
+            <li>🤖 Most people believe <strong>agents should replace
+              workflows</strong>. Opposite: climb the ladder only when
+              the rung below fails a measured eval — see
+              <a href="agentic-ai-fundamentals.html">Agentic AI
+              Fundamentals</a>.</li>
+            <li>📦 Most people believe a <strong>polyrepo is how
+              grown-ups scale</strong>. Opposite: shared code without a
+              graph is how grown-ups drown.</li>
+            <li>📏 Most people believe <strong>process is how you de-risk
+              the future</strong>. Opposite: process is what you do
+              when you refuse to pick a future.</li>
+          </ul>
+
+          <h2>😊 All happy companies are different</h2>
+          <p>Tolstoy, inverted: unhappy companies are alike — they
+            compete themselves to zero. Happy companies are monopolies
+            in the economic sense: they do something unique enough that
+            customers cannot comparison-shop them into a commodity
+            [<a href="#ref-1">1</a>]. Econ 101 taught us to worship
+            perfect competition. Perfect competition is also where
+            profits go to die. If you want time to invent, you need
+            slack. Slack comes from being the only one who does the
+            thing that matters.</p>
+          <p>Read “monopoly” as <strong>unique cash flows</strong>, not
+            “be evil” and not “call legal.” A search engine that is 10×
+            better, a payments rail that actually clears, a platform
+            that is the only sane way to ship a Data Asset Bundle —
+            those are monopolies of a niche. A team that wins an
+            internal beauty contest and then forks every other team’s
+            stack is just a fief.</p>
+          <h3>🏰 What durability actually looks like</h3>
+          <p>Thiel’s four traits of a business that still prints money
+            in year ten:</p>
+          <ul>
+            <li>🧬 <strong>Proprietary technology</strong> — aim for
+              ~10× on a dimension users feel, not 10% in a lab. Under
+              10×, the market hears “incremental” and stays put.</li>
+            <li>🕸️ <strong>Network effects</strong> — only if the product
+              is useful when the network is still tiny. Facebook
+              started as Harvard, not Earth. Platforms start as
+              <em>one</em> golden path, not a catalog.</li>
+            <li>📈 <strong>Economies of scale</strong> — software is
+              supposed to have this for free. Service-shaped “platforms”
+              (every team gets a custom snowflake) do not.</li>
+            <li>🍎 <strong>Brand</strong> — last, and only after
+              substance. Logo refresh is not a strategy or you won't be a better team if you call yourself "the core-data-team". Jobs came back
+              to Apple and killed product lines, not the other way
+              around.</li>
+          </ul>
+          <p>The sequencing is the part people skip. <strong>Start too
+            small.</strong> Own a niche so tight it looks unserious on a
+            slide — PayPal’s eBay PowerSellers, Amazon’s books, Tesla’s
+            roadster. Then walk into adjacent markets. “We will take 1%
+            of a $100B TAM” is usually a confession that you have not
+            found a starting point.</p>
+          <p>And skip the disruption cosplay. Disruption is an incumbent
+            word. If your identity is “we are against X,” you are still
+            in X’s frame. Create. Let the old thing be confused in
+            private.</p>
+          <p>🏁 First-mover is a tactic. <strong>Last-mover</strong> is
+            the goal: make the last great development in the category
+            and collect the cash flows. Capablanca on chess: study the
+            endgame first. Same for platforms. If your design cannot be
+            the way the org still works in 2036, you are renting a
+            launch week.</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Start in a tiny niche, expand adjacently, become the last mover">
+            <pre class="mermaid">
+flowchart LR
+  A["🐣 Tiny niche<br/>own most of it"] --> B["➡️ Adjacent market"]
+  B --> C["🏁 Last mover<br/>in the category"]
+            </pre>
+          </div>
+
+          <h2>🎟️ You are not a lottery ticket</h2>
+          <p>The luck-vs-skill debate is unfalsifiable for any one
+            company — you cannot rewind 2004 and start Facebook a
+            thousand times. Thiel’s move is to stop arguing about the
+            past and ask whether <em>your</em> future is something you
+            design or something that happens to you.</p>
+          <p>Cross definite/indefinite with optimistic/pessimistic and
+            you get four cultures. The labels he stuck on countries in
+            2014 are a cartoon — treat the 2×2 as a diagnostic for a
+            team, not a briefing deck.</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Four views of the future: definite vs indefinite crossed with optimistic vs pessimistic">
+            <pre class="mermaid">
+flowchart TB
+  subgraph OPT["😊 Optimistic"]
+    direction LR
+    IO["🌫️ Indefinite<br/>optionality, process"]
+    DO["🗺️ Definite<br/>plan, then build"]
+  end
+  subgraph PESS["😟 Pessimistic"]
+    direction LR
+    IP["🍷 Indefinite<br/>drift and delay"]
+    DP["🧱 Definite<br/>copy and brace"]
+  end
+            </pre>
+          </div>
+
+          <ul>
+            <li>🗺️ <strong>Definite optimism</strong> — the future is
+              better <em>if we build it</em>. Apollo, interstate
+              highways, a written architecture for the next 24 months.
+              Engineers, not optionality priests.</li>
+            <li>🌫️ <strong>Indefinite optimism</strong> — the future is
+              better, somehow, so keep doors open. Résumés, portfolios,
+              more OKRs than plans (i.e. RVTech's "core-data-team" 😂), finance as a substitute for
+              invention. This is the default of late-career process
+              culture.</li>
+            <li>🧱 <strong>Definite pessimism</strong> — the future is
+              worse and known, so copy what already worked and extract.
+              A 1→n machine with a Gantt chart.</li>
+            <li>🍷 <strong>Indefinite pessimism</strong> — the future is
+              worse and foggy, so wait, hedge, and consume. Kick the
+              can. Beautiful vacation policy, no product.</li>
+          </ul>
+          <p>Indefinite optimism is the one that infects competent orgs.
+            Nobody will say “we have no plan.” They will say “we are
+            staying agile,” “we are platform-agnostic,” “we should not
+            pick winners.” Then you get six half-started feature stores
+            and a steering committee. A definite plan can be wrong — you
+            can update it. An indefinite process cannot be wrong,
+            because it never claimed a destination.</p>
+          <aside class="two-cents-aside">
+            <p>🎰 <strong>Power law is fund math, not career math.</strong>
+              Venture returns sit in one or two names. That is why a
+              fund diversifies. <em>You</em> are not a twenty-company
+              portfolio. Your leverage is the opposite: pick the one
+              0→1 bet you can actually finish. Diversifying your
+              attention is how staff engineers become slides.</p>
+          </aside>
+
+          <h2>🔐 Secrets</h2>
+          <p>If the world were efficient, every idea would already be
+            priced in and startups would be a lottery. Thiel’s claim is
+            that important truths are still lying around — not mystic
+            ones, just <em>unsound</em> ones: things that are true, that
+            matter, that the crowd has not licensed yet. Conventions
+            look like knowledge because they are popular. Secrets look
+            like mistakes until they ship.</p>
+          <p>How you hunt them: look where people are not looking.
+            Nature of nature (physics, biology) or nature of people
+            (what they say vs what they do). The second is underrated in
+            platform work. Everyone <em>says</em> they want a
+            self-service ML platform. Watch what they actually do when
+            a YAML file is the onboarding. The secret is often
+            “distribution is the product.”</p>
+          <p>What you do with a secret: tell it to the smallest group
+            that can build it, then go. A secret that needs a town hall
+            is no longer a secret — it is a trend, and you are late.</p>
+
+          <h2>🧱 Foundations, mafia, sales</h2>
+          <p>Thiel is blunt on beginnings because they do not get a
+            retry. Cofounder alignment is a marriage, not a stand-up.
+            Ownership, possession, and control are three different
+            knobs — equity, day-to-day, and governance — and startups
+            die when they are assigned to the wrong people. Cash now vs
+            equity later is a culture test: if nobody wants the upside,
+            they do not believe the plan.</p>
+          <p>Culture as a “mafia”: not crime — a specific mission,
+            high trust, low politics, each person doing
+            <em>one</em> thing the company actually needs. Recruiting is
+            not “we have ping-pong.” It is “this is the conspiracy, here
+            is your unique role.” Hoodies are not a strategy. A
+            sentence that is true only for <em>this</em> team is.</p>
+          <p>And then the part nerds skip: <strong>everybody sells</strong>.
+            Distribution is not beneath the work. Complex sales, personal
+            sales, marketing, viral loops — pick the one your product
+            actually has. “If you build it they will come” is a eulogy.
+            Inside a company this is even more true. A platform with no
+            first ten teams, no scaffold, no office hours, no opinionated
+            golden path is a ghost town with great Terraform.</p>
+
+          <h2>🤝 Man and machine</h2>
+          <p>The 2014 chapter that aged in public. Thiel’s line: computers
+            are <strong>complements</strong>, not substitutes. PayPal’s
+            fraud stack was humans plus models — neither won alone.
+            The substitution story (“AI will take the jobs, then the
+            companies”) makes good keynotes and bad architectures.</p>
+          <p>2026 update: models can now <em>act</em>, not just score.
+            That does not repeal complementarity. It moves the boundary.
+            Humans own irreversible actions, permissions, and the
+            definition of done. Models draft, retrieve, route, and try
+            the next tool call inside a budget. The
+            <a href="agentic-ai-fundamentals.html">agentic map</a> is
+            that chapter with a kill switch: workflow when the path is
+            a recipe, agent when the path is unknown
+            <em>and</em> the environment gives ground truth. Substitution
+            is a demo. Complementarity is a system.</p>
+
+          <h2>✅ Seven questions that kill “bad luck”</h2>
+          <p>Cleantech in the 2000s had a true macro story and a pile of
+            corpses. Thiel’s autopsy is a checklist every business —
+            and every internal platform — has to pass. Get zero right
+            and you will call the result bad luck. Tesla, in his telling,
+            cleared all seven. Most “green” startups cleared none
+            [<a href="#ref-1">1</a>].</p>
+
+          <div class="table-responsive">
+            <table class="table table-sm two-cents-table">
+              <thead>
+                <tr>
+                  <th>Question</th>
+                  <th>Startup version</th>
+                  <th>Platform / ML version</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>🛠️ Engineering</td>
+                  <td>10× technology, not 10%</td>
+                  <td>A golden path that is an order of magnitude less
+                    painful than the snowflake it replaces</td>
+                </tr>
+                <tr>
+                  <td>⏰ Timing</td>
+                  <td>Why now, specifically?</td>
+                  <td>The org is actually blocked — not “AI is hot”</td>
+                </tr>
+                <tr>
+                  <td>🏰 Monopoly</td>
+                  <td>Big share of a small market</td>
+                  <td>One workflow, owned end-to-end, before a catalog</td>
+                </tr>
+                <tr>
+                  <td>👥 People</td>
+                  <td>Builders, not costume sales</td>
+                  <td>Engineers who ship the path they preach</td>
+                </tr>
+                <tr>
+                  <td>📣 Distribution</td>
+                  <td>A real way to deliver</td>
+                  <td>Scaffolds, docs, office hours, the first ten teams</td>
+                </tr>
+                <tr>
+                  <td>🛡️ Durability</td>
+                  <td>Defensible in 10–20 years</td>
+                  <td>Contracts, ownership, evals — not a launch deck</td>
+                </tr>
+                <tr>
+                  <td>🔐 Secret</td>
+                  <td>A truth others don’t see</td>
+                  <td>A bottleneck you learned by being in the work</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The social-entrepreneurship trap lives here too. “Do well by
+            doing good” with an audience-tested mission produces
+            conventional products. What is actually good for a society
+            — or a company — is usually <em>specific</em> and slightly
+            unpopular. Applause is a lagging indicator of a secret that
+            already leaked.</p>
+
+          <h2>⚖️ Where I’d push back</h2>
+          <p>A 2-Cents post that only nods is a book report. The parts I
+            will not swallow whole:</p>
+          <ul>
+            <li>🏷️ <strong>“Monopoly” is a 2026 trap word.</strong> The
+              underlying idea — unique, durable cash flows — is right.
+              The branding is catnip for people who want a moral
+              exemption. If you cannot explain your uniqueness without
+              the M-word, you do not have it yet.</li>
+            <li>🌍 <strong>The country 2×2 is a 2014 cartoon.</strong>
+              Useful as a personality test for an org. Useless as
+              geopolitics. Do not cite it at dinner.</li>
+            <li>👔 <strong>The suit heuristic is a punchline.</strong>
+              Founders Fund’s “pass on the CEO in a suit” rule was a
+              speed hack on a specific bubble. I have met excellent
+              engineers in collars and disasters in hoodies. Judge the
+              plan and the artifacts.</li>
+            <li>🏘️ <strong>“Don’t compete” can become “don’t talk.”</strong>
+              Avoiding a commodity war is wise. Building a tiny internal
+              fief that will not integrate is how platforms die. Last
+              mover in a niche, then <em>connect</em> — not secede.</li>
+            <li>📊 <strong>Power law is not permission to ignore the
+              median path.</strong> Funds can live on outliers. A
+              platform that only works for the hero team is a demo.</li>
+          </ul>
+
+          <h2>🪙 My 2 cents</h2>
+          <p>Stop asking “what’s the best practice?” That question is
+            1→n with extra steps. Ask the questions that force a
+            0→1 shape:</p>
+          <ul>
+            <li>❓ What do we believe that the org does not?</li>
+            <li>🐣 What tiny market can we own <em>this</em> quarter?</li>
+            <li>🏁 Will this still be the way we work in ten years?</li>
+            <li>🔟 What is the 10×, not the 20%?</li>
+            <li>📣 Who sells it, and through what motion?</li>
+            <li>🤝 What do humans still own when the model is in the
+              loop?</li>
+          </ul>
+          <p>Contracts that are non-optional:</p>
+          <ul>
+            <li>🗺️ One <strong>definite plan</strong> beats twelve
+              “options”</li>
+            <li>🐣 <strong>Start too small</strong>, then walk adjacent</li>
+            <li>🏁 Play the <strong>endgame</strong> — last mover, not
+              launch week</li>
+            <li>🔐 Bet on a <strong>secret</strong> you earned in the
+              work, not a trend from a keynote</li>
+            <li>🤝 Design <strong>complements</strong> — humans plus
+              machines — not replacements</li>
+            <li>📣 Treat <strong>distribution</strong> as part of the
+              product: scaffolds, golden paths, the first ten teams</li>
+          </ul>
+          <p>🌱 Treat the future as something you
+            <strong>design</strong> — not a lottery ticket you wait to
+            cash.</p>
+
+          <h2>📚 References</h2>
+          <ol class="two-cents-references">
+            <li id="ref-1">Peter Thiel with Blake Masters,
+              <em>Zero to One: Notes on Startups, or How to Build the
+              Future</em>, Crown Business, 2014,
+              <a href="https://www.penguinrandomhouse.com/books/232049/zero-to-one-by-peter-thiel-with-blake-masters/"
+                target="_blank" rel="noopener noreferrer">penguinrandomhouse.com/books/232049/…</a>
+            </li>
+            <li id="ref-2">Blake Masters, notes from Peter Thiel’s
+              Stanford CS183 course (2012) — the draft the book was
+              built from,
+              <a href="https://blakemasters.tumblr.com/peter-thiels-cs183-startup"
+                target="_blank" rel="noopener noreferrer">blakemasters.tumblr.com/peter-thiels-cs183-startup</a>
+            </li>
+          </ol>
+
+          <footer class="two-cents-article-footer">
+            <a href="../index.html#two-cents">← Back to 2-Cents</a>
+          </footer>
+
+        </article>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; <strong><span>Amirhessam Tahmassebi</span></strong>
+      </div>
+      <div class="credits">
+      </div>
+    </div>
+  </footer>
+  <!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/jquery/jquery.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="../assets/vendor/counterup/counterup.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/venobox/venobox.min.js"></script>
+  <script src="../assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="../assets/vendor/typed.js/typed.min.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+
+  <!-- Theme toggle -->
+  <script src="../assets/js/theme-toggle.js?v=20260716174000"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Mermaid diagrams -->
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    var theme =
+      document.documentElement.getAttribute("data-theme") === "dark"
+        ? "dark"
+        : "default";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: theme,
+      securityLevel: "loose",
+      flowchart: { curve: "basis", padding: 12 }
+    });
+  </script>
+
+</body>
+
+</html>
