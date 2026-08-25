@@ -109,16 +109,39 @@
       }
 
       var eduCol = section.querySelector('[data-resume-col="academia"]');
-      if (eduCol) eduCol.classList.toggle("is-hidden", filter === "industry");
-
       var expCol = section.querySelector('[data-resume-col="experience"]');
+
+      var visibleInExp = 0;
       if (expCol) {
+        var expItems = expCol.querySelectorAll(".resume-item[data-track]");
+        for (var e = 0; e < expItems.length; e++) {
+          if (!expItems[e].classList.contains("is-filtered-out")) {
+            visibleInExp++;
+          }
+        }
+      }
+
+      if (eduCol) {
+        eduCol.classList.toggle("is-hidden", filter === "industry");
+        eduCol.classList.remove("col-lg-4", "col-lg-12");
         if (filter === "industry") {
-          expCol.classList.remove("col-lg-8");
+          /* column hidden */
+        } else if (filter === "academia" || visibleInExp === 0) {
+          eduCol.classList.add("col-lg-12");
+        } else {
+          eduCol.classList.add("col-lg-4");
+        }
+      }
+
+      if (expCol) {
+        expCol.classList.toggle("is-hidden", visibleInExp === 0);
+        expCol.classList.remove("col-lg-8", "col-lg-12");
+        if (visibleInExp === 0) {
+          /* column hidden */
+        } else if (filter === "industry") {
           expCol.classList.add("col-lg-12");
         } else {
           expCol.classList.add("col-lg-8");
-          expCol.classList.remove("col-lg-12");
         }
       }
 

@@ -885,6 +885,21 @@ section {
   display: none;
 }
 
+.resume .resume-layout {
+  align-items: flex-start;
+}
+
+@media (min-width: 992px) {
+  .resume .resume-col[data-resume-col="academia"]:not(.is-hidden) {
+    position: sticky;
+    top: 80px;
+  }
+}
+
+.resume .resume-title--subsection {
+  margin-top: 28px;
+}
+
 .resume .resume-track {
   position: relative;
 }
