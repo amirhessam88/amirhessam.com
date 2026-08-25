@@ -3,22 +3,64 @@
     {
       "icon": "icofont-brainstorming",
       "title": "AI/ML Systems Ops",
-      "description": "Production ML pipelines, model lifecycle, MLOps, CI/CD, and applied AI at scale."
+      "description": "Production ML pipelines, model lifecycle, MLOps, CI/CD, and applied AI at scale.",
+      "tags": [
+        "MLflow",
+        "ZenML",
+        "Kubeflow",
+        "LLMs",
+        "RAG",
+        "PyTorch",
+        "Hugging Face",
+        "Model Serving",
+        "PEFT",
+        "Ray"
+      ]
     },
     {
       "icon": "icofont-chart-histogram",
       "title": "Observability & Platform",
-      "description": "Reliability frameworks, monitoring, and platform engineering for AI products."
+      "description": "Reliability frameworks, monitoring, and platform engineering for AI products.",
+      "tags": [
+        "DABs",
+        "CI/CD",
+        "Datadog",
+        "Grafana",
+        "K8s",
+        "LLM-as-a-judge",
+        "Feature Store",
+        "Docker"
+      ]
     },
     {
       "icon": "icofont-database",
       "title": "Distributed Data",
-      "description": "Large-scale data processing, Spark, and cloud-native data platforms."
+      "description": "Large-scale data processing, Spark, and cloud-native data platforms.",
+      "tags": [
+        "Spark",
+        "SQL",
+        "AWS",
+        "Azure",
+        "Terraform",
+        "dbt",
+        "Databricks",
+        "PySpark"
+      ]
     },
     {
       "icon": "icofont-file-python",
       "title": "Open Source & Research",
-      "description": "Building <a href=\"https://github.com/slickml/slick-ml\">SlickML</a> and publishing in ML &amp; scientific computing."
+      "description": "Building <a href=\"https://github.com/slickml/slick-ml\">SlickML</a> and publishing in ML &amp; scientific computing.",
+      "tags": [
+        "SlickML",
+        "Python",
+        "Go",
+        "Git",
+        "TDD",
+        "Bash",
+        "Linux",
+        "Physical AI"
+      ]
     }
   ],
   "tags": [
@@ -27,6 +69,7 @@
     "SQL",
     "Bash",
     "LLMs",
+    "RAG",
     "MLOps",
     "CI/CD",
     "PySpark",
@@ -34,6 +77,14 @@
     "Spark",
     "AWS",
     "Azure",
+    "Terraform",
+    "dbt",
+    "MLflow",
+    "ZenML",
+    "Kubeflow",
+    "Datadog",
+    "Grafana",
+    "Docker",
     "Git",
     "Linux"
   ]
