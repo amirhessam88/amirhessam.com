@@ -76,7 +76,8 @@ amirhessam.com/
 │   ├── 🏗️ building-an-org-monorepo.html
 │   ├── 🚀 mlops-deployment-strategies.html
 │   ├── 🧠 agentic-ai-fundamentals.html
-│   └── 0️⃣➡️1️⃣ zero-to-one.html
+│   ├── 0️⃣➡️1️⃣ zero-to-one.html
+│   └── 🧩 fine-tuning-llms.html
 ├── 📁 assets/
 │   ├── 🎨 css/                   # Stylesheets
 │   ├── 📊 data/                  # Statistics and data files
@@ -224,6 +225,7 @@ Opinionated posts live under [`two-cents/`](two-cents/). Conventions for new pos
 | [🚀 MLOps Deployment Strategies](two-cents/mlops-deployment-strategies.html) | 🤖 MLOps | Serving modes, deploy-code vs deploy-model, recreate → rolling → blue/green → canary → A/B → shadow, environments, and rules of thumb |
 | [🧠 Agentic AI Fundamentals](two-cents/agentic-ai-fundamentals.html) | 🧠 Agents | LLM vs workflow vs agent, ReAct / plan-and-execute / reflection, MCP, multi-agent, memory, guardrails, and LLMOps |
 | [0️⃣➡️1️⃣ Zero to One](two-cents/zero-to-one.html) | 🦄 Startups | 0→1 vs 1→n, monopoly vs competition, definite optimism, secrets, last-mover, and the seven questions — operating notes, not a book report |
+| [🧩 Fine-Tuning LLMs](two-cents/fine-tuning-llms.html) | 🧩 Fine-Tuning | Full FT vs PEFT, LoRA → DoRA → QLoRA, SFT → DPO → GRPO, TIES/DARE merge, the 2026 recipe, and slick-tune as the orthogonal toolkit |
 
 ## 📝 Publications
 
