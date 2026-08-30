@@ -1,0 +1,2149 @@
+<!-- =======================================================
+	  * Amirhessam Tahmassebi
+	  * Email: admin@amirhessam.com
+	  * Website: www.amirhessam.com
+  ======================================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored === "light" || stored === "dark"
+          ? stored
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="color-scheme" content="light dark">
+
+  <title>Fine-Tuning LLMs | 2-Cents</title>
+  <meta
+    content="A complete map of LLM fine-tuning in 2026: full FT vs PEFT, LoRA, DoRA, AdaLoRA, QLoRA, SFT, DPO, ORPO, KTO, GRPO, adapter merge — and slick-tune as the orthogonal toolkit."
+    name="description">
+  <meta
+            content="Amirhessam Tahmassebi, fine-tuning, LLM, LoRA, QLoRA, DoRA, DPO, GRPO, PEFT, slick-tune, SlickTune, post-training, in-context learning, ICL"
+    name="keywords">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Amirhessam Tahmassebi">
+  <meta property="og:url"
+    content="https://www.amirhessam.com/two-cents/fine-tuning-llms.html">
+  <meta property="og:title" content="Fine-Tuning LLMs | 2-Cents">
+  <meta property="og:description"
+    content="Full FT vs PEFT, LoRA → DoRA → QLoRA, SFT → DPO → GRPO, TIES/DARE merge, and why the 2026 recipe is a thin adapter plus probes — plus slick-tune.">
+  <meta property="og:image"
+    content="https://www.amirhessam.com/assets/img/two-cents/og-fine-tuning-llms.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="627">
+  <meta property="og:image:alt" content="Fine-Tuning LLMs — 2-Cents">
+  <meta property="article:published_time" content="2026-08-30">
+  <meta property="article:tag" content="Fine-Tuning">
+  <meta property="article:tag" content="LLM">
+  <meta property="article:tag" content="PEFT">
+  <meta property="article:tag" content="slick-tune">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Fine-Tuning LLMs | 2-Cents">
+  <meta name="twitter:description"
+    content="LoRA, QLoRA, DoRA, SFT, DPO, GRPO, adapter merge — the 2026 fine-tuning stack, then slick-tune as the toolkit.">
+  <meta name="twitter:image"
+    content="https://www.amirhessam.com/assets/img/two-cents/og-fine-tuning-llms.png">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Fine-Tuning LLMs",
+    "description": "A complete map of LLM fine-tuning in 2026: full FT vs PEFT, LoRA, DoRA, AdaLoRA, QLoRA, SFT, DPO, ORPO, KTO, GRPO, adapter merge — and slick-tune as the orthogonal toolkit.",
+    "datePublished": "2026-08-30",
+    "dateModified": "2026-08-30",
+    "mainEntityOfPage": "https://www.amirhessam.com/two-cents/fine-tuning-llms.html",
+    "image": "https://www.amirhessam.com/assets/img/two-cents/og-fine-tuning-llms.png",
+    "keywords": [
+      "fine-tuning",
+      "LLM",
+      "LoRA",
+      "QLoRA",
+      "DoRA",
+      "DPO",
+      "GRPO",
+      "PEFT",
+      "in-context learning",
+      "ICL",
+      "slick-tune"
+    ],
+    "author": {
+      "@type": "Person",
+      "name": "Amirhessam Tahmassebi",
+      "url": "https://www.amirhessam.com/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Amirhessam Tahmassebi",
+      "url": "https://www.amirhessam.com/"
+    }
+  }
+  </script>
+
+  <!-- Favicons -->
+  <link href="../assets/img/logo_color_clear.png" rel="icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="../assets/vendor/owl.carousel/assets/owl.carousel.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="d-flex flex-column">
+
+      <div class="profile">
+        <img src="../assets/img/profile-img.jpg" alt=""
+          class="img-fluid rounded-circle">
+        <h1 class="text-light"><a href="../index.html">Amirhessam Tahmassebi</a>
+        </h1>
+        <div class="social-links mt-3 text-center">
+          <a href="https://www.linkedin.com/in/amirhessam/" class="linkedin"><i
+              class="bx bxl-linkedin"></i></a>
+          <a href="https://scholar.google.com/citations?user=CnHZjFAAAAAJ&hl=en"
+            class="google-plus"><i class="bx bxl-google"></i></a>
+          <a href="https://github.com/amirhessam88" class="github"><i
+              class="bx bxl-github"></i></a>
+          <a href="https://slickml.com/" class="consulting"><i
+              class="icofont-learn"></i></a>
+          <a href="https://github.com/slickml" class="library"><i
+              class="icofont-brainstorming"></i></a>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="../index.html"><i class="bx bx-home"></i>
+              <span>Home</span></a></li>
+          <li class="nav-two-cents">
+            <a href="../index.html#two-cents"><i class="bx bx-bulb"></i>
+              <span>2-Cents</span></a>
+            <ul class="nav-two-cents-articles">
+              <li><a href="building-an-org-monorepo.html">🏗️ Building an Org
+                  Monorepo</a></li>
+              <li><a href="mlops-deployment-strategies.html">🚀 MLOps Deployment
+                  Strategies</a></li>
+              <li><a href="agentic-ai-fundamentals.html">🧠 Agentic AI
+                  Fundamentals</a></li>
+              <li><a href="zero-to-one.html">0️⃣➡️1️⃣ Zero to
+                  One</a></li>
+              <li class="active"><a href="fine-tuning-llms.html">🧩 Fine-Tuning
+                  LLMs</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav><!-- .nav-menu -->
+
+      <button type="button" class="theme-toggle" data-theme-toggle
+        aria-pressed="false" aria-label="Switch to dark theme"
+        title="Dark theme">
+        <i class="bx bx-moon theme-toggle-icon theme-toggle-icon-moon"
+          aria-hidden="true"></i>
+        <i class="bx bx-sun theme-toggle-icon theme-toggle-icon-sun"
+          aria-hidden="true"></i>
+        <span class="theme-toggle-label">Dark mode</span>
+      </button>
+
+      <button type="button" class="mobile-nav-toggle d-xl-none"><i
+          class="icofont-navigation-menu"></i></button>
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>🪙 2-Cents</h2>
+          <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#two-cents">2-Cents</a></li>
+            <li>Fine-Tuning</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Article ======= -->
+    <section class="two-cents-article">
+      <div class="container">
+        <article class="two-cents-article-body">
+
+          <header class="two-cents-article-header">
+            <span class="two-cents-card-tag">🧩 Fine-Tuning</span>
+            <h1>🧩 Fine-Tuning LLMs</h1>
+            <p class="two-cents-article-meta">
+              <time datetime="2026-08-30">📅 August 30, 2026</time>
+              <span aria-hidden="true">·</span>
+              <span>⏱️ 45 min read</span>
+            </p>
+          </header>
+
+          <aside class="two-cents-inspiration">
+            <p>📖 <strong>Inspiration.</strong> Fine-tuning used to mean
+              “unfreeze everything and hope the GPU survives.” The useful
+              map now sits in the papers and the adapters: LoRA
+              [<a href="https://arxiv.org/abs/2106.09685"
+                target="_blank" rel="noopener noreferrer">1</a>],
+              QLoRA
+              [<a href="https://arxiv.org/abs/2305.14314"
+                target="_blank" rel="noopener noreferrer">2</a>],
+              DoRA
+              [<a href="https://arxiv.org/abs/2402.09353"
+                target="_blank" rel="noopener noreferrer">3</a>],
+              DPO
+              [<a href="https://arxiv.org/abs/2305.18290"
+                target="_blank" rel="noopener noreferrer">4</a>],
+              and GRPO from DeepSeekMath / R1
+              [<a href="https://arxiv.org/abs/2402.03300"
+                target="_blank" rel="noopener noreferrer">5</a>]
+              [<a href="https://arxiv.org/abs/2501.12948"
+                target="_blank" rel="noopener noreferrer">6</a>].
+              I wrote the same ideas as a visual guide for
+              <a href="https://www.docs.slickml.com/slick-tune/pages/fine_tuning_guide.html"
+                target="_blank" rel="noopener noreferrer">slick-tune</a>
+              [<a href="https://www.docs.slickml.com/slick-tune/pages/fine_tuning_guide.html"
+                target="_blank" rel="noopener noreferrer">7</a>]
+              — diagrams first, math second. This post is the
+              <strong>opinionated</strong> version: every methodology in
+              enough detail to choose, what actually became the 2026
+              pattern, and why I shipped the library the way I did.</p>
+          </aside>
+
+          <p class="two-cents-lead">💡 Fine-tuning is not “train a model.”
+            It is five orthogonal questions:
+            <strong>which checkpoint</strong>,
+            <strong>how weights change</strong>,
+            <strong>what loss you optimize</strong>,
+            <strong>which examples</strong>, and
+            <strong>how you know it worked</strong>. Mix those up and you
+            get a 70B that recites your JSONL and forgets how to count.
+            Keep them separate and you can swap LoRA for DoRA, SFT for
+            DPO, without rewriting the stack.</p>
+
+          <h2>🗺️ The map</h2>
+          <p>Read this as a curriculum, not a glossary. Six layers — climb
+            only when the layer below is not enough:</p>
+          <ol>
+            <li>🥊 <strong>When to fine-tune</strong> — in-context
+              learning, RAG, continued pre-training, distillation.
+              Answers: <em>should</em> weights move at all?</li>
+            <li>⚙️ <strong>What actually changes</strong> — linear layers,
+              gradients, AdamW. Answers: <em>what</em> is a “weight
+              update”?</li>
+            <li>🧩 <strong>Strategy</strong> — Full, LoRA, DoRA, AdaLoRA,
+              QLoRA, and the 2026 LoRA zoo. Answers: <em>how</em> do
+              weights change?</li>
+            <li>🎓 <strong>Objective</strong> — SFT → preferences →
+              verifiable RL. Answers: <em>what</em> is the model learning?</li>
+            <li>🧪 <strong>Proof</strong> — probes, holdout PPL, judges,
+              adapter merge. Answers: <em>did</em> it stick?</li>
+            <li>🧞 <strong>slick-tune</strong> — the orthogonal toolkit.
+              Answers: <em>how</em> do you run the stack without a
+              400-line trainer script?</li>
+          </ol>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Five orthogonal axes of fine-tuning">
+            <pre class="mermaid">
+flowchart LR
+  subgraph AXES["🎛️ Fine-tuning is a product of axes"]
+    M["🧠 model"]
+    S["🧩 strategy"]
+    O["🎓 objective"]
+    D["📁 data"]
+    E["📊 metrics"]
+  end
+  M --- S --- O --- D --- E
+            </pre>
+          </div>
+
+          <aside class="two-cents-aside">
+            <p>🧠 <strong>Mental model.</strong> Strategy ≠ objective.
+              LoRA is <em>how</em> the matrices move. DPO is
+              <em>what</em> you pay the optimizer to prefer. You can run
+              LoRA + SFT on Monday and LoRA + GRPO on Friday without
+              changing the adapter idea. That orthogonality is the whole
+              point — and the whole reason
+              <a href="https://github.com/slickml/slick-tune"
+                target="_blank" rel="noopener noreferrer">slick-tune</a>
+              exists.</p>
+          </aside>
+
+          <h2>🥊 Should weights move at all?</h2>
+          <p>An LLM is a giant next-token machine: text in, a
+            distribution over the vocabulary out. Those probabilities
+            come from billions of numbers — <strong>weights</strong>.
+            Pre-training learns language from the internet.
+            Fine-tuning continues that training on
+            <em>your</em> distribution so the model behaves the way you
+            want: a house style, a JSON schema, a product API, a
+            refusal policy, a set of stable facts.</p>
+          <p>Three other knobs exist. Most teams should try them
+            <em>before</em> opening a Trainer — starting with
+            <strong>in-context learning</strong>:</p>
+
+          <figure class="two-cents-diagram ft-flow" role="img"
+            aria-label="Pre-training fans out into in-context learning, RAG, and fine-tuning">
+            <div class="ft-flow-source">
+              <strong>🏭 Pre-training</strong>
+              <span>🌐 Web-scale text → 🧠 base / instruct checkpoint</span>
+            </div>
+            <div class="ft-flow-fork" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <div class="ft-flow-cols">
+              <div class="ft-flow-col">
+                <h3>🎯 In-context learning</h3>
+                <ol>
+                  <li>
+                    <strong>❄️ Frozen model</strong>
+                    <span>no weight update</span>
+                  </li>
+                  <li>
+                    <strong>📝 Instruction + demos</strong>
+                    <span>live in the prompt</span>
+                  </li>
+                  <li>
+                    <strong>📤 Answer</strong>
+                    <span>format from the shots</span>
+                  </li>
+                </ol>
+              </div>
+              <div class="ft-flow-col">
+                <h3>📚 RAG</h3>
+                <ol>
+                  <li>
+                    <strong>❄️ Frozen model</strong>
+                    <span>no weight update</span>
+                  </li>
+                  <li>
+                    <strong>🔎 Retrieve docs</strong>
+                    <span>facts that change</span>
+                  </li>
+                  <li>
+                    <strong>📤 Grounded answer</strong>
+                    <span>cite what you fetched</span>
+                  </li>
+                </ol>
+              </div>
+              <div class="ft-flow-col">
+                <h3>🧩 Fine-tuning</h3>
+                <ol>
+                  <li>
+                    <strong>🏁 Starting checkpoint</strong>
+                    <span>base or instruct</span>
+                  </li>
+                  <li>
+                    <strong>📁 Your labeled data</strong>
+                    <span>optimizer updates weights</span>
+                  </li>
+                  <li>
+                    <strong>✨ Adapted model</strong>
+                    <span>adapter or full checkpoint</span>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </figure>
+
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>Approach</th>
+                <th>Weights change?</th>
+                <th>Good for</th>
+                <th>Limit</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>💬 Zero-shot prompt</td>
+                <td>No</td>
+                <td>Clear instructions, one-off tasks</td>
+                <td>No examples; format and edge cases drift</td>
+              </tr>
+              <tr>
+                <td>🎯 In-context learning</td>
+                <td>No — demos live in the prompt</td>
+                <td>Few/many-shot tasks; rapid iteration; no GPU train</td>
+                <td>Context window, token tax every request, order sensitivity</td>
+              </tr>
+              <tr>
+                <td>📚 RAG</td>
+                <td>No</td>
+                <td>Facts that change weekly; citations</td>
+                <td>Retrieval quality; the model can still ignore the docs</td>
+              </tr>
+              <tr>
+                <td>🧩 Fine-tuning</td>
+                <td>Yes — all or adapters</td>
+                <td>Stable facts, format, tone, tool schemas, refusals</td>
+                <td>Needs data + compute; can overfit; can forget</td>
+              </tr>
+              <tr>
+                <td>🔄 Continued pre-training</td>
+                <td>Yes — often embeddings too</td>
+                <td>New domain / language at corpus scale</td>
+                <td>Expensive; LoRA is weaker here unless you train
+                  <code>embed_tokens</code> / <code>lm_head</code>
+                  carefully
+                  [<a href="https://arxiv.org/abs/2405.09673"
+                    target="_blank" rel="noopener noreferrer">8</a>]
+                </td>
+              </tr>
+              <tr>
+                <td>🏭 Pre-training from scratch</td>
+                <td>Yes, from noise</td>
+                <td>You are a lab with a cluster</td>
+                <td>Not a product tactic</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>👍 <strong>Rule of thumb in 2026.</strong> Start with
+            ICL. Fine-tune for
+            <em>form</em> — style, structure, tool calling, refusal
+            patterns, a small set of facts that must not drift. Retrieve
+            for <em>facts that change</em>. The highest-ROI pattern is a
+            thin LoRA/QLoRA adapter <em>plus</em> RAG, not one instead of
+            the other. Distill after you have a teacher you trust.</p>
+          <p>If you need the model to
+            <em>reliably</em> know something small and personal — names,
+            emails, product APIs — fine-tuning plus
+            <strong>probes</strong> beats hoping the prompt sticks
+            [<a href="https://www.docs.slickml.com/slick-tune/pages/fine_tuning_guide.html"
+              target="_blank" rel="noopener noreferrer">7</a>].</p>
+
+          <h2>🎯 In-context learning</h2>
+          <p><strong>In-context learning (ICL)</strong> is the ability
+            to pick up a task from examples
+            <em>inside the prompt</em>, with
+            <strong>no weight update</strong>
+            [<a href="https://arxiv.org/abs/2005.14165"
+              target="_blank" rel="noopener noreferrer">32</a>].
+            GPT-3 made the phrase famous. Everything since is an
+            argument about how far you can push that idea before you
+            should actually train.</p>
+          <p>The prompt is the dataset. The forward pass is the
+            optimizer. Tomorrow’s request can use a different dataset
+            without touching a checkpoint.</p>
+
+          <figure class="two-cents-diagram ft-flow" role="img"
+            aria-label="Zero-shot versus few-shot versus many-shot in-context learning">
+            <div class="ft-flow-cols">
+              <div class="ft-flow-col">
+                <h3>0️⃣ Zero-shot</h3>
+                <ol>
+                  <li>
+                    <strong>📋 Instruction</strong>
+                    <span>no examples</span>
+                  </li>
+                  <li>
+                    <strong>❄️ Frozen model</strong>
+                    <span>weights unchanged</span>
+                  </li>
+                  <li>
+                    <strong>📤 Answer</strong>
+                    <span>hope the instruction is enough</span>
+                  </li>
+                </ol>
+              </div>
+              <div class="ft-flow-col">
+                <h3>🎯 Few-shot ICL</h3>
+                <ol>
+                  <li>
+                    <strong>📋 Instruction</strong>
+                    <span>task + format</span>
+                  </li>
+                  <li>
+                    <strong>📎 1–16 demos</strong>
+                    <span>gold input → output pairs</span>
+                  </li>
+                  <li>
+                    <strong>❄️ Frozen model</strong>
+                    <span>weights unchanged</span>
+                  </li>
+                  <li>
+                    <strong>📤 Answer</strong>
+                    <span>continue the pattern</span>
+                  </li>
+                </ol>
+              </div>
+              <div class="ft-flow-col">
+                <h3>📚 Many-shot ICL</h3>
+                <ol>
+                  <li>
+                    <strong>📋 Instruction</strong>
+                    <span>task + format</span>
+                  </li>
+                  <li>
+                    <strong>📎 Hundreds–thousands</strong>
+                    <span>the prompt <em>is</em> the dataset</span>
+                  </li>
+                  <li>
+                    <strong>❄️ Frozen model</strong>
+                    <span>weights unchanged</span>
+                  </li>
+                  <li>
+                    <strong>📤 Answer</strong>
+                    <span>can override pre-train bias</span>
+                  </li>
+                </ol>
+              </div>
+            </div>
+          </figure>
+
+          <h3>📎 What a “shot” actually is</h3>
+          <p>A shot is an input–output pair the model can
+            <em>attend to</em> before it writes the next token. Typical
+            shapes:</p>
+          <ul>
+            <li>0️⃣ <strong>Zero-shot</strong> — instruction only.
+              “Extract the JSON. Schema follows.”</li>
+            <li>1️⃣ <strong>One-shot / few-shot</strong> — a handful of
+              gold examples. The original GPT-3 regime: 1–32 shots
+              [<a href="https://arxiv.org/abs/2005.14165"
+                target="_blank" rel="noopener noreferrer">32</a>].</li>
+            <li>📚 <strong>Many-shot</strong> — hundreds to thousands of
+              examples stuffed into a long context window. Gemini-class
+              windows made this a real baseline, not a parlor trick
+              [<a href="https://arxiv.org/abs/2404.11018"
+                target="_blank" rel="noopener noreferrer">33</a>].</li>
+          </ul>
+          <pre><code>System: Extract a JSON object with keys name, email.
+
+User:
+Input: "Write Jane at jane@acme.com"
+Output: {"name":"Jane","email":"jane@acme.com"}
+
+Input: "Ping Amirhessam: admin@slickml.com"
+Output:</code></pre>
+          <p>At inference the model is still doing next-token
+            prediction. The demonstrations bias the attention pattern
+            so the continuation looks like “another example of the
+            same map.” That is ICL. It is
+            <em>not</em> backprop.</p>
+
+          <h3>🧠 Why it works (and why it sometimes doesn’t)</h3>
+          <p>Three stories that are all partly true:</p>
+          <ul>
+            <li>📐 <strong>Format specification.</strong> Min et al.
+              showed that even
+              <em>random</em> labels in the demos can help — a lot of
+              few-shot gain is “here is the output shape,” not
+              “here is the true mapping”
+              [<a href="https://arxiv.org/abs/2202.12837"
+                target="_blank" rel="noopener noreferrer">34</a>].
+              If your few-shot prompt only teaches the schema, a
+              tighter instruction might have been enough.</li>
+            <li>📉 <strong>Implicit inner loop.</strong> A line of
+              theory treats attention over demos as a few steps of
+              gradient descent / linear regression implemented in
+              the forward pass — the model is a
+              <em>meta-optimizer</em>
+              [<a href="https://arxiv.org/abs/2212.10559"
+                target="_blank" rel="noopener noreferrer">35</a>].
+              Useful intuition: more shots ≈ more inner-loop
+              steps, until the context saturates.</li>
+            <li>📍 <strong>Task location.</strong> Pre-training already
+              saw a thousand formats. ICL points at the right
+              basin. Fine-tuning
+              <em>moves</em> the basin. That is why ICL is fast to
+              try and easy to forget on the next request.</li>
+          </ul>
+          <p>Practical footguns: demo
+            <strong>order</strong> matters, recency bias is real,
+            label distribution in the prompt leaks into the answer,
+            and a 32k context full of shots is still paid
+            <em>per request</em> unless you KV-cache / prompt-cache
+            the prefix.</p>
+
+          <h3>📚 Many-shot is the 2024–2026 ICL pattern</h3>
+          <p>Few-shot was “can the model learn from 8 examples?”
+            Many-shot asks “what if the prompt
+            <em>is</em> the fine-tune set?” Agarwal et al. show that
+            going from a handful of shots to hundreds or thousands
+            keeps lifting both generative and discriminative tasks,
+            can
+            <strong>override pre-training biases</strong> that
+            few-shot cannot, and often lands
+            <em>comparable to fine-tuning</em> — at the cost of
+            prefill compute, not a training run
+            [<a href="https://arxiv.org/abs/2404.11018"
+              target="_blank" rel="noopener noreferrer">33</a>].
+            They also try
+            <em>Reinforced ICL</em> (model-written chain-of-thought
+            as shots) and
+            <em>Unsupervised ICL</em> (inputs without gold outputs)
+            when human labels run out.</p>
+          <p>The catch is the economics. SFT pays once. Many-shot
+            pays on every call, unless you cache the demo prefix.
+            Long-context models made ICL look like a substitute for
+            LoRA; KV caching made that substitute affordable for
+            high-QPS prefixes. If the demos
+            <em>change per user</em>, you are back to paying the
+            token tax.</p>
+          <p>A 2025–2026 cousin —
+            <strong>many-shot in-context fine-tuning</strong> —
+            actually <em>trains</em> the model to use long demo
+            prefixes (every in-context example is a supervised
+            target, not just the last answer). One checkpoint, many
+            tasks at inference, less forgetting than naive
+            zero-shot SFT
+            [<a href="https://arxiv.org/abs/2506.11103"
+              target="_blank" rel="noopener noreferrer">36</a>].
+            That is ICL and fine-tuning having a child, not a
+            replacement for either.</p>
+          <p>On controlled formal languages, fine-tuning still wins
+            in-distribution proficiency; ICL matches on some
+            out-of-distribution splits and varies much more across
+            model families
+            [<a href="https://aclanthology.org/2026.acl-long.1932/"
+              target="_blank" rel="noopener noreferrer">37</a>].
+            Do not take “many-shot ≈ SFT” as a law. Take it as
+            “measure both on <em>your</em> eval.”</p>
+
+          <h3>🗳️ ICL vs fine-tuning</h3>
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>🎯 ICL</th>
+                <th>🧩 Fine-tuning</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Weights</td>
+                <td>Frozen</td>
+                <td>Move — all or adapters</td>
+              </tr>
+              <tr>
+                <td>Where examples live</td>
+                <td>Prompt (ephemeral)</td>
+                <td>Optimizer (baked in)</td>
+              </tr>
+              <tr>
+                <td>Cost</td>
+                <td>Prefill tokens / request (cacheable)</td>
+                <td>Train once; cheap decode after bake</td>
+              </tr>
+              <tr>
+                <td>Latency at QPS</td>
+                <td>Hurts if the prefix is huge and uncached</td>
+                <td>Adapter or baked model is a normal forward</td>
+              </tr>
+              <tr>
+                <td>Forgetting</td>
+                <td>None — base unchanged</td>
+                <td>Real risk on small SFT sets</td>
+              </tr>
+              <tr>
+                <td>Reliability</td>
+                <td>Order / wording sensitive</td>
+                <td>Stable if probes pass</td>
+              </tr>
+              <tr>
+                <td>Best at</td>
+                <td>New tasks tomorrow; personalization per call</td>
+                <td>A contract that must hold on empty prompts</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Soft-prompt PEFT (prefix tuning, prompt tuning, IA³) is
+            the cousin that
+            <em>learns</em> a prefix instead of writing one. Same
+            intuition as ICL — steer with context — but the prefix
+            is trained and then stored. In 2026 LoRA ate that niche
+            for LLMs; keep prefix methods in mind for encoder-only
+            or extreme parameter budgets, not as your first SFT
+            tool.</p>
+
+          <aside class="two-cents-aside">
+            <p>🧠 <strong>Climb when ICL fails a measured eval.</strong>
+              Zero-shot if the instruction is the product. Few-shot
+              if eight gold rows fix the format. Many-shot if you
+              have a long window, cacheable demos, and no training
+              budget. Fine-tune when the empty prompt must still
+              obey the contract — schema, refusals, house voice,
+              facts you will probe. RAG sits beside all of these
+              for knowledge that churns. Combining ICL
+              <em>on top of</em> a LoRA is allowed and often
+              correct.</p>
+          </aside>
+
+          <h2>⚙️ What actually changes?</h2>
+          <p>Inside a Transformer, most of the trainable mass is
+            <strong>linear layers</strong>: matrices that mix features.
+            Attention projections (<code>q_proj</code>,
+            <code>k_proj</code>, <code>v_proj</code>,
+            <code>o_proj</code>) and MLP projections
+            (<code>gate_proj</code>, <code>up_proj</code>,
+            <code>down_proj</code>) are the usual suspects.</p>
+          <p>One layer is just <code>y = Wx</code> (plus bias, plus
+            nonlinearity elsewhere). Fine-tuning computes a
+            <strong>loss</strong> — how wrong the next-token predictions
+            were — then <strong>backprop</strong> produces a
+            <strong>gradient</strong> for every trainable number: nudge
+            this entry up or down. An optimizer, almost always
+            <strong>AdamW</strong>, applies those nudges for many
+            steps. After enough steps the model’s distribution has
+            shifted toward your data.</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Training step: data, model, loss, optimizer">
+            <pre class="mermaid">
+sequenceDiagram
+  participant D as 📁 Dataset
+  participant M as 🧠 Model
+  participant L as 📉 Loss
+  participant O as ⚙️ Optimizer
+  D->>M: batch of tokens
+  M->>L: predictions vs labels
+  L->>M: gradients
+  M->>O: trainable params + grads
+  O->>M: updated weights / adapters
+            </pre>
+          </div>
+
+          <p>Memory is the tax. Full fine-tuning stores
+            <em>weights + gradients + optimizer states</em>. AdamW
+            keeps two extra tensors per parameter (first and second
+            moments), so the working set is roughly
+            <strong>several times</strong> the model size in the
+            training dtype. That is why PEFT exists, and why QLoRA
+            exists on top of PEFT.</p>
+
+          <h2>💡 Why not always update every weight?</h2>
+          <p><strong>Full fine-tuning</strong> works. It is also the
+            most expensive way to teach a model your email address:</p>
+          <ul>
+            <li>💾 GPU memory: weights + grads + Adam states ≈ several×
+              model size</li>
+            <li>📦 Storage: one full copy of the model per run</li>
+            <li>🧠 Catastrophic forgetting: a tiny dataset can erase
+              general skills</li>
+            <li>🔀 Multi-task serving: you do not want five 70B
+              specialists on disk</li>
+          </ul>
+          <p><strong>Parameter-Efficient Fine-Tuning (PEFT)</strong>
+            freezes the base and trains a small add-on — an
+            <strong>adapter</strong>. The family that ate the industry
+            is LoRA
+            [<a href="https://arxiv.org/abs/2106.09685"
+              target="_blank" rel="noopener noreferrer">1</a>].
+            Typical trainable fraction: <strong>0.1–5%</strong>.
+            Checkpoint: a few tens of megabytes, not 140 GB.</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Full fine-tuning versus PEFT adapters">
+            <pre class="mermaid">
+flowchart TB
+  subgraph FULL["🏋️ Full fine-tuning"]
+    W1["🔓 Every weight trainable"]
+  end
+  subgraph PEFT["🧩 PEFT e.g. LoRA"]
+    WF["❄️ Base weights frozen"]
+    A["🧪 Tiny adapters trainable"]
+    WF --- A
+  end
+            </pre>
+          </div>
+
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Full FT</th>
+                <th>PEFT (LoRA-like)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Trainable params</td>
+                <td>~100%</td>
+                <td>Often under 1–5%</td>
+              </tr>
+              <tr>
+                <td>Checkpoint</td>
+                <td>Entire model</td>
+                <td>Small adapter files</td>
+              </tr>
+              <tr>
+                <td>Multi-task serving</td>
+                <td>Heavy</td>
+                <td>Swap adapters on one base</td>
+              </tr>
+              <tr>
+                <td>Quality ceiling</td>
+                <td>Highest in theory</td>
+                <td>Usually close for style / SFT / prefs</td>
+              </tr>
+              <tr>
+                <td>When it loses</td>
+                <td>Memory, storage, forgetting</td>
+                <td>Continued pre-training, some hard domains
+                  [<a href="https://arxiv.org/abs/2405.09673"
+                    target="_blank" rel="noopener noreferrer">8</a>]
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>The 2026 default for almost every product team:
+            <strong>LoRA or QLoRA</strong>. Full FT is a research /
+            tiny-model / “I proved LoRA’s rank is the bottleneck”
+            move — not the first experiment.</p>
+
+          <h2>🧭 Strategy: how weights change</h2>
+          <p>A <strong>strategy</strong> answers: given a frozen or
+            unfrozen base, <em>what parameterization</em> do we
+            train? slick-tune ships the five you actually use
+            [<a href="https://www.docs.slickml.com/slick-tune/pages/fine_tuning_guide.html"
+              target="_blank" rel="noopener noreferrer">7</a>].
+            The rest of the LoRA zoo (PiSSA, LoRA+, rsLoRA, LoftQ, …)
+            is mostly <em>how you initialize or scale the same
+            A,B</em>.</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Decision tree for choosing a fine-tuning strategy">
+            <pre class="mermaid">
+flowchart TB
+  Start["Need to fine-tune?"] --> Mem{"GPU memory tight?"}
+  Mem -->|"Yes, CUDA"| Q["📦 QLoRA"]
+  Mem -->|"Yes, Mac / CPU"| L["🧩 LoRA / DoRA"]
+  Mem -->|"Plenty"| Choice{"Want adaptive ranks?"}
+  Choice -->|No| Fixed{"Want magnitude / direction split?"}
+  Fixed -->|No| L2["🧩 LoRA"]
+  Fixed -->|Yes| D["✨ DoRA"]
+  Choice -->|Yes| AD["🎯 AdaLoRA"]
+  Mem -->|"Research / max quality / tiny model"| F["🏋️ Full FT"]
+            </pre>
+          </div>
+
+          <h3>🏋️ Full fine-tuning</h3>
+          <p><strong>Idea.</strong> Every weight that can learn,
+            learns. One linear layer is still <code>y = Wx</code>;
+            every entry of <code>W</code> gets a gradient.</p>
+          <p><strong>When.</strong> Small bases where memory allows
+            (SmolLM-class demos). Or you have already shown that
+            LoRA’s rank is the ceiling and you will keep
+            <em>one</em> specialized checkpoint.</p>
+          <p><strong>Trade-off.</strong> Highest memory and storage.
+            One run → one full model directory. Easy to overfit a
+            2k-example JSONL into a model that can no longer follow
+            generic instructions.</p>
+          <p>Biderman et al. (“LoRA Learns Less and Forgets Less”)
+            showed LoRA often
+            <em>underfits</em> continued pre-training and
+            <em>forgets less</em> than full FT on instruction data
+            [<a href="https://arxiv.org/abs/2405.09673"
+              target="_blank" rel="noopener noreferrer">8</a>].
+            That is a feature for product SFT and a bug for “teach
+            the model a new language from a corpus.” If you do
+            continued pre-training with LoRA, the Unsloth recipe is
+            now: target <em>all</em> linear layers (including
+            <code>gate_proj</code>), use
+            <strong>rsLoRA</strong> at high rank, and a
+            <em>smaller</em> LR on <code>embed_tokens</code> /
+            <code>lm_head</code>
+            [<a href="https://www.unsloth.ai/blog/contpretraining"
+              target="_blank" rel="noopener noreferrer">9</a>].</p>
+
+          <h3>🧩 LoRA — Low-Rank Adaptation</h3>
+          <p>Keep <code>W</code> frozen. Learn a thin correction:</p>
+          <pre><code>W′ = W + (α / r) · B A</code></pre>
+          <ul>
+            <li><code>A</code> is <code>r × d_in</code> — often
+              Gaussian / Kaiming at init</li>
+            <li><code>B</code> is <code>d_out × r</code> — often
+              <strong>zeros</strong>, so training starts as “no
+              change”</li>
+            <li><code>r</code> (<strong>rank</strong>) is tiny — 8,
+              16, 32, 64 — versus thousands of hidden dims</li>
+            <li><code>α</code> (<strong>alpha</strong>) scales the
+              update. A common start is <code>α ≈ 2r</code>, or
+              <code>α = r</code> if you already bake scaling into
+              the LR</li>
+          </ul>
+          <p><strong>Why “low-rank”?</strong> Empirically, the useful
+            change ΔW for a downstream task often lives in a
+            low-dimensional subspace. A thin <code>BA</code> is
+            enough for style, format, and a surprising amount of
+            factual adaptation. Hu et al. showed this for GPT-3-class
+            models: ~10,000× fewer trainable parameters, no extra
+            inference latency after you
+            <em>merge</em> B A back into W
+            [<a href="https://arxiv.org/abs/2106.09685"
+              target="_blank" rel="noopener noreferrer">1</a>].</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="LoRA forward pass: frozen W plus trainable BA">
+            <pre class="mermaid">
+flowchart TB
+  x["📥 Input x"] --> W["❄️ Frozen W"]
+  x --> A["🧪 Trainable A  r × d_in"]
+  A --> B["🧪 Trainable B  d_out × r"]
+  W --> Sum["➕"]
+  B -->|"α/r · BA x"| Sum
+  Sum --> y["📤 Output y"]
+            </pre>
+          </div>
+
+          <p><strong>Where adapters attach.</strong> Originally:
+            attention <code>q</code> and <code>v</code> only. In 2026
+            the default is <code>target_modules="all-linear"</code>
+            — attention <em>and</em> MLP. Skipping
+            <code>gate_proj</code> is a known footgun for continued
+            pre-training
+            [<a href="https://www.unsloth.ai/blog/contpretraining"
+              target="_blank" rel="noopener noreferrer">9</a>].</p>
+          <p><strong>Serving.</strong> After training you have the
+            unchanged base plus a small adapter folder
+            (<code>adapter_model.safetensors</code>,
+            <code>adapter_config.json</code>). At inference: load
+            base + adapter, or <strong>bake</strong>
+            (<code>merge_and_unload</code>) so engines like vLLM /
+            TGI see one set of weights.</p>
+
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>Knob</th>
+                <th>Meaning</th>
+                <th>Typical start</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>r</code></td>
+                <td>Capacity of ΔW</td>
+                <td>8–64 for SFT; often 64 for GRPO</td>
+              </tr>
+              <tr>
+                <td><code>alpha</code></td>
+                <td>Strength of the update</td>
+                <td><code>2r</code>, or <code>r</code> with rsLoRA</td>
+              </tr>
+              <tr>
+                <td><code>dropout</code></td>
+                <td>Regularize adapters</td>
+                <td>0.0–0.05 (0 is common in 2026 recipes)</td>
+              </tr>
+              <tr>
+                <td><code>target_modules</code></td>
+                <td>Which linears get LoRA</td>
+                <td><code>all-linear</code></td>
+              </tr>
+              <tr>
+                <td>LR</td>
+                <td>Adapter step size</td>
+                <td>~1e-4 to 2e-4 for SFT LoRA; ~5e-6 for GRPO</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>🧬 The 2026 LoRA zoo — same A,B, better physics</h3>
+          <p>Vanilla LoRA is still the workhorse. The papers since
+            2023 mostly fix <em>initialization</em>,
+            <em>scaling</em>, or <em>optimizer asymmetry</em> — they
+            do not replace the adapter. Hugging Face PEFT exposes
+            most of these as flags on <code>LoraConfig</code>
+            [<a href="https://huggingface.co/docs/peft/en/package_reference/lora"
+              target="_blank" rel="noopener noreferrer">10</a>].</p>
+
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>Variant</th>
+                <th>What it changes</th>
+                <th>When it matters</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>📐 <strong>rsLoRA</strong>
+                  [<a href="https://arxiv.org/abs/2312.03732"
+                    target="_blank" rel="noopener noreferrer">11</a>]
+                </td>
+                <td>Scale by <code>α / √r</code> instead of
+                  <code>α / r</code></td>
+                <td>High rank (128–256). Vanilla scaling
+                  <em>shrinks</em> the update as r grows</td>
+              </tr>
+              <tr>
+                <td>⚡ <strong>LoRA+</strong>
+                  [<a href="https://arxiv.org/abs/2402.12354"
+                    target="_blank" rel="noopener noreferrer">12</a>]
+                </td>
+                <td>Different LRs for A and B (B gets a larger LR)</td>
+                <td>Faster convergence; ~2× wall-clock in the paper</td>
+              </tr>
+              <tr>
+                <td>🎻 <strong>PiSSA</strong>
+                  [<a href="https://arxiv.org/abs/2404.02948"
+                    target="_blank" rel="noopener noreferrer">13</a>]
+                </td>
+                <td>Init A,B from the principal SVD of W; residual
+                  stays frozen</td>
+                <td>Tight step budgets; coding / math; also cuts
+                  quantization error vs QLoRA</td>
+              </tr>
+              <tr>
+                <td>🧮 <strong>LoftQ</strong>
+                  [<a href="https://arxiv.org/abs/2310.08659"
+                    target="_blank" rel="noopener noreferrer">14</a>]
+                </td>
+                <td>Init adapters to cancel 4-bit quantization error</td>
+                <td>QLoRA runs where the quantized base is a bad
+                  starting point</td>
+              </tr>
+              <tr>
+                <td>📊 <strong>EVA</strong></td>
+                <td>SVD on <em>activations</em>; allocate rank by
+                  explained variance</td>
+                <td>Data-aware init; PEFT
+                  <code>init_lora_weights="eva"</code></td>
+              </tr>
+              <tr>
+                <td>🧭 <strong>CorDA</strong></td>
+                <td>Context-oriented decomposition of W</td>
+                <td>Faster than PiSSA in instruction-previewed
+                  mode; better knowledge preserve in the other mode</td>
+              </tr>
+              <tr>
+                <td>🎯 <strong>LoRA-Pro / LoRA-GA</strong>
+                  [<a href="https://arxiv.org/abs/2407.18242"
+                    target="_blank" rel="noopener noreferrer">15</a>]
+                </td>
+                <td>Align the LoRA step with the full-FT gradient
+                  (GA = SVD of grads at init)</td>
+                <td>When you want PEFT to
+                  <em>track</em> full FT, not just be cheap</td>
+              </tr>
+              <tr>
+                <td>🧊 <strong>VeRA</strong>
+                  [<a href="https://arxiv.org/abs/2310.11454"
+                    target="_blank" rel="noopener noreferrer">16</a>]
+                </td>
+                <td>Shared frozen random matrices + tiny per-layer
+                  scales</td>
+                <td>Extreme parameter count, weaker capacity</td>
+              </tr>
+              <tr>
+                <td>📉 <strong>GaLore</strong>
+                  [<a href="https://arxiv.org/abs/2403.03507"
+                    target="_blank" rel="noopener noreferrer">17</a>]
+                </td>
+                <td>Project <em>gradients</em> to low rank (full
+                  weights still train)</td>
+                <td>Full-FT quality with optimizer-state savings —
+                  not an adapter</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>RSRA (2026) is the other direction: a
+            <em>training-free</em> probe that allocates rank from
+            representation sensitivity before you fine-tune, then
+            plugs into LoRA / DoRA / PiSSA
+            [<a href="https://arxiv.org/abs/2607.09757"
+              target="_blank" rel="noopener noreferrer">18</a>].
+            AdaLoRA does the same idea
+            <em>during</em> training with importance scores. The
+            pattern: <strong>uniform rank is leaving money on the
+            table; the question is whether you allocate before or
+            during the run.</strong></p>
+
+          <h3>✨ DoRA — Weight-Decomposed LoRA</h3>
+          <p>Full FT changes both <strong>how large</strong> a weight
+            row is (magnitude) and <strong>which way</strong> it
+            points (direction). Plain LoRA mostly learns a
+            directional ΔW on frozen W. DoRA decomposes the adapted
+            weight into a trainable magnitude vector
+            <code>m</code> and a LoRA-style direction
+            [<a href="https://arxiv.org/abs/2402.09353"
+              target="_blank" rel="noopener noreferrer">3</a>]:</p>
+          <pre><code>W′ = m · (W + BA) / ||W + BA||_row</code></pre>
+          <p>Same knobs as LoRA (<code>r</code>, <code>alpha</code>).
+            Slightly more compute. In PEFT it is
+            <code>use_dora=True</code>.</p>
+          <p><strong>2026 systems note.</strong> Naive DoRA
+            materializes the dense <code>BA</code> just to take a
+            row-norm — at high rank that is hundreds of MB of
+            transient VRAM per module. Factored norms + fused Triton
+            kernels cut that working set and pick up ~1.5–2× on the
+            compose kernels
+            [<a href="https://arxiv.org/abs/2603.22276"
+              target="_blank" rel="noopener noreferrer">19</a>].
+            If you heard “DoRA is too slow,” check whether you are
+            running the 2024 eager path.</p>
+          <p>✅ <strong>When to try DoRA.</strong> You like LoRA’s
+            cost and want a bit more quality headroom — especially
+            instruction / commonsense suites where magnitude
+            actually moves.</p>
+
+          <h3>🎯 AdaLoRA — adaptive rank</h3>
+          <p>Not every layer needs the same <code>r</code>. AdaLoRA
+            parameterizes ΔW as an SVD-like triplet, scores
+            importance from gradients, and
+            <strong>prunes toward a rank budget</strong>
+            [<a href="https://arxiv.org/abs/2303.10512"
+              target="_blank" rel="noopener noreferrer">20</a>]:</p>
+          <ol>
+            <li>Start with a higher <code>init_r</code></li>
+            <li>Warm up (<code>tinit</code>) with little/no prune</li>
+            <li>Allocate / prune every <code>deltaT</code> steps
+              toward average <code>target_r</code></li>
+            <li>Final <code>tfinal</code> steps: freeze ranks,
+              fine-tune</li>
+          </ol>
+          <p>⚠️ <strong>Critical implementation detail.</strong>
+            PEFT’s <code>update_and_allocate</code> must run
+            <em>after</em> <code>optimizer.step()</code> and
+            <em>before</em> <code>zero_grad()</code> — gradients
+            still have to exist. Miss that hook and AdaLoRA is just
+            expensive LoRA. slick-tune’s
+            <code>AdaLoRACallback</code> hangs off Hugging Face
+            Trainer’s <code>on_optimizer_step</code>
+            [<a href="https://www.docs.slickml.com/slick-tune/pages/fine_tuning_guide.html"
+              target="_blank" rel="noopener noreferrer">7</a>].</p>
+          <p>✅ Longer runs, rank-budget experiments. Tiny
+            memorization demos often need the warmup plus a slightly
+            higher LR than LoRA.</p>
+
+          <h3>📦 QLoRA — 4-bit base + high-precision adapters</h3>
+          <p>QLoRA is how 65B-class models got fine-tuned on a 48 GB
+            GPU
+            [<a href="https://arxiv.org/abs/2305.14314"
+              target="_blank" rel="noopener noreferrer">2</a>].
+            Three ideas stacked:</p>
+          <ol>
+            <li>🔢 Store frozen base weights in
+              <strong>NF4</strong> (4-bit NormalFloat, a quantile
+              type matched to weight distributions)</li>
+            <li>📉 <strong>Double quantization</strong> — quantize
+              the quantization constants themselves</li>
+            <li>📄 <strong>Paged optimizers</strong> — spill Adam
+              states to CPU RAM when the CUDA allocator would OOM</li>
+          </ol>
+          <p>Forward computes in bf16/fp16. LoRA A,B stay in higher
+            precision. You train the adapters, not the 4-bit
+            integers.</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="QLoRA: 4-bit frozen base plus bf16 LoRA adapters">
+            <pre class="mermaid">
+flowchart TB
+  Disk["💾 16/32-bit checkpoint on disk"] --> Q["❄️ Load as 4-bit NF4 base"]
+  Q --> Lora["🧪 Trainable LoRA A,B in bf16"]
+  Batch["📦 Batch"] --> Q
+  Batch --> Lora
+  Q --> Out["➡️ Forward"]
+  Lora --> Out
+            </pre>
+          </div>
+
+          <p>In 2026 QLoRA is the <strong>default for single-GPU
+            7B–70B SFT</strong>. Unsloth-class kernels closed most of
+            the throughput gap with 16-bit LoRA. Pick LoRA when you
+            have VRAM headroom and want max tokens/sec; pick QLoRA
+            when memory is the binding constraint. LoftQ or PiSSA
+            init if the quantized base is a bad starting point
+            [<a href="https://arxiv.org/abs/2310.08659"
+              target="_blank" rel="noopener noreferrer">14</a>]
+            [<a href="https://arxiv.org/abs/2404.02948"
+              target="_blank" rel="noopener noreferrer">13</a>].</p>
+          <p>📋 <strong>Hardware.</strong> bitsandbytes 4-bit wants
+            <strong>CUDA</strong>. On Apple Silicon / CPU, use LoRA,
+            not QLoRA. slick-tune: <code>uv sync --extra qlora</code>.</p>
+
+          <h3>🗳️ Choosing a strategy</h3>
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>Situation</th>
+                <th>Prefer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Laptop smoke test (Mac)</td>
+                <td>🧩 LoRA (or DoRA)</td>
+              </tr>
+              <tr>
+                <td>First serious PEFT run</td>
+                <td>🧩 LoRA, <code>r=16</code>, all-linear</td>
+              </tr>
+              <tr>
+                <td>LoRA-like cost, try quality+</td>
+                <td>✨ DoRA</td>
+              </tr>
+              <tr>
+                <td>Long run, explore rank budgets</td>
+                <td>🎯 AdaLoRA (or RSRA then LoRA)</td>
+              </tr>
+              <tr>
+                <td>7B+ on one consumer GPU</td>
+                <td>📦 QLoRA</td>
+              </tr>
+              <tr>
+                <td>High rank / continued pre-training</td>
+                <td>📐 rsLoRA + embeddings at lower LR</td>
+              </tr>
+              <tr>
+                <td>Small model, one final specialist</td>
+                <td>🏋️ Full</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2>🎓 Objective: what the model learns</h2>
+          <p>Strategy is the parameterization. Objective is the
+            <strong>loss + data contract</strong>. They combine
+            freely: LoRA + SFT, QLoRA + DPO, LoRA + GRPO.</p>
+          <p>The 2026 post-training stack is modular. Classic RLHF
+            (SFT → reward model → PPO) is not dead at frontier labs,
+            but it is no longer the default you should reach for
+            first
+            [<a href="https://llm-stats.com/blog/research/post-training-techniques-2026"
+              target="_blank" rel="noopener noreferrer">21</a>]:</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Post-training stack from SFT to preferences to verifiable RL">
+            <pre class="mermaid">
+flowchart TB
+  subgraph SUP["📝 Supervised"]
+    SFT["SFT — imitate assistant tokens"]
+  end
+  subgraph PREF["⚖️ Preferences"]
+    DPO["DPO — chosen vs rejected vs ref"]
+    ORPO["ORPO — odds-ratio, no ref model"]
+    KTO["KTO — unpaired good / bad"]
+    SIM["SimPO — avg logprob, no ref"]
+  end
+  subgraph RL["🎯 Verifiable RL"]
+    GRPO["GRPO — group-relative advantages"]
+    DAPO["DAPO — clip-higher, dynamic sampling"]
+  end
+  SFT --> PREF --> RL
+            </pre>
+          </div>
+
+          <h3>📝 SFT — supervised fine-tuning</h3>
+          <p>Imitate labeled assistant answers. Next-token negative
+            log-likelihood on the <em>response</em> tokens (mask the
+            prompt). This is still the correct
+            <strong>first</strong> step: teach facts, house style,
+            JSON schemas, tool-call format.</p>
+          <p>Data shapes (JSONL, one object per line):</p>
+          <pre><code>{"messages":[{"role":"user","content":"..."},{"role":"assistant","content":"..."}]}
+{"prompt":"...","response":"..."}
+{"instruction":"...","input":"...","output":"..."}</code></pre>
+          <p>📉 <strong>Data &gt; scale.</strong> 500–2,000
+            <em>clean</em> demonstrations often beat 50,000 noisy
+            ones for tone/format. For domain SFT, 5k–20k in the
+            target distribution is a common band. If the model must
+            emit a schema, put the schema in the targets, not only
+            the system prompt.</p>
+          <p>Completion-only loss (do not train on user tokens) is
+            the default that is not default enough — if your library
+            trains on the whole sequence, you are teaching the model
+            to imitate the <em>questions</em> too.</p>
+
+          <h3>🏆 Classic RLHF — reward model + PPO</h3>
+          <p>InstructGPT’s recipe
+            [<a href="https://arxiv.org/abs/2203.02155"
+              target="_blank" rel="noopener noreferrer">22</a>]:
+            SFT, then a <strong>reward model</strong> on preference
+            pairs, then <strong>PPO</strong> with a KL penalty toward
+            the SFT policy. It works. It also means a second model,
+            a value head / critic, unstable advantage estimates, and
+            a lot of annotation.</p>
+          <p>You still see PPO at labs for safety-critical
+            alignment. For everyone else, the field moved to
+            <em>implicit-reward</em> methods (DPO family) and then
+            to <strong>RL with verifiable rewards</strong> (GRPO
+            family) for reasoning. slick-tune’s roadmap puts
+            classic RM + PPO in a later phase; the shipped path is
+            DPO/ORPO/KTO + GRPO
+            [<a href="https://github.com/slickml/slick-tune"
+              target="_blank" rel="noopener noreferrer">23</a>].</p>
+
+          <h3>⚖️ DPO — Direct Preference Optimization</h3>
+          <p>DPO skips the reward model
+            [<a href="https://arxiv.org/abs/2305.18290"
+              target="_blank" rel="noopener noreferrer">4</a>].
+            You provide a <strong>chosen</strong> and a
+            <strong>rejected</strong> completion for the same
+            prompt. The loss increases the likelihood of chosen
+            relative to rejected, compared to a
+            <strong>frozen reference</strong> policy (usually the
+            SFT model), scaled by <code>beta</code> (KL /
+            preference strength). Typical <code>beta</code>:
+            0.1–0.5.</p>
+          <pre><code>{"prompt":"...","chosen":"...","rejected":"..."}</code></pre>
+          <p>Cost: a forward through policy <em>and</em> reference
+            (~30–50% more than SFT). Stability: much better than
+            PPO for most teams. 1k–5k ranked pairs is a common
+            starting set.</p>
+
+          <h3>🎲 ORPO — odds-ratio, no reference</h3>
+          <p>Same preference pairs as DPO. ORPO folds SFT and
+            preference into one odds-ratio term — no separate ref
+            model in GPU memory
+            [<a href="https://arxiv.org/abs/2403.07691"
+              target="_blank" rel="noopener noreferrer">24</a>].
+            Useful when the dataset is small and you do not want to
+            keep a second copy of the weights. Same
+            <code>beta</code> knob, different meaning (odds-ratio
+            strength).</p>
+
+          <h3>✅❌ KTO — unpaired thumbs</h3>
+          <p>Product logs are rarely ranked pairs. KTO treats
+            alignment as prospect-theoretic optimization over
+            <em>binary</em> good/bad labels
+            [<a href="https://arxiv.org/abs/2402.01306"
+              target="_blank" rel="noopener noreferrer">25</a>]:</p>
+          <pre><code>{"prompt":"...","completion":"...","label":true}</code></pre>
+          <p>TRL wants batch size &gt; 1 for the KL term —
+            slick-tune auto-bumps
+            <code>per_device_train_batch_size</code> to at least 2.
+            If all you have is thumbs-up / thumbs-down from
+            production, this is the objective, not DPO.</p>
+
+          <h3>📉 SimPO and friends</h3>
+          <p>SimPO uses the <em>average</em> log-probability of the
+            response as an implicit reward — no reference model
+            [<a href="https://arxiv.org/abs/2405.14734"
+              target="_blank" rel="noopener noreferrer">26</a>].
+            IPO, CPO, and a pile of DPO variants tweak the
+            regularization. The practical split in 2026:</p>
+          <ul>
+            <li>⚖️ Paired prefs, you can afford a ref →
+              <strong>DPO</strong></li>
+            <li>⚖️ Paired prefs, tight VRAM / small data →
+              <strong>ORPO</strong> (or SimPO)</li>
+            <li>👍 Unpaired labels → <strong>KTO</strong></li>
+          </ul>
+
+          <h3>🎯 GRPO — Group Relative Policy Optimization</h3>
+          <p>This is the optimizer that made open reasoning models
+            feel like o1. DeepSeekMath introduced GRPO; DeepSeek-R1
+            showed large-scale RL with verifiable rewards can
+            <em>emerge</em> chain-of-thought, self-reflection, and
+            strategy switching — including an R1-Zero path with
+            <em>no</em> SFT first
+            [<a href="https://arxiv.org/abs/2402.03300"
+              target="_blank" rel="noopener noreferrer">5</a>]
+            [<a href="https://arxiv.org/abs/2501.12948"
+              target="_blank" rel="noopener noreferrer">6</a>].</p>
+          <p><strong>Idea.</strong> Drop the critic / value network.
+            For each prompt, sample a <strong>group</strong> of
+            completions (8–64 in papers; 2–4 in laptop demos).
+            Score each with a reward. Advantage is just
+            group-relative:</p>
+          <pre><code>A_i = (r_i − mean(r)) / std(r)</code></pre>
+          <p>Then a PPO-style clipped policy gradient, often with a
+            KL term toward a reference (<code>beta</code>). No
+            learned reward model if the reward is
+            <strong>verifiable</strong>: unit tests passed, boxed
+            math matches, JSON parses, substring present.</p>
+          <p>That last sentence is the paradigm shift:
+            <strong>RLVR</strong> — reinforcement learning with
+            verifiable rewards — not “humans rated this 7/10.”</p>
+          <pre><code>{"prompt":"Who is Amirhessam Tahmassebi?","must_contain":"founder of SlickML"}</code></pre>
+          <p>slick-tune’s demo reward: exact substring → 1.0; else a
+            soft keyword-overlap so groups can get non-zero
+            advantages
+            [<a href="https://www.docs.slickml.com/slick-tune/pages/fine_tuning_guide.html"
+              target="_blank" rel="noopener noreferrer">7</a>].</p>
+          <p>⚠️ <strong>Warm-start.</strong> On a cold tiny base,
+            rewards stay ~0 and GRPO cannot learn. Run SFT first,
+            then GRPO with <code>adapter_path</code> pointing at the
+            SFT adapter. Frontier R1-Zero is the exception that
+            proves the compute budget.</p>
+
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>Knob</th>
+                <th>Meaning</th>
+                <th>Typical</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>num_generations</code></td>
+                <td>Completions per prompt</td>
+                <td>2–4 demo; 8–16 serious</td>
+              </tr>
+              <tr>
+                <td><code>max_completion_length</code></td>
+                <td>Max new tokens per sample</td>
+                <td>64–128 demo; much longer for CoT</td>
+              </tr>
+              <tr>
+                <td><code>beta</code></td>
+                <td>KL toward the reference</td>
+                <td>0.0 for tiny demos; &gt;0 in production</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>🚀 DAPO, Dr. GRPO, GSPO — GRPO after the hype</h3>
+          <p>Naive GRPO at long-CoT scale hits entropy collapse,
+            length bias, and reward noise. DAPO (ByteDance, 2025)
+            is the open system that actually reproduced R1-class
+            gains on Qwen2.5-32B
+            [<a href="https://arxiv.org/abs/2503.14476"
+              target="_blank" rel="noopener noreferrer">27</a>]:</p>
+          <ol>
+            <li>📐 <strong>Clip-Higher</strong> — asymmetric PPO clip
+              (<code>ε_low &lt; ε_high</code>) so entropy does not
+              die</li>
+            <li>🎰 <strong>Dynamic sampling</strong> — drop groups
+              where every sample has the same reward (zero
+              advantage → wasted step)</li>
+            <li>🔤 <strong>Token-level policy gradient</strong> —
+              do not let long sequences dominate the batch</li>
+            <li>✂️ <strong>Overlong reward shaping</strong> — penalize
+              / filter truncated samples so length is not a
+              spurious reward</li>
+          </ol>
+          <p>Unsloth and TRL now expose DAPO / Dr. GRPO switches on
+            the same GRPO trainer. GSPO (Qwen) sets importance
+            sampling at <em>sequence</em> level instead of token
+            level. The cutting-edge pattern is not “invent a new
+            three-letter optimizer every month” — it is
+            <strong>GRPO + the four DAPO fixes</strong> when you
+            leave the toy regime.</p>
+
+          <h3>🧭 Choosing an objective</h3>
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>Goal</th>
+                <th>Prefer</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Teach facts / format from demos</td>
+                <td>📝 SFT</td>
+              </tr>
+              <tr>
+                <td>Rank good answers above bad ones (paired)</td>
+                <td>⚖️ DPO (or ORPO if no ref)</td>
+              </tr>
+              <tr>
+                <td>Only thumbs-up / thumbs-down</td>
+                <td>✅❌ KTO</td>
+              </tr>
+              <tr>
+                <td>Checkable string / test / math / code</td>
+                <td>🎯 GRPO after SFT (DAPO when long CoT)</td>
+              </tr>
+              <tr>
+                <td>Safety-critical, learned reward</td>
+                <td>🏆 RM + PPO (you know why you need it)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <aside class="two-cents-aside">
+            <p>🧬 <strong>The 2026 recipe, one line.</strong>
+              Strong instruct base → LoRA/QLoRA SFT on a tight
+              contract → DPO/ORPO/KTO on prefs → GRPO/DAPO on
+              verifiable tasks → probes that can fail a release.
+              Skip a stage if you do not have that data. Do not skip
+              measurement.</p>
+          </aside>
+
+          <h2>🧪 Did it work?</h2>
+          <p>Training loss going down is necessary and almost
+            insufficient. You can memorize the JSONL and still fail
+            the product question. Measure explicitly
+            [<a href="https://www.docs.slickml.com/slick-tune/pages/fine_tuning_guide.html"
+              target="_blank" rel="noopener noreferrer">7</a>]:</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Eval loop: holdout perplexity, probes, judges">
+            <pre class="mermaid">
+flowchart TB
+  Train["📁 Train JSONL"] --> Fit["🚂 Tuner.fit"]
+  Fit --> Adapter["💾 Adapter / checkpoint"]
+  Hold["📁 Holdout JSONL"] --> PPL["📉 Holdout perplexity"]
+  Adapter --> PPL
+  Probes["🎯 Probe JSONL"] --> Gen["✍️ Generate answers"]
+  Adapter --> Gen
+  Gen --> Sub["✅ SubstringJudge"]
+  Gen --> LLM["🧑‍⚖️ LLMJudge"]
+            </pre>
+          </div>
+
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>Signal</th>
+                <th>Asks</th>
+                <th>Good when</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>📉 Train loss</td>
+                <td>Did optimization move?</td>
+                <td>Downward trend</td>
+              </tr>
+              <tr>
+                <td>📉 Holdout PPL</td>
+                <td>How surprising is unseen text?</td>
+                <td>Lower PPL on a file you did
+                  <em>not</em> train on</td>
+              </tr>
+              <tr>
+                <td>🎯 Probes + substring</td>
+                <td>Does the answer contain your fact?</td>
+                <td>High pass rate on paraphrases</td>
+              </tr>
+              <tr>
+                <td>🧑‍⚖️ LLM judge</td>
+                <td>Rubric 0–10</td>
+                <td>The judge is stronger than the student</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p><strong>Perplexity</strong> = exp(mean token NLL).
+            Intuition: effective branching factor for the next
+            token — lower is better. It is a
+            <em>distributional</em> score, not a fact check. A model
+            can have great PPL and still never say “SlickML.”</p>
+          <p><strong>Probes</strong> are the missing piece in most
+            tutorials. A probe is a question plus a
+            <code>must_contain</code> substring. Pass rate is the
+            number you should be willing to fail a release on.
+            Paraphrase the questions — if you probe with the
+            training prompt verbatim, you measured memorization,
+            not learning.</p>
+          <p>On tiny demo models, prefer a substring judge. A 135M
+            checkpoint judging itself will under-score correct
+            answers.</p>
+
+          <h2>🔀 Multi-adapter merge — TIES and DARE</h2>
+          <p>After a few PEFT runs you have several adapter folders
+            on the <em>same</em> base: SFT facts, DPO manners, a
+            GRPO reasoning head. Options:</p>
+          <ol>
+            <li>🔀 <strong>Switch</strong> — load them all, activate
+              one with <code>set_adapter</code></li>
+            <li>🧬 <strong>Merge</strong> — fuse into one new adapter</li>
+            <li>🍞 <strong>Bake</strong> —
+              <code>merge_and_unload</code> into full weights for
+              vLLM / TGI</li>
+          </ol>
+          <p>Naive averaging lets useful edits
+            <strong>cancel</strong> when adapters disagree in sign,
+            and keeps a lot of noisy small entries. TIES and DARE
+            prune and resolve conflicts first
+            [<a href="https://arxiv.org/abs/2306.01708"
+              target="_blank" rel="noopener noreferrer">28</a>]
+            [<a href="https://arxiv.org/abs/2311.03099"
+              target="_blank" rel="noopener noreferrer">29</a>].</p>
+
+          <h3>✂️ TIES — Trim, Elect Sign, Merge</h3>
+          <ol>
+            <li><strong>Trim</strong> — drop the smallest-magnitude
+              updates; keep density ∈ [0, 1]</li>
+            <li><strong>Elect sign</strong> — where adapters
+              disagree, pick a consensus sign</li>
+            <li><strong>Merge</strong> — average the survivors under
+              that sign</li>
+          </ol>
+          <p>Intuition: keep the big edits, resolve fights over
+            direction, then combine.</p>
+
+          <h3>🎲 DARE — Drop And REscale</h3>
+          <ol>
+            <li><strong>Drop</strong> a large share of delta entries
+              (again, <code>density</code>)</li>
+            <li><strong>Rescale</strong> survivors so expected
+              magnitude stays honest</li>
+            <li>Often paired with TIES-style signs →
+              <code>dare_ties</code> / <code>dare_linear</code></li>
+          </ol>
+          <p>Intuition: many fine-tune deltas are redundant; dropping
+            most and rescaling keeps behavior while reducing
+            interference. The Super Mario paper’s claim in one
+            sentence: homologous models have sparse, over-parameterized
+            deltas you can lottery-ticket away
+            [<a href="https://arxiv.org/abs/2311.03099"
+              target="_blank" rel="noopener noreferrer">29</a>].</p>
+
+          <p><strong>Hard requirements.</strong> Same
+            <code>model_id</code>. Each path is a PEFT dir with
+            <code>adapter_config.json</code>. For
+            <code>ties</code> / <code>dare_*</code> / linear, every
+            adapter must share the same LoRA <code>r</code> — else
+            use an SVD variant (<code>ties_svd</code>, …) or retrain
+            at matching rank. Density 0.5 is a sane start. Weights
+            per adapter can be &lt; 1 or even negative.</p>
+
+          <h2>🧞 slick-tune — the orthogonal toolkit</h2>
+          <p>I got tired of copy-pasting PEFT + TRL scripts that
+            couple the model, the adapter, the loss, and the eval
+            into one argparse monster. <strong>slick-tune</strong>
+            is a small composable library on Transformers + PEFT +
+            TRL: swap one axis, keep the rest
+            [<a href="https://github.com/slickml/slick-tune"
+              target="_blank" rel="noopener noreferrer">23</a>]
+            [<a href="https://pypi.org/project/slicktune/"
+              target="_blank" rel="noopener noreferrer">30</a>].</p>
+          <pre><code>model  ×  strategy  ×  objective  ×  data  ×  metrics</code></pre>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="How slick-tune wires model, strategy, objective, and metrics">
+            <pre class="mermaid">
+flowchart TB
+  subgraph IN["📥 You provide"]
+    mid["🧠 model_id"]
+    strat["🧩 Strategy"]
+    obj["🎓 Objective"]
+    data["📁 train JSONL"]
+    hold["📉 optional eval JSONL"]
+    probes["🎯 optional probes"]
+  end
+  subgraph TUNER["🚂 Tuner.fit"]
+    load["load tokenizer + model"]
+    apply["strategy.apply or adapter_path warm-start"]
+    train["TRL trainer for objective"]
+    metrics["MetricsTracker"]
+  end
+  subgraph OUT["📤 Artifacts"]
+    ckpt["💾 adapter or full weights"]
+    mj["📊 metrics.json"]
+    merged["🔀 optional TIES / DARE merge"]
+  end
+  mid --> load
+  strat --> apply
+  load --> apply --> train
+  obj --> train
+  data --> train
+  train --> metrics
+  hold --> metrics
+  probes --> metrics
+  train --> ckpt
+  metrics --> mj
+  ckpt --> merged
+            </pre>
+          </div>
+
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>Axis</th>
+                <th>Shipped (v0.5)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>🧩 Strategy</td>
+                <td><code>Full</code> / <code>LoRA</code> /
+                  <code>DoRA</code> / <code>AdaLoRA</code> /
+                  <code>QLoRA</code></td>
+              </tr>
+              <tr>
+                <td>🎓 Objective</td>
+                <td><code>SFT</code> / <code>DPO</code> /
+                  <code>ORPO</code> / <code>KTO</code> /
+                  <code>GRPO</code></td>
+              </tr>
+              <tr>
+                <td>📊 Metrics</td>
+                <td>Holdout PPL, substring / LLM judges, probe pass
+                  rate</td>
+              </tr>
+              <tr>
+                <td>🔀 Merge</td>
+                <td>TIES / DARE / linear + <code>bake_adapter</code></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>📌 A LoRA + SFT run</h3>
+          <pre><code>from slicktune import LoRAStrategy, SFTObjective, Tuner
+
+Tuner(
+    model_id="HuggingFaceTB/SmolLM2-135M-Instruct",
+    strategy=LoRAStrategy(r=16, alpha=32, dropout=0.05),
+    objective=SFTObjective(),
+    output_dir="outputs/sft_lora",
+    eval_data="examples/data/about_amir.eval.jsonl",
+).fit("examples/data/about_amir.jsonl")</code></pre>
+          <p>Swap the strategy, keep the JSONL:</p>
+          <pre><code>DoRAStrategy(r=16, alpha=32)          # quality headroom
+AdaLoRAStrategy(init_r=16, target_r=12, tinit=60, tfinal=30)
+QLoRAStrategy(r=16, alpha=32)         # CUDA + bitsandbytes
+FullStrategy()                        # every weight</code></pre>
+          <p>Swap the objective, keep LoRA:</p>
+          <pre><code>DPOObjective(beta=0.1)   # prefs JSONL
+ORPOObjective(beta=0.1)  # same prefs, no ref
+KTOObjective(beta=0.1)   # unpaired labels
+GRPOObjective(beta=0.0, num_generations=4, max_completion_length=96)</code></pre>
+
+          <h3>⌨️ CLI</h3>
+          <pre><code># 🏋️ Train
+uv run slicktune train --strategy lora \
+  --data examples/data/about_amir.jsonl \
+  --eval-data examples/data/about_amir.eval.jsonl \
+  --output outputs/sft_lora
+
+# 🧪 Probes — did your facts stick?
+uv run slicktune probe \
+  --model-dir outputs/sft_lora \
+  --probes examples/data/about_amir.probes.jsonl
+
+# 📊 Holdout PPL + judges
+uv run slicktune eval \
+  --model-dir outputs/sft_lora \
+  --eval-data examples/data/about_amir.eval.jsonl \
+  --probes examples/data/about_amir.probes.jsonl \
+  --judge substring
+
+# 🔀 Merge adapters
+uv run slicktune merge \
+  --adapter outputs/sft_lora \
+  --adapter outputs/dpo_lora:0.5 \
+  --method ties --density 0.5 \
+  --output outputs/merged_ties</code></pre>
+
+          <h3>🔀 Merge in Python</h3>
+          <pre><code>from slicktune import AdapterRef, merge_adapters, bake_adapter, load_multi_adapters
+
+merge_adapters(
+    model_id="HuggingFaceTB/SmolLM2-135M-Instruct",
+    adapters=[
+        AdapterRef(path="outputs/sft_lora", name="sft", weight=1.0),
+        AdapterRef(path="outputs/dpo_lora", name="dpo", weight=0.5),
+    ],
+    output_dir="outputs/merged_ties",
+    method="ties",
+    density=0.5,
+)
+
+bake_adapter(adapter_dir="outputs/sft_lora", output_dir="outputs/sft_baked")</code></pre>
+
+          <p>The personal loop the repo is built around: edit a tiny
+            “about me” JSONL, a
+            <em>held-out</em> paraphrase file for PPL, and probes
+            with <code>must_contain</code>. Train on SmolLM2-135M so
+            a laptop can finish. Probe. If the pass rate did not
+            move, the run did not work — no matter what the loss
+            plot says.</p>
+          <p>📦 <code>pip install slicktune</code> · Python 3.10–3.13 ·
+            extra <code>qlora</code> for CUDA 4-bit. Docs:
+            <a href="https://www.docs.slickml.com/slick-tune/"
+              target="_blank" rel="noopener noreferrer">docs.slickml.com/slick-tune</a>.
+            Visual guide:
+            <a href="https://www.docs.slickml.com/slick-tune/pages/fine_tuning_guide.html"
+              target="_blank" rel="noopener noreferrer">Fine-Tuning LLMs: A Visual Guide</a>
+            [<a href="https://www.docs.slickml.com/slick-tune/pages/fine_tuning_guide.html"
+              target="_blank" rel="noopener noreferrer">7</a>].</p>
+
+          <h2>🪙 My 2 cents</h2>
+          <p>Stop asking “should we fine-tune?” Ask the questions
+            that force an architecture:</p>
+          <ul>
+            <li>🎯 Can few-shot or many-shot ICL carry the task
+              without a training run?</li>
+            <li>📚 Can retrieval serve the facts that change?</li>
+            <li>📝 Do I have demonstrations, pairs, thumbs, or a
+              verifier?</li>
+            <li>💾 Is VRAM or quality the binding constraint?</li>
+            <li>🎯 What substring / test / rubric fails the
+              release?</li>
+            <li>🔀 Do I need one specialist, or several adapters I
+              can merge later?</li>
+          </ul>
+          <p>Answer those and the stack almost picks itself:</p>
+          <ul>
+            <li>🎯 <strong>ICL</strong> (few-shot, then many-shot)
+              when demos fit the window and the empty prompt is
+              allowed to be weak</li>
+            <li>💬 <strong>Prompt + RAG</strong> when knowledge
+              moves and the format already works</li>
+            <li>🧩 <strong>LoRA SFT</strong> when style, schema, or
+              stable facts must live in the weights</li>
+            <li>📦 <strong>QLoRA</strong> when the base is big and
+              the GPU is not</li>
+            <li>✨ <strong>DoRA / PiSSA / rsLoRA</strong> when vanilla
+              LoRA is the ceiling, not the floor</li>
+            <li>⚖️ <strong>DPO / ORPO / KTO</strong> when you can
+              label better vs worse</li>
+            <li>🎯 <strong>GRPO</strong> when a program can score the
+              answer — after SFT, not instead of it</li>
+            <li>✂️ <strong>TIES / DARE</strong> when adapters
+              disagree; <strong>bake</strong> when the serving
+              engine wants one folder</li>
+          </ul>
+          <p>Contracts that are non-optional:</p>
+          <ul>
+            <li>🎛️ Strategy and objective stay orthogonal — do not
+              rewrite the trainer to change the loss</li>
+            <li>🎯 Probes over vibes; holdout PPL over train loss</li>
+            <li>❄️ Fine-tune form; retrieve facts that churn</li>
+            <li>🧪 A 135M laptop loop that
+              <em>proves the plumbing</em> before you spend H100
+              hours</li>
+          </ul>
+          <p>🌱 Treat fine-tuning as something you
+            <strong>compose</strong> — model × strategy × objective
+            × data × metrics — not a Colab you hope converges.
+            That is why slick-tune looks the way it does.</p>
+
+          <h2>📚 References</h2>
+          <ol class="two-cents-references">
+            <li id="ref-1">Edward J. Hu et al., “LoRA: Low-Rank
+              Adaptation of Large Language Models,” ICLR 2022,
+              <a href="https://arxiv.org/abs/2106.09685"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2106.09685</a>
+            </li>
+            <li id="ref-2">Tim Dettmers et al., “QLoRA: Efficient
+              Finetuning of Quantized LLMs,” NeurIPS 2023,
+              <a href="https://arxiv.org/abs/2305.14314"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2305.14314</a>
+            </li>
+            <li id="ref-3">Shih-Yang Liu et al., “DoRA:
+              Weight-Decomposed Low-Rank Adaptation,” ICML 2024,
+              <a href="https://arxiv.org/abs/2402.09353"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2402.09353</a>
+            </li>
+            <li id="ref-4">Rafael Rafailov et al., “Direct Preference
+              Optimization: Your Language Model is Secretly a Reward
+              Model,” NeurIPS 2023,
+              <a href="https://arxiv.org/abs/2305.18290"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2305.18290</a>
+            </li>
+            <li id="ref-5">Zhihong Shao et al., “DeepSeekMath: Pushing
+              the Limits of Mathematical Reasoning in Open Language
+              Models,” 2024,
+              <a href="https://arxiv.org/abs/2402.03300"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2402.03300</a>
+            </li>
+            <li id="ref-6">DeepSeek-AI, “DeepSeek-R1: Incentivizing
+              Reasoning Capability in LLMs via Reinforcement
+              Learning,” 2025,
+              <a href="https://arxiv.org/abs/2501.12948"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2501.12948</a>
+            </li>
+            <li id="ref-7">Amirhessam Tahmassebi / SlickML, “Fine-Tuning
+              LLMs: A Visual Guide,” slick-tune docs,
+              <a href="https://www.docs.slickml.com/slick-tune/pages/fine_tuning_guide.html"
+                target="_blank"
+                rel="noopener noreferrer">docs.slickml.com/slick-tune/pages/fine_tuning_guide.html</a>
+            </li>
+            <li id="ref-8">Dan Biderman et al., “LoRA Learns Less and
+              Forgets Less,” TMLR 2024,
+              <a href="https://arxiv.org/abs/2405.09673"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2405.09673</a>
+            </li>
+            <li id="ref-9">Unsloth, “Continued LLM Pretraining,”
+              <a href="https://www.unsloth.ai/blog/contpretraining"
+                target="_blank"
+                rel="noopener noreferrer">unsloth.ai/blog/contpretraining</a>
+            </li>
+            <li id="ref-10">Hugging Face, PEFT LoRA reference,
+              <a href="https://huggingface.co/docs/peft/en/package_reference/lora"
+                target="_blank"
+                rel="noopener noreferrer">huggingface.co/docs/peft/…/lora</a>
+            </li>
+            <li id="ref-11">Damjan Kalajdzievski, “A Rank
+              Stabilization Scaling Factor for Fine-Tuning with
+              LoRA,” 2023,
+              <a href="https://arxiv.org/abs/2312.03732"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2312.03732</a>
+            </li>
+            <li id="ref-12">Soufiane Hayou, Nikhil Ghosh, and Bin Yu,
+              “LoRA+: Efficient Low Rank Adaptation of Large
+              Models,” 2024,
+              <a href="https://arxiv.org/abs/2402.12354"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2402.12354</a>
+            </li>
+            <li id="ref-13">Fanxu Meng, Zhaohui Wang, and Muhan Zhang,
+              “PiSSA: Principal Singular Values and Singular Vectors
+              Adaptation of Large Language Models,” 2024,
+              <a href="https://arxiv.org/abs/2404.02948"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2404.02948</a>
+            </li>
+            <li id="ref-14">Yixiao Li et al., “LoftQ: LoRA-Fine-Tuning-Aware
+              Quantization for Large Language Models,” ICLR 2024,
+              <a href="https://arxiv.org/abs/2310.08659"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2310.08659</a>
+            </li>
+            <li id="ref-15">Zhengbo Wang et al., “LoRA-Pro: Are
+              Low-Rank Adapters Properly Optimized?,” 2024,
+              <a href="https://arxiv.org/abs/2407.18242"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2407.18242</a>
+            </li>
+            <li id="ref-16">Dawid J. Kopiczko, Tijmen Blankevoort, and
+              Yuki M. Asano, “VeRA: Vector-based Random Matrix
+              Adaptation,” ICLR 2024,
+              <a href="https://arxiv.org/abs/2310.11454"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2310.11454</a>
+            </li>
+            <li id="ref-17">Jiawei Zhao et al., “GaLore: Memory-Efficient
+              LLM Training by Gradient Low-Rank Projection,” ICML
+              2024,
+              <a href="https://arxiv.org/abs/2403.03507"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2403.03507</a>
+            </li>
+            <li id="ref-18">RSRA: “Training-Free Probing of
+              Representation Sensitivity for Efficient LoRA Rank
+              Allocation,” 2026,
+              <a href="https://arxiv.org/abs/2607.09757"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2607.09757</a>
+            </li>
+            <li id="ref-19">“Scaling DoRA: High-Rank Adaptation via
+              Factored Norms and Fused Kernels,” 2026,
+              <a href="https://arxiv.org/abs/2603.22276"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2603.22276</a>
+            </li>
+            <li id="ref-20">Qingru Zhang et al., “AdaLoRA: Adaptive
+              Budget Allocation for Parameter-Efficient
+              Fine-Tuning,” ICLR 2023,
+              <a href="https://arxiv.org/abs/2303.10512"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2303.10512</a>
+            </li>
+            <li id="ref-21">“Post-Training in 2026: GRPO, DAPO, RLVR
+              &amp; Beyond,”
+              <a href="https://llm-stats.com/blog/research/post-training-techniques-2026"
+                target="_blank"
+                rel="noopener noreferrer">llm-stats.com/blog/research/post-training-techniques-2026</a>
+            </li>
+            <li id="ref-22">Long Ouyang et al., “Training language
+              models to follow instructions with human feedback,”
+              NeurIPS 2022,
+              <a href="https://arxiv.org/abs/2203.02155"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2203.02155</a>
+            </li>
+            <li id="ref-23">SlickML, slick-tune,
+              <a href="https://github.com/slickml/slick-tune"
+                target="_blank"
+                rel="noopener noreferrer">github.com/slickml/slick-tune</a>
+            </li>
+            <li id="ref-24">Jiwoo Hong, Noah Lee, and James Thorne,
+              “ORPO: Monolithic Preference Optimization without
+              Reference Model,” EMNLP 2024,
+              <a href="https://arxiv.org/abs/2403.07691"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2403.07691</a>
+            </li>
+            <li id="ref-25">Kawin Ethayarajh et al., “KTO: Model
+              Alignment as Prospect Theoretic Optimization,” ICML
+              2024,
+              <a href="https://arxiv.org/abs/2402.01306"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2402.01306</a>
+            </li>
+            <li id="ref-26">Yu Meng, Mengzhou Xia, and Danqi Chen,
+              “SimPO: Simple Preference Optimization with a
+              Reference-Free Reward,” NeurIPS 2024,
+              <a href="https://arxiv.org/abs/2405.14734"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2405.14734</a>
+            </li>
+            <li id="ref-27">Qiying Yu et al., “DAPO: An Open-Source LLM
+              Reinforcement Learning System at Scale,” 2025,
+              <a href="https://arxiv.org/abs/2503.14476"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2503.14476</a>
+            </li>
+            <li id="ref-28">Prateek Yadav et al., “TIES-Merging:
+              Resolving Interference When Merging Models,” NeurIPS
+              2023,
+              <a href="https://arxiv.org/abs/2306.01708"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2306.01708</a>
+            </li>
+            <li id="ref-29">Le Yu et al., “Language Models are Super
+              Mario: Absorbing Abilities from Homologous Models as a
+              Free Lunch,” ICML 2024,
+              <a href="https://arxiv.org/abs/2311.03099"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2311.03099</a>
+            </li>
+            <li id="ref-30">slicktune on PyPI,
+              <a href="https://pypi.org/project/slicktune/"
+                target="_blank"
+                rel="noopener noreferrer">pypi.org/project/slicktune</a>
+            </li>
+            <li id="ref-31">Hugging Face, TRL documentation,
+              <a href="https://huggingface.co/docs/trl"
+                target="_blank"
+                rel="noopener noreferrer">huggingface.co/docs/trl</a>
+            </li>
+            <li id="ref-32">Tom B. Brown et al., “Language Models are
+              Few-Shot Learners,” NeurIPS 2020,
+              <a href="https://arxiv.org/abs/2005.14165"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2005.14165</a>
+            </li>
+            <li id="ref-33">Rishabh Agarwal et al., “Many-Shot
+              In-Context Learning,” 2024,
+              <a href="https://arxiv.org/abs/2404.11018"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2404.11018</a>
+            </li>
+            <li id="ref-34">Sewon Min et al., “Rethinking the Role of
+              Demonstrations: What Makes In-Context Learning Work?,”
+              EMNLP 2022,
+              <a href="https://arxiv.org/abs/2202.12837"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2202.12837</a>
+            </li>
+            <li id="ref-35">Damai Dai et al., “Why Can GPT Learn
+              In-Context? Language Models Implicitly Perform Gradient
+              Descent as Meta-Optimizers,” 2023,
+              <a href="https://arxiv.org/abs/2212.10559"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2212.10559</a>
+            </li>
+            <li id="ref-36">Wenchong He, Liqian Peng, Zhe Jiang, and
+              Alec Go, “You Only Fine-tune Once: Many-Shot
+              In-Context Fine-Tuning for Large Language Models,”
+              2025,
+              <a href="https://arxiv.org/abs/2506.11103"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2506.11103</a>
+            </li>
+            <li id="ref-37">Bishwamittra Ghosh et al., “Fine-tuning vs.
+              In-context Learning in Large Language Models: A Formal
+              Language Learning Perspective,” ACL 2026,
+              <a href="https://aclanthology.org/2026.acl-long.1932/"
+                target="_blank"
+                rel="noopener noreferrer">aclanthology.org/2026.acl-long.1932</a>
+            </li>
+          </ol>
+
+          <footer class="two-cents-article-footer">
+            <a href="../index.html#two-cents">← Back to 2-Cents</a>
+          </footer>
+
+        </article>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; <strong><span>Amirhessam Tahmassebi</span></strong>
+      </div>
+      <div class="credits">
+      </div>
+    </div>
+  </footer>
+  <!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/jquery/jquery.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="../assets/vendor/counterup/counterup.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/venobox/venobox.min.js"></script>
+  <script src="../assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="../assets/vendor/typed.js/typed.min.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+
+  <!-- Theme toggle -->
+  <script src="../assets/js/theme-toggle.js?v=20260716174000"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Mermaid diagrams -->
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    var theme =
+      document.documentElement.getAttribute("data-theme") === "dark"
+        ? "dark"
+        : "default";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: theme,
+      securityLevel: "loose",
+      flowchart: { curve: "basis", padding: 12 }
+    });
+  </script>
+
+</body>
+
+</html>
