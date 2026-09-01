@@ -1,0 +1,784 @@
+<!-- =======================================================
+	  * Amirhessam Tahmassebi
+	  * Email: admin@amirhessam.com
+	  * Website: www.amirhessam.com
+  ======================================================== -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem("theme");
+        var theme = stored === "light" || stored === "dark"
+          ? stored
+          : (window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+        document.documentElement.setAttribute("data-theme", theme);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta name="color-scheme" content="light dark">
+
+  <title>WikiSkill | 2-Cents</title>
+  <meta
+    content="Google's WikiSkill compiles agent traces into a persistent wiki, then into gated skills. Operating notes: three layers, don't let the worker read the wiki, transfer vs workarounds, and how this maps onto LLMOps."
+    name="description">
+  <meta
+    content="Amirhessam Tahmassebi, WikiSkill, agent skills, LLM wiki, skill evolution, Google Research, LLMOps, Karpathy, Anthropic skills"
+    name="keywords">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Amirhessam Tahmassebi">
+  <meta property="og:url"
+    content="https://www.amirhessam.com/two-cents/wiki-skill.html">
+  <meta property="og:title" content="WikiSkill | 2-Cents">
+  <meta property="og:description"
+    content="Compile agent experience into a wiki, then into skills you can gate and roll back — Google's WikiSkill, with production notes.">
+  <meta property="og:image"
+    content="https://www.amirhessam.com/assets/img/two-cents/og-wiki-skill.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="627">
+  <meta property="og:image:alt" content="WikiSkill — 2-Cents">
+  <meta property="article:published_time" content="2026-09-01">
+  <meta property="article:tag" content="Agentic Skills">
+  <meta property="article:tag" content="Agents">
+  <meta property="article:tag" content="LLMOps">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="WikiSkill | 2-Cents">
+  <meta name="twitter:description"
+    content="Traces, wiki, skills — Google's compiler for agent experience, plus what I would actually ship.">
+  <meta name="twitter:image"
+    content="https://www.amirhessam.com/assets/img/two-cents/og-wiki-skill.png">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "WikiSkill",
+    "description": "Google's WikiSkill compiles agent traces into a persistent wiki, then into gated skills. Operating notes: three layers, don't let the worker read the wiki, transfer vs workarounds, and how this maps onto LLMOps.",
+    "datePublished": "2026-09-01",
+    "dateModified": "2026-09-01",
+    "mainEntityOfPage": "https://www.amirhessam.com/two-cents/wiki-skill.html",
+    "image": "https://www.amirhessam.com/assets/img/two-cents/og-wiki-skill.png",
+    "keywords": [
+      "WikiSkill",
+      "agent skills",
+      "LLM wiki",
+      "skill evolution",
+      "LLMOps"
+    ],
+    "author": {
+      "@type": "Person",
+      "name": "Amirhessam Tahmassebi",
+      "url": "https://www.amirhessam.com/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Amirhessam Tahmassebi",
+      "url": "https://www.amirhessam.com/"
+    }
+  }
+  </script>
+
+  <!-- Favicons -->
+  <link href="../assets/img/logo_color_clear.png" rel="icon">
+
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+    rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link href="../assets/vendor/bootstrap/css/bootstrap.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="../assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="../assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <link href="../assets/vendor/owl.carousel/assets/owl.carousel.min.css"
+    rel="stylesheet">
+  <link href="../assets/vendor/aos/aos.css" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="../assets/css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="d-flex flex-column">
+
+      <div class="profile">
+        <img src="../assets/img/profile-img.jpg" alt=""
+          class="img-fluid rounded-circle">
+        <h1 class="text-light"><a href="../index.html">Amirhessam Tahmassebi</a>
+        </h1>
+        <div class="social-links mt-3 text-center">
+          <a href="https://www.linkedin.com/in/amirhessam/" class="linkedin"><i
+              class="bx bxl-linkedin"></i></a>
+          <a href="https://scholar.google.com/citations?user=CnHZjFAAAAAJ&hl=en"
+            class="google-plus"><i class="bx bxl-google"></i></a>
+          <a href="https://github.com/amirhessam88" class="github"><i
+              class="bx bxl-github"></i></a>
+          <a href="https://slickml.com/" class="consulting"><i
+              class="icofont-learn"></i></a>
+          <a href="https://github.com/slickml" class="library"><i
+              class="icofont-brainstorming"></i></a>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="../index.html"><i class="bx bx-home"></i>
+              <span>Home</span></a></li>
+          <li class="nav-two-cents">
+            <a href="../index.html#two-cents"><i class="bx bx-bulb"></i>
+              <span>2-Cents</span></a>
+            <ul class="nav-two-cents-articles">
+              <li><a href="building-an-org-monorepo.html">🏗️ Building an Org
+                  Monorepo</a></li>
+              <li><a href="mlops-deployment-strategies.html">🚀 MLOps Deployment
+                  Strategies</a></li>
+              <li><a href="agentic-ai-fundamentals.html">🧠 Agentic AI
+                  Fundamentals</a></li>
+              <li><a href="zero-to-one.html">0️⃣➡️1️⃣ Zero to
+                  One</a></li>
+              <li><a href="fine-tuning-llms.html">🧩 Fine-Tuning
+                  LLMs</a></li>
+              <li class="active"><a href="wiki-skill.html">📚 WikiSkill</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav><!-- .nav-menu -->
+
+      <button type="button" class="theme-toggle" data-theme-toggle
+        aria-pressed="false" aria-label="Switch to dark theme"
+        title="Dark theme">
+        <i class="bx bx-moon theme-toggle-icon theme-toggle-icon-moon"
+          aria-hidden="true"></i>
+        <i class="bx bx-sun theme-toggle-icon theme-toggle-icon-sun"
+          aria-hidden="true"></i>
+        <span class="theme-toggle-label">Dark mode</span>
+      </button>
+
+      <button type="button" class="mobile-nav-toggle d-xl-none"><i
+          class="icofont-navigation-menu"></i></button>
+
+    </div>
+  </header><!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <div class="d-flex justify-content-between align-items-center">
+          <h2>🪙 2-Cents</h2>
+          <ol>
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../index.html#two-cents">2-Cents</a></li>
+            <li>WikiSkill</li>
+          </ol>
+        </div>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Article ======= -->
+    <section class="two-cents-article">
+      <div class="container">
+        <article class="two-cents-article-body">
+
+          <header class="two-cents-article-header">
+            <span class="two-cents-card-tag">🎒 Agentic Skills</span>
+            <h1>📚 WikiSkill</h1>
+            <p class="two-cents-article-meta">
+              <time datetime="2026-09-01">📅 September 1, 2026</time>
+              <span aria-hidden="true">·</span>
+              <span>⏱️ 12 min read</span>
+            </p>
+          </header>
+
+          <aside class="two-cents-inspiration">
+            <p>📖 <strong>Inspiration.</strong> Google Research’s
+              <em>WikiSkill: Compiling Agent Experience into Persistent
+              Knowledge for Skill Evolution</em>
+              (Tang, Rashtchian, Ferng, Tomkins, Juan, Vu — arXiv
+              2608.27454, Aug 2026)
+              [<a href="https://arxiv.org/abs/2608.27454"
+                target="_blank" rel="noopener noreferrer">1</a>]
+              is the first paper that names the layer I was already
+              arguing for in
+              <a href="agentic-ai-fundamentals.html">Agentic AI
+              Fundamentals</a>:
+              <strong>skills over god-prompts</strong>, and
+              <strong>memory as evidence, never policy</strong>. They
+              cite Karpathy’s LLM Wiki
+              [<a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"
+                target="_blank" rel="noopener noreferrer">2</a>]
+              and sit on top of Anthropic’s filesystem skill format
+              [<a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills"
+                target="_blank" rel="noopener noreferrer">3</a>].
+              This is not a paper report. It is what I would actually
+              ship from it.</p>
+          </aside>
+
+          <p class="two-cents-lead">💡 An agent that forgets every run
+            is a contractor with no notebook. An agent that dumps every
+            trace into the next prompt is a contractor with a junk
+            drawer. <strong>WikiSkill</strong> is the claim that you
+            need a compiler in between: immutable traces, a compounding
+            wiki, and skills you can execute — and
+            <em>roll back</em>.</p>
+
+          <h2>🧱 The missing compiler</h2>
+          <p>Agent skills are already a product surface: a directory
+            with <code>SKILL.md</code>, scripts, and progressive
+            disclosure so the model only loads what it needs
+            [<a href="#ref-3">3</a>]. Most of them are still
+            hand-authored. The 2026 skill-evolution papers — EvoSkill,
+            Trace2Skill, SkillOpt
+            [<a href="#ref-4">4</a>][<a href="#ref-5">5</a>][<a href="#ref-6">6</a>]
+            — close that gap with the same outer loop: roll out,
+            analyze successes and failures, patch the skill, gate on
+            validation. Fine. The bug is where the
+            <em>learning</em> lives.</p>
+          <p>Those methods keep insights scattered across optimizer
+            histories, rejected diffs, and last week’s traces. That is
+            Slack-as-a-wiki. The next proposer cannot see the
+            postmortem. It re-proposes the thing you already rejected.
+            WikiSkill’s move is to insert a
+            <strong>persistent knowledge layer</strong> between raw
+            experience and executable procedure, then let that layer
+            compound across iterations while skills stay gated.</p>
+          <p>Karpathy’s framing is the right one: compile experience
+            into knowledge that
+            <em>pays rent next week</em>, not a longer context window
+            that pays rent until the next compaction
+            [<a href="#ref-2">2</a>]. Horizontal progress is copying
+            last run’s prompt. Vertical progress is a compiler. See
+            <a href="zero-to-one.html">Zero to One</a> if that split
+            already lives in your head.</p>
+
+          <aside class="two-cents-aside">
+            <p>🧭 <strong>This is not fine-tuning.</strong> Weights
+              stay frozen. You are compiling
+              <em>procedural</em> knowledge into files. If the thing
+              that must change is style, schema, or a stable fact that
+              belongs in the model, go to
+              <a href="fine-tuning-llms.html">Fine-Tuning LLMs</a>.
+              If it is a workflow the agent should follow, it belongs
+              in a skill — not in a LoRA.</p>
+          </aside>
+
+          <h2>📚 Three layers, one workspace</h2>
+          <p>WikiSkill splits the agent workspace the way a grown-up
+            platform splits logs, runbooks, and deployable code
+            [<a href="#ref-1">1</a>]:</p>
+          <ul>
+            <li>📦 <strong>Raw layer</strong> (<code>raw/</code>) —
+              immutable execution traces. Reasoning, tool calls,
+              outputs, answers. You do not edit history. You
+              <em>compile</em> it.</li>
+            <li>📚 <strong>Wiki layer</strong> (<code>wiki/</code>) —
+              pattern pages, an evolution log, and a skill-impact
+              tracker. Failure modes, successful strategies, rejected
+              diffs, acceptance outcomes. This layer is never rolled
+              back.</li>
+            <li>🎒 <strong>Skills layer</strong>
+              (<code>skills/</code>) — the only thing the inference
+              agent is allowed to read. <code>SKILL.md</code> is the
+              procedure. <code>PURPOSE.md</code> maps the skill back
+              to the wiki patterns that justified it. Provenance, not
+              vibes.</li>
+          </ul>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Raw traces compile into a wiki, which informs skills the inference agent actually runs">
+            <pre class="mermaid">
+flowchart TB
+  RAW["📦 Raw layer<br/>immutable traces"] --> WIKI["📚 Wiki layer<br/>patterns · logs · impact"]
+  WIKI --> SKILL["🎒 Skills layer<br/>SKILL.md + PURPOSE.md"]
+  SKILL --> INF["🤖 Inference agent"]
+  INF --> RAW
+            </pre>
+          </div>
+
+          <p>Translate that onto the contracts I already use for
+            agents. Traces are evidence. The wiki is the compiled
+            postmortem. Skills are policy. Mixing those three in one
+            prompt is how you get a god-prompt with a README. I said
+            this in
+            <a href="agentic-ai-fundamentals.html">Agentic AI
+            Fundamentals</a>:
+            <strong>memory is evidence, never policy</strong>.
+            WikiSkill is that sentence with a filesystem.</p>
+
+          <h2>🔁 The loop — and the one-way wiki</h2>
+          <p>Each iteration has four jobs
+            [<a href="#ref-1">1</a>]:</p>
+          <ol>
+            <li>🤖 <strong>Inference agent</strong> rolls out on
+              training tasks with the current skills injected. It
+              cannot see the wiki. That restriction is the point, not
+              a bug — more below.</li>
+            <li>📝 <strong>Wiki Maintainer</strong> samples traces
+              (they cap at ~8 per iteration: more fails than passes),
+              writes or patches pattern pages, updates the index,
+              appends the evolution log.</li>
+            <li>🛠️ <strong>Skill Proposer</strong> is a ReAct agent
+              [<a href="https://arxiv.org/abs/2210.03629"
+                target="_blank" rel="noopener noreferrer">7</a>].
+              It is not force-fed a dump of traces. It reads
+              <code>wiki/index.md</code>,
+              <code>skill-impact.md</code>, then
+              <em>picks</em> which pattern pages and traces to open.
+              One atomic proposal per iteration: create a skill or
+              patch one.</li>
+            <li>🧪 <strong>Gating</strong> scores the candidate on a
+              held-out validation split. Strict improvement only. If
+              the score drops or ties, the skill set rolls back. The
+              wiki stays. The rejected diff is logged so the next
+              proposer does not retry the same bad idea.</li>
+          </ol>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="WikiSkill evolution loop: rollout, wiki update, propose, gate; skills rollback, wiki persists">
+            <pre class="mermaid">
+flowchart LR
+  I["🤖 Rollout"] --> W["📝 Wiki maintainer"]
+  W --> P["🛠️ Propose skill"]
+  P --> G{"🧪 Val better?"}
+  G -->|yes| A["✅ Keep skill"]
+  G -->|no| R["↩️ Roll back skill"]
+  A --> L["📜 Log to wiki"]
+  R --> L
+  L --> I
+            </pre>
+          </div>
+
+          <p>That last sentence is the whole paper, dressed as an
+            algorithm. <strong>Skills are a release. The wiki is a
+            ledger.</strong> You can revert the deployable. You do not
+            revert the postmortem. If you have ever shipped a model
+            behind a canary and kept the incident doc after the
+            rollback, you already know this shape — see
+            <a href="mlops-deployment-strategies.html">MLOps
+            Deployment Strategies</a>.</p>
+          <p>Their ALFWorld case study makes it concrete. Iteration 0
+            proposes a vague “goal-directed action” skill. Validation
+            rejects it. <code>skill-impact.md</code> keeps the diff.
+            Iteration 1, informed by that rejection, ships
+            <em>Never return an item to its origin location</em> and
+            it lands. Later, new loop variants show up in the wiki,
+            and the skill gets a tighter rule:
+            <em>each operation type once per item</em>. That is not
+            “the model got smarter.” That is a compiler that did not
+            forget.</p>
+
+          <h2>🚫 Do not let the worker read the wiki</h2>
+          <p>The ablation is the part I would tattoo on an on-call
+            runbook. With Gemini-3.5-Flash, giving the
+            <em>Skill Proposer</em> wiki access is worth about
+            <strong>+15 points</strong> average across their
+            benchmarks. Giving the
+            <em>Inference Agent</em> wiki access during training
+            rollouts
+            <strong>hurts</strong> the skills you end up with
+            (LiveMath 72.6% → 64.8%)
+            [<a href="#ref-1">1</a>].</p>
+          <p>Their hypothesis matches production intuition: if the
+            worker can cheat by reading the wiki, the traces stop
+            teaching you what the skill file is missing. You optimize
+            a system that will not exist at serving time — unless you
+            also ship the wiki into production, which is how you
+            recreate the god-prompt you were trying to kill.</p>
+          <p>Map:</p>
+          <ul>
+            <li>📚 Wiki → compiler / reviewer / postmortem author</li>
+            <li>🎒 Skills → what the worker is allowed to load</li>
+            <li>📦 Traces → evidence the compiler reads, not a second
+              policy channel</li>
+          </ul>
+          <p>Same rule as long-term memory: retrieved facts are
+            evidence. Security rules, stop conditions, and tool
+            permissions do not get learned from a conversation, and
+            they do not get learned from a wiki page the model wrote
+            about itself. If a pattern is ready to govern behavior, it
+            graduates into a skill, gets gated, and gets a version.
+            Until then it is a note.</p>
+
+          <aside class="two-cents-aside">
+            <p>⚠️ <strong>A wiki page is prompt injection with a
+              table of contents</strong> if you load it at serving
+              time. Skills should be trusted, signed, versioned,
+              permission-scoped. The wiki should be reviewed like a
+              runbook, not injected like RAG.</p>
+          </aside>
+
+          <h2>📈 Skills are a scaling law, not a participation trophy
+          </h2>
+          <p>WikiSkill beats the other skill-evolution methods on
+            average across five models and five benchmarks — math,
+            search, spreadsheets, long-context docs, embodied
+            household tasks. The interesting curve is not “we won the
+            table.” It is
+            <strong>who benefits</strong>
+            [<a href="#ref-1">1</a>].</p>
+          <ul>
+            <li>📏 Inside Qwen, WikiSkill’s average lift grows with
+              scale: <strong>+12.3 / +17.5 / +23.9</strong> points
+              at 4B / 9B / 27B. Stronger models write better skills
+              <em>and</em> follow them.</li>
+            <li>⚖️ Skills can buy you scale you did not pay for:
+              Qwen-3.5-9B <em>with</em> WikiSkill (47.4%) beats
+              Qwen-3.6-27B <em>without</em> skills (39.4%).</li>
+            <li>📊 The lift is not uniform. Spreadsheets and
+              ALFWorld move a lot; long-context OfficeQA is stingy,
+              and the 4B model actually gets slightly
+              <em>worse</em> — it cannot execute the multi-step
+              search workflow the skill describes, so it reverts to
+              “just read the document.”</li>
+          </ul>
+          <p>That last point is the one vendors will skip in the
+            tweet. A skill is not a spell. It is a procedure the
+            inference model has to be strong enough to
+            <em>run</em>. If your 4B tool-caller cannot follow a
+            four-step grep plan across a Treasury bulletin, evolving
+            a prettier <code>SKILL.md</code> will not save you. Climb
+            the agent ladder only when the rung below fails a measured
+            eval — same rule as
+            <a href="agentic-ai-fundamentals.html">Agentic AI
+            Fundamentals</a>.</p>
+
+          <h2>🔀 Discovery and execution are different jobs</h2>
+          <p>The transfer table is the product insight. Skills evolved
+            by one model often help another — sometimes more than the
+            target’s self-evolved skill. Qwen-3.6-27B skills take
+            Qwen-3.5-9B from 63.4% → 70.2% on ALFWorld. Qwen-3.5-4B
+            skills jump Gemma-4-31B from 33.9% → 73.1% on LiveMath.
+            Gemini skills help Qwen-27B on SealQA more than Qwen
+            helped itself
+            [<a href="#ref-1">1</a>].</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="A discovery model writes the skill; a possibly different execution model runs it">
+            <pre class="mermaid">
+flowchart LR
+  D["🔬 Discovery model<br/>writes the skill"] --> S["🎒 Skill artifact"]
+  S --> E["⚡ Execution model<br/>runs the skill"]
+            </pre>
+          </div>
+
+          <p>Self-evolution conflates two capabilities:</p>
+          <ul>
+            <li>🔬 <strong>Discovering</strong> a procedure from
+              traces — diagnosis, naming the pattern, writing a
+              rule.</li>
+            <li>⚡ <strong>Executing</strong> that procedure at
+              inference time — following the rule under a long
+              context, a tool budget, a noisy environment.</li>
+          </ul>
+          <p>Those do not have to be the same model, the same family,
+            or the same price. That is a platform shape: a stronger
+            (or cheaper, or overnight) compiler writes skills; the
+            serving fleet runs them. It is also how you should think
+            about Cursor / Claude skills and internal playbooks. The
+            author of the runbook is not the on-call who executes it
+            at 2am.</p>
+          <p>Transfer is not free. Qwen-3.5-4B spreadsheet skills
+            <em>destroy</em> Gemini-3.5-Flash: 50.5% → 18.1%. The
+            4B skill encodes crutches — single-line Python, string
+            conversion rules, fragmented diagnostics — that help a
+            small model not fall over, and that prevent a strong
+            model from writing an end-to-end script before its
+            interaction budget dies. <strong>General procedures
+            transfer. Model-specific workarounds are tech
+            debt.</strong> Label them that way in
+            <code>PURPOSE.md</code> or you will ship a 4B hack into
+            a 27B prod path and call it “knowledge reuse.”</p>
+
+          <aside class="two-cents-aside">
+            <p>🧪 <strong>Eval the skill on the model that will run
+              it</strong>, not the model that wrote it. A transferred
+              skill is a candidate release, not a free lunch. Same
+              as promoting a model: the artifact is innocent until
+              the target environment scores it.</p>
+          </aside>
+
+          <h2>🏭 What I would actually ship</h2>
+          <p>I would not paste WikiSkill’s research harness into
+            production. I would steal the
+            <em>compiler shape</em> and put it behind the LLMOps
+            contracts I already want:</p>
+
+          <div class="two-cents-diagram" role="img"
+            aria-label="Production mapping: traces to wiki to gated skill release to a registry the serving agent retrieves from">
+            <pre class="mermaid">
+flowchart TB
+  T["📡 Replayable traces"] --> W["📚 Wiki / postmortems"]
+  W --> P["🛠️ Propose skill patch"]
+  P --> EV["🧪 Eval gate"]
+  EV -->|pass| REL["📦 Versioned skill release"]
+  EV -->|fail| RB["↩️ Rollback skill"]
+  RB --> W
+  REL --> REG["🔎 Skill registry"]
+  REG --> AG["🤖 Serving agent"]
+            </pre>
+          </div>
+
+          <table class="table table-sm two-cents-table">
+            <thead>
+              <tr>
+                <th>WikiSkill layer</th>
+                <th>Production object</th>
+                <th>Contract</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>📦 Raw traces</td>
+                <td>Replayable run logs</td>
+                <td>Immutable, tenant-scoped, retained on a
+                  policy</td>
+              </tr>
+              <tr>
+                <td>📚 Wiki</td>
+                <td>Reviewed runbooks / pattern catalog</td>
+                <td>Not in the serving prompt; prune or expire</td>
+              </tr>
+              <tr>
+                <td>🎒 Skills</td>
+                <td>Versioned artifacts in a registry</td>
+                <td>Retrieved, permission-filtered, signed</td>
+              </tr>
+              <tr>
+                <td>🧪 Val gate</td>
+                <td>Release eval</td>
+                <td>You can fail the deploy on it</td>
+              </tr>
+              <tr>
+                <td>📜 skill-impact.md</td>
+                <td>Change log + rejected diffs</td>
+                <td>Stop the compiler repeating itself</td>
+              </tr>
+              <tr>
+                <td>🧭 PURPOSE.md</td>
+                <td>Provenance</td>
+                <td>Which patterns, which model, which eval</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>Where I would
+            <em>not</em> copy the paper:</p>
+          <ul>
+            <li>📥 <strong>Full skill injection.</strong> They dump
+              every active skill into the system prompt so retrieval
+              cannot confound the study. Correct for a paper. Fatal
+              for a library of fifty skills. Keep classify → search
+              registry → permission filter → load, as in
+              <a href="agentic-ai-fundamentals.html">Agentic AI
+              Fundamentals</a>.</li>
+            <li>🧹 <strong>No wiki pruning.</strong> They admit it.
+              Permanent memory is a liability portfolio: stale
+              patterns, poisoned procedures, prompt bloat,
+              cross-tenant leakage. Retention, review, and deletion
+              are not optional just because a markdown folder feels
+              harmless.</li>
+            <li>📏 <strong>Strict
+              <code>&gt;</code> on a tiny val set.</strong> Neutral
+              patches that unlock the next iteration never land.
+              Small val splits make the gate noisy. In production I
+              want: bootstrap the gate, require a minimum delta
+              <em>or</em> a human for high-impact procedural writes,
+              and never let the model promote a skill that changes
+              permissions.</li>
+            <li>🧑‍⚖️ <strong>Unreviewed procedural memory.</strong>
+              If a bad workaround gets written as a pattern and then
+              compiled into a skill, you have automated the incident.
+              High-impact wiki pages (anything that sounds like
+              policy) get a human, the same way irreversible tool
+              calls do.</li>
+          </ul>
+          <p>The honest limitation they flag — no long-horizon online
+            adaptation inside a single multi-hour rollout — is the
+            next compiler, not this one. WikiSkill is
+            <em>offline</em> skill evolution between batches of tasks.
+            Online skill patches mid-incident are a different blast
+            radius. Do not conflate them.</p>
+
+          <h2>🪙 My 2 cents</h2>
+          <p>Stop asking “should the agent remember?” Ask the
+            questions that force a compiler:</p>
+          <ul>
+            <li>📦 What is immutable evidence vs compiled knowledge vs
+              executable policy?</li>
+            <li>🚫 Does the worker ever see the wiki, or only the
+              skill?</li>
+            <li>🧪 What eval fails the skill release?</li>
+            <li>🔀 Who writes the skill, and who runs it?</li>
+            <li>🧹 When does a pattern expire, get pruned, or get
+              promoted?</li>
+            <li>🔐 Which skill loads are permission-scoped, signed,
+              and retrieved — not dumped?</li>
+          </ul>
+          <p>Answer those and the shape almost picks itself:</p>
+          <ul>
+            <li>📡 <strong>Traces</strong> you can replay</li>
+            <li>📚 <strong>Wiki</strong> the compiler reads and a
+              human can audit</li>
+            <li>🎒 <strong>Skills</strong> the worker loads on
+              demand</li>
+            <li>🧪 <strong>Gate</strong> that can roll back the skill
+              without erasing the lesson</li>
+            <li>🔬⚡ <strong>Discovery ≠ execution</strong> — transfer
+              is a candidate, not a merge</li>
+          </ul>
+          <p>Contracts that are non-optional:</p>
+          <ul>
+            <li>🎒 Skills over god-prompts</li>
+            <li>📜 Memory is evidence, never policy — the wiki is
+              memory</li>
+            <li>📦 Version the skill the way you version the graph,
+              the tools, and the prompt</li>
+            <li>🧪 Evals you can fail a release on; traces you can
+              replay</li>
+            <li>🧹 Prune the wiki; label workarounds so they cannot
+              masquerade as general procedures</li>
+            <li>🛡️ Permission envelope outside the model —
+              always</li>
+          </ul>
+          <p>🌱 Treat agent experience as something you
+            <strong>compile</strong> — not something you paste into
+            the next prompt.</p>
+
+          <h2>📚 References</h2>
+          <ol class="two-cents-references">
+            <li id="ref-1">Liyan Tang, Cyrus Rashtchian, Chun-Sung
+              Ferng, Andrew Tomkins, Da-Cheng Juan, and Tu Vu,
+              “WikiSkill: Compiling Agent Experience into Persistent
+              Knowledge for Skill Evolution,” arXiv:2608.27454, Aug
+              2026,
+              <a href="https://arxiv.org/abs/2608.27454"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2608.27454</a>
+            </li>
+            <li id="ref-2">Andrej Karpathy, “LLM Wiki,” GitHub Gist,
+              2026,
+              <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"
+                target="_blank"
+                rel="noopener noreferrer">gist.github.com/karpathy/442a6bf555914893e9891c11519de94f</a>
+            </li>
+            <li id="ref-3">Barry Zhang, Katelyn Lazuka, and Mahesh
+              Murag, “Equipping agents for the real world with Agent
+              Skills,” Anthropic, Oct 2025,
+              <a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills"
+                target="_blank"
+                rel="noopener noreferrer">anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills</a>
+            </li>
+            <li id="ref-4">S. Alzubi, N. Provenzano, J. Bingham, W.
+              Chen, and T. Vu, “EvoSkill: Automated Skill Discovery
+              for Multi-Agent Systems,” arXiv:2603.02766, 2026,
+              <a href="https://arxiv.org/abs/2603.02766"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2603.02766</a>
+            </li>
+            <li id="ref-5">J. Ni et al., “Trace2Skill: Distill
+              Trajectory-Local Lessons into Transferable Agent
+              Skills,” arXiv:2603.25158, 2026,
+              <a href="https://arxiv.org/abs/2603.25158"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2603.25158</a>
+            </li>
+            <li id="ref-6">Y. Yang et al., “SkillOpt: Executive
+              Strategy for Self-Evolving Agent Skills,”
+              arXiv:2605.23904, 2026,
+              <a href="https://arxiv.org/abs/2605.23904"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2605.23904</a>
+            </li>
+            <li id="ref-7">Shunyu Yao et al., “ReAct: Synergizing
+              Reasoning and Acting in Language Models,” ICLR 2023,
+              <a href="https://arxiv.org/abs/2210.03629"
+                target="_blank"
+                rel="noopener noreferrer">arxiv.org/abs/2210.03629</a>
+            </li>
+          </ol>
+
+          <footer class="two-cents-article-footer">
+            <a href="../index.html#two-cents">← Back to 2-Cents</a>
+          </footer>
+
+        </article>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container">
+      <div class="copyright">
+        &copy; <strong><span>Amirhessam Tahmassebi</span></strong>
+      </div>
+      <div class="credits">
+      </div>
+    </div>
+  </footer>
+  <!-- End  Footer -->
+
+  <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src="../assets/vendor/jquery/jquery.min.js"></script>
+  <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../assets/vendor/jquery.easing/jquery.easing.min.js"></script>
+  <script src="../assets/vendor/php-email-form/validate.js"></script>
+  <script src="../assets/vendor/waypoints/jquery.waypoints.min.js"></script>
+  <script src="../assets/vendor/counterup/counterup.min.js"></script>
+  <script src="../assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+  <script src="../assets/vendor/venobox/venobox.min.js"></script>
+  <script src="../assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="../assets/vendor/typed.js/typed.min.js"></script>
+  <script src="../assets/vendor/aos/aos.js"></script>
+
+  <!-- Theme toggle -->
+  <script src="../assets/js/theme-toggle.js?v=20260716174000"></script>
+
+  <!-- Template Main JS File -->
+  <script src="../assets/js/main.js"></script>
+
+  <!-- Mermaid diagrams -->
+  <script type="module">
+    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+    var theme =
+      document.documentElement.getAttribute("data-theme") === "dark"
+        ? "dark"
+        : "default";
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: theme,
+      securityLevel: "loose",
+      flowchart: { curve: "basis", padding: 12 }
+    });
+  </script>
+
+</body>
+
+</html>

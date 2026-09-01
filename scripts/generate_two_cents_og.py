@@ -33,6 +33,7 @@ DEFAULTS = [
     ("Agentic AI Fundamentals", "og-agentic-ai-fundamentals.png"),
     ("Zero to One", "og-zero-to-one.png"),
     ("Fine-Tuning LLMs", "og-fine-tuning-llms.png"),
+    ("WikiSkill", "og-wiki-skill.png"),
 ]
 
 
