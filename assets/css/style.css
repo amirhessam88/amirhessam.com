@@ -1146,7 +1146,8 @@ section {
 }
 
 .logo-ribbon__item[data-logo="rivian"] img,
-.logo-ribbon__item[data-logo="oracle"] img {
+.logo-ribbon__item[data-logo="oracle"] img,
+.logo-ribbon__item[data-logo="tiger-analytics"] img {
   max-width: 160px;
 }
 
