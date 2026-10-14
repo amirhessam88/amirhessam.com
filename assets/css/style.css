@@ -1151,6 +1151,11 @@ section {
   max-width: 160px;
 }
 
+.logo-ribbon__item[data-logo="slickrent"] img {
+  max-height: 48px;
+  max-width: 168px;
+}
+
 .logo-ribbon__item.is-lit,
 .logo-ribbon__item:hover {
   filter: grayscale(0) saturate(1.05);
@@ -1561,6 +1566,10 @@ section {
   max-width: 140px;
 }
 
+#ventures .portfolio-wrap--slickrent {
+  max-width: 210px;
+}
+
 #ventures .portfolio-wrap img {
   max-height: 90px;
   width: auto;
@@ -1570,6 +1579,11 @@ section {
   object-fit: contain;
   transform-origin: center center;
   transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#ventures .portfolio-wrap--slickrent img {
+  max-height: 80px;
+  max-width: 210px;
 }
 
 #libraries .portfolio-wrap {
